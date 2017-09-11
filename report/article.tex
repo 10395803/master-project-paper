@@ -1,0 +1,1054 @@
+\RequirePackage[hyphens]{url}
+
+\documentclass{elsarticle}
+
+
+%
+% Packages
+%
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{listings}
+\usepackage{amsmath}
+\allowdisplaybreaks
+\usepackage{amsfonts}
+\usepackage{amstext}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{empheq}
+\usepackage{cases}
+\usepackage{anyfontsize}
+\usepackage{enumitem}
+\usepackage{pdfpages}
+\usepackage{fourier}	% Style
+\usepackage{bm}
+\usepackage{epstopdf}
+\usepackage{lipsum}
+%\usepackage{authblk}
+\usepackage[top=3cm, bottom=3cm, left=2cm, right=2cm, scale=0.75]{geometry}	% Set the margins
+%\usepackage[inner=3cm, textwidth=445pt, scale=0.75, top=3cm, bottom=3cm]{geometry}	% Set the margins
+\usepackage{fancyhdr}
+\usepackage[letterspace=150]{microtype}
+\usepackage{textcomp}
+\usepackage{gensymb}
+\usepackage{booktabs}
+\usepackage{amsmath,etoolbox}
+\usepackage{mathtools}
+\usepackage{anyfontsize}
+%\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{float}
+\usepackage{subfig}
+\usepackage[labelfont=bf,labelsep=period,font=small]{caption}
+%\usepackage{subcaption}
+\usepackage{newunicodechar}
+\usepackage{nicefrac}	% For diagonal fractions
+\usepackage{bbm}
+\usepackage{csvsimple}
+%\usepackage{floatrow}	% For notes below a figure
+
+% Set header and footer
+\usepackage{fancyhdr}
+
+% Packages needed for tables
+\usepackage{longtable}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{array}
+
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+\usepackage{breakurl}
+\usepackage{url}
+
+% To put footnotes at the bottom of the page
+\usepackage[bottom]{footmisc}
+
+\usepackage{empheq}
+
+\usepackage{tikz}
+
+% Default fixed font does not support bold face
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{10.25} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{10.25}  % for normal
+
+% Custom colors
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+% To insert code snippets
+\usepackage{listings}
+
+% For argmin
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% To insert verbatim within a command
+\usepackage{fancyvrb}
+
+% For pseudocode
+\usepackage[section]{algorithm}
+\usepackage{algpseudocode}
+
+\usepackage[many]{tcolorbox}
+
+\usepackage{stackengine}
+
+% Set interline
+\usepackage{setspace}
+%\onehalfspacing
+
+
+%
+% Definitions
+%
+
+% To enumerate subequations with arabic numbers (e.g. 1.1, 1.2, ecc)
+%\numberwithin{equation}{chapter}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\makeatletter
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+
+% Theorem and definition environment
+\theoremstyle{theorem}
+\newtheorem{theorem}{Theorem}[section]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+\theoremstyle{proposition}
+\newtheorem{proposition}{Proposition}[section]
+%\newenvironment{definition}[1][Definition]{\begin{trivlist}
+%\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+% To enumerate the equations and the figures according to the section they are in
+%\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+% To modify the space between figure and caption
+%\setlength{\abovecaptionskip}{-4pt}
+%\setlength{\belowcaptionskip}{3pt}
+
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\topfraction}{0.9}
+
+\makeatletter
+	\renewcommand*\l@figure{\@dottedtocline{1}{1em}{3.2em}}
+\makeatother
+
+% Define norm symbol
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% Define mod symbol
+\newcommand{\Mod}[1]{\ (\mathrm{mod}\ #1)}
+
+% Aliases for \boldsymbol and \widetilde
+\newcommand{\wt}[1]{\widetilde{#1}}
+\newcommand{\bg}[1]{\boldsymbol{#1}}
+
+% Redefine \Require and \Ensure for algorithm environment
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+% Make \big| adapt to the context
+\makeatletter
+\let\amstexbig\big
+\def\newbig#1{%
+  \ifx#1|%
+    \expandafter\@firstoftwo
+  \else
+    \expandafter\@secondoftwo
+  \fi
+  {\big@bar}%
+  {\amstexbig{#1}}%
+}
+\AtBeginDocument{\let\big\newbig}
+\def\big@bar{\bBigg@{1.1}|}
+\makeatother
+
+% Define the do-while loop
+\algdef{SE}[DOWHILE]{DoWhile}{EndDoWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1}
+
+%\newcommand{\NewPage}{\newpage\null\thispagestyle{empty}\newpage}
+
+
+%
+% Document
+%
+
+\begin{document}
+
+	%
+	% Frontmatter
+	%
+	
+	\begin{frontmatter}
+		\title{A non-intrusive reduced basis method using artificial neural networks}
+		
+		\author{J.S.~Hesthaven}
+		\ead{jan.hesthaven@epfl.ch}
+		
+		\author{S.~Ubbiali}
+		\ead{stefano.ubbiali@epfl.ch}
+		
+		\address{\'Ecole Polytechnique F\'ed\'erale de Lausanne (EPFL), CH-1015 Lausanne, Switzerland}
+		
+		\begin{abstract}
+			In this work, we develop a non-intrusive reduced basis (RB) method for pa\-ra\-me\-tri\-zed time-indepedent partial differential equations (PDEs). The proposed method extracts a reduced basis from a collection of high-fidelity solutions via proper orthogonal decomposition (POD) and employs artificial neural networks (ANNs), particularly multi-layer perceptrons (MLPs), to accurately approximate the coefficients of the reduced model. The search for the optimal number of inner neurons and the minimum amount of training samples which avoids overfitting is carried out in the offline phase through an automatic routine, relying upon a joint use of the Latin Hypercube Sampling (LHS) and the Levenberg-Marquardt training algorithm. This guarantees a complete offline-online decoupling, leading to an efficient RB method - referred to as POD-NN - suitable also for nonlinear problems featuring a non-affine parametric dependence. Numerical studies are presented for the linear and nonlinear Poisson equation and for driven cavity viscous flows, modeled through the steady uncompressible Navier-Stokes equations. Both physical and geometrical parametrizations are considered. Several results confirm the accuracy of the POD-NN method and show the substantial speed-up enabled at the online stage with respect to a traditional RB strategy based on the Galerkin projection process.
+		\end{abstract}
+		
+		\begin{keyword}
+			non-intrusive reduced basis method \sep proper orthogonal decomposition \sep multi-layer perceptron \sep Levenberg-Marquardt algorithm \sep Poisson equation \sep driven cavity flow
+		\end{keyword}
+	\end{frontmatter}
+	
+	
+	%
+	% Introduction
+	%
+	
+	\section{Introduction}
+	\label{section:Introduction}
+		
+		%\begin{spacing}{1.1}
+		Several applications arising in engineering and applied sciences involve mathematical models expressed as parametrized partial differential equations (PDEs), in which boundary conditions, material properties, source terms, loads or geometrical factors of the underlying physical problem are addressed to a parameter $\bg{\mu}$ \cite{Eft08, HSR16, JIR14}. A list of notable examples includes parameter estimation \cite{Bro93}, topology optimization \cite{Ben04}, optimal control \cite{LM67} and uncertainty quantification \cite{LeM10}. In these contexts, one is typically interested in a real-time evaluation of an \emph{output of interest} (defined as a functional of the state variable \cite{Dep08}) for many parameter entries, i.e., for many configurations of the problem.  
+		
+		The continuously growing availability of computational power and the simultaneous algorithmic improvements make possible nowadays the \emph{high-fidelity} numerical resolution of complex problems via standard discretization procedures, such as finite difference (FD), finite volume (FV), finite element (FE), or spectral methods \cite{QMN15}. However, these schemes remain prohibitevely expensive in many-query and real-time contexts, both in terms of CPU time and memory demand. This follows from the large amount of degrees of freedom (DOFs) they imply, resulting from the (fine) spatial discretization needed to accurately solve the underpinning PDE \cite{Ams10}. In light of this, \emph{reduced order modeling} (ROM) methods have received a significant attention in the last decades. The objective of these methods is to replace the full-order system by one of significant smaller dimension, thus to decrease the computational burden while leading to a reasonable loss of accuracy \cite{Chen17}. 
+		
+		\emph{Reduced basis} (RB) methods constitute a well-known and widely-used instance of reduced order modeling techniques. They are generally implemented pursuing an offline-online paradigm \cite{Mad06}. Based upon an ensemble of \emph{snapshots} (i.e., high-fidelity solutions to the parametrized differential problem), the goal of the \emph{offline} step is to construct a solution-dependent basis, yielding a reduced space of globally approximating functions capable of representing the main dynamics of the full-order model \cite{Bal14, Chen17}. For this, two major approaches have been proposed in the literature: proper orthogonal decomposition (POD) \cite{Vol08} and greedy algorithms \cite{HSZ14}. The former relies on a deterministic or random sample to generate the snapshots and then employs a singular value decomposition (SVD) to recover the reduced basis. Whereas, the latter adopt a different strategy, as the basis vectors coincide with the snapshots themselves, carefully selected according to some optimality criterion. As a result, a greedy strategy is typically more effective and efficient than POD, as it enables the exploration of a wider region of the parameter space while entailing the computation of many fewer high-fidelity solutions \cite{HSR16}. However, there may exist problems for which a greedy approach is not feasible, simply because a natural criterion for the choice of the snapshots is not available \cite{Bal14}.
+		
+		When a reduced-order environment has been properly set up, given a new parameter input, an approximation to the \emph{truth} solution is sought \emph{online} as a linear combination of the RB functions. The expansion coefficients are determined via projection of the full-order system onto the reduced space \cite{Buf12}. To this end, a Galerkin procedure is the most popular choice. 
+		
+		Despite their established effectiveness, for complex nonlinear problems with a non-affine dependence on the parameters, projection-based RB methods do not provide any computational gain with respect to a direct (expensive) approach, as the cost to compute the projection coefficients depends on the dimension of the full-order model. In fact, a full decoupling between the online stage and the high-fidelity scheme is the ultimate secret for the success of any RB procedure \cite{QMN15}. For this purpose, one may recover an affine expansion of the differential operator through the empirical interpolation method (EIM) \cite{Bar04} or its discrete variants \cite{Cha10, NMA15}. 
+		
+		A valuable alternative to address this concern is represented by \emph{non-intrusive} RB methods, which refer to the high-fidelity model solely to generate the snapshots, without involving it in the projection process \cite{Chen17}. The projection coefficients are then obtained via interpolation over the parameter domain of a database of reduced-order informations \cite{Cas15}. However, it should be noted that reduced bases generally belong to nonlinear, matrix manifolds. Hence, unless using a large amount of samples, standard interpolation techniques may fail, as they cannot enforce the constraints characterizing those manifolds \cite{Ams10, BNR00}. 
+		
+		In this work, we develop a non-intrusive RB method employing POD for the generation of the reduced basis and resorting to (artificial) neural networks, in particular multi-layer perceptrons, in the interpolation step. Hence, in the following we refer to the proposed RB procedure as the POD-NN method. Being of non-intrusive nature, POD-NN is suitable for a fast and reliable resolution of complex nonlinear PDEs featuring a non-affine parametric dependence. To test its accuracy and efficiency, the POD-NN method is applied to the linear and nonlinear Poisson equation and to the steady uncompressible Navier-Stokes equations. Both physical and geometrical parametrizations are considered.
+		
+		As their biological counterpart, \emph{artificial neural networks} (ANNs) \cite{Hay05} are computing systems consisting of information-processing units, called \emph{neurons}, interconnected through \emph{weighted synapses}. The attractive feature of ANNs lies in their capability of \emph{learning} from experience \cite{Kri07}. As a result, ANNs have found most used in those applications, such as cluster detection, image identification or speech recognition, which are difficult to address via computer algorithms using rule-based programming \cite{Mat16}. However, ANNs have been successfully applied also in more traditional contexts, e.g., continuous function approximation, as a valid alternative to the programming approach to investigate complexity, nonlinearity and uncertainties of a high order \cite{Nie15}. 
+		
+		The learning of an ANN is accomplished through a \emph{training} process, during which the network is exposed to a collection of examples and its weights are properly adjusted so that it can provide reasonable responses in similar (yet not identical) situations. As shown later in the paper, the training and the subsequent evaluation of a neural network perfectly fit the offline-online framework, offering the POD-NN method a significant online speed-up with respect to the standard projection-based POD-Garlerkin (POD-G) RB procedure.
+		
+		TODO: paper outline
+		%\end{spacing}
+		
+	%
+	% Section 2: Parametrized partial differential equations
+	%
+		
+	\section{Parametrized partial differential equations}
+	\label{section:Parametrized partial differential equations}
+	
+		%\begin{spacing}{1.1}
+		Assume $\mathcal{P}_{ph} \subset \mathbb{R}^{P_{ph}}$ and $\mathcal{P}_g \subset \mathbb{R}^{P_{g}}$ be compact sets, and let $\boldsymbol{\mu}_{ph} \in \mathcal{P}_{ph}$ and $\boldsymbol{\mu}_{g} \in \mathcal{P}_{g}$ be respectively the \emph{physical} and \emph{geometrical} parameters characterizing the differential problem, so that $\boldsymbol{\mu} = (\boldsymbol{\mu}_{ph} \, , \boldsymbol{\mu}_{g}) \in \mathcal{P} = \mathcal{P}_{ph} \times \mathcal{P}_g \subset \mathbb{R}^P$, $P = P_{ph} + P_g$ represents the overall \emph{input vector parameter}. While $\bg{\mu}_{ph}$ addresses material properties, source terms and boundary conditions, $\bg{\mu}_g$ defines the shape of the computational domain $\wt{\Omega} = \wt{\Omega}(\boldsymbol{\mu}_g) \subset \mathbb{R}^d$, $d = 1,2$, with Lipschitz boundary $\wt{\Gamma} = \partial \wt{\Omega}$; we denote by $\wt{\Gamma}_D$ and $\wt{\Gamma}_N$ the portions of $\wt{\Gamma}$ where Dirichlet and Neumann boundary conditions are enforced, with $\wt{\Gamma}_D \cup \wt{\Gamma}_N = \wt{\Gamma}$ and $\mathring{\wt{\Gamma}}_D \cap \mathring{\wt{\Gamma}}_N = \emptyset$.
+		
+		Consider then a Hilbert space $\wt{V} = \wt{V}(\bg{\mu}_g) = \wt{V}(\wt{\Omega}(\boldsymbol{\mu}_g))$ defined over the domain $\wt{\Omega}(\boldsymbol{\mu}_g)$, equipped with the scalar product $(\cdot, \, \cdot)_{\wt{V}}$ and the induced norm $\norm{\cdot}_{\wt{V}} = \sqrt{(\cdot, \, \cdot)_{\wt{V}}}$. Furthermore, let $\wt{V}' = \wt{V}'(\boldsymbol{\mu}_g)$ be the dual of $\wt{V}$, i.e., the space of linear and continuous functionals over $\wt{V}$. Denoting by $\wt{G} ~ : ~ \wt{V} \times \mathcal{P}_{ph} \rightarrow \wt{V}'$ the map representing a parametrized nonlinear second-order PDE, the differential (strong) form of the problem of interest reads: given $\bg{\mu} = (\bg{\mu}_{ph}, \, \bg{\mu}_g) \in \mathcal{P}$, find $\wt{u}(\boldsymbol{\mu}) \in \wt{V}(\bg{\mu}_g)$ such that
+		\begin{equation}
+			\label{eq:pde-differential-form}
+			\wt{G}(\wt{u}(\bg{\mu}); \bg{\mu}_{ph}) = 0 \hspace*{0.3cm} \text{in $\wt{V}'(\bg{\mu}_g)$} \, ,
+		\end{equation}
+		namely
+		\begin{equation*}
+			\langle \wt{G}(\wt{u}(\bg{\mu}); \bg{\mu}_{ph}), \, v \rangle_{\wt{V'},\wt{V}} = 0 \hspace*{0.3cm} \forall v \in \wt{V}(\bg{\mu}_g) \, .
+		\end{equation*}
+		Here, $\langle \cdot, \, \cdot \rangle_{\wt{V}',\wt{V}} ~ : ~ \wt{V}' \times \wt{V} \rightarrow \mathbb{R}$ represents the duality pairing between $\wt{V}'$ and $\wt{V}$, encoding the action of any functional of $\wt{V}'$ onto elements of $\wt{V}$.
+		
+		The finite element method requires problem \eqref{eq:pde-differential-form} to be stated in a weak (or variational) form \cite{Qua10}. To this end, let us introduce the form $\wt{g} ~ : ~ \wt{V} \times \wt{V} \times \mathcal{P} \rightarrow \mathbb{R}$, with $g(\cdot, \, \cdot; \, \bg{\mu})$ defined as:
+		\begin{equation*}
+			\wt{g}(w, \, v; \, \bg{\mu}) = \langle \wt{G}(w; \bg{\mu}_{ph}); v \rangle_{\wt{V}',\wt{V}} \hspace*{0.3cm} \forall w, \, v \in \wt{V} \, .
+		\end{equation*}
+		The variational formulation of \eqref{eq:pde-differential-form} then reads: given $\bg{\mu} = (\bg{\mu}_{ph}, \, \bg{\mu}_g) \in \mathcal{P}$, find $\wt{u}(\bg{\mu}) \in \wt{V}(\bg{\mu}_g)$ such that
+		\begin{equation}
+			\label{eq:pde-variational-form}
+			\wt{g}(\wt{u}(\bg{\mu}), \, v; \, \bg{\mu}) = 0 \hspace*{0.3cm} \forall v \in \wt{V}(\bg{\mu}) \, .
+		\end{equation}
+		Note that the definition of $\wt{g}(\cdot, \, \cdot; \, \bg{\mu})$ relies on the duality pairing $\langle \cdot, \, \cdot \rangle_{\wt{V}',\wt{V}}$ between $\wt{V}$ and $\wt{V}'$. Hence, from the nonlinearity of $\wt{G}$ follows the nonlinearity of $\wt{g}$ with respect to its first argument.
+		%\end{spacing}
+		
+	\subsection{From physical to reference domain}
+	\label{section:From physical to reference domain}
+	
+		As anticipated in the Introduction, any reduced basis method seeks an approximated solution to a differential problem as a combination of (few) well-chosen basis vectors, resulting in a finite-dimensional model which features a remarkably decreased dimension with respect to canonical discretization techniques (e.g., finite element method). As further detailed in Section \ref{}, the method relies on the combination of a collection of high-fidelity approximations $\big\lbrace \wt{u}_h \big( \bg{\mu}^{(1)} \big), \, \ldots \, , \wt{u}_h \big( \bg{\mu}^{(N)} \big) \big\rbrace$, called \emph{snapshots}, corresponding to the parameter values $\big\lbrace \bg{\mu}^{(1)}, \, \ldots \, , \bg{\mu}^{(N)} \big\rbrace$. However, we may be concerned with boundary value problems for stationary PDEs defined on variable shape geometries, so that two snapshots $\wt{u}_h \big( \bg{\mu}^{(j)} \big)$ and $\wt{u}_h \big( \bg{\mu}^{(k)} \big)$, with $1 \leq j, \, k \leq N$ and $j \neq k$, are likely to have been computed on two different domains $\wt{\Omega}\big( \bg{\mu}_g^{(j)}\big)$ and $\wt{\Omega}\big( \bg{\mu}_g^{(k)}\big)$. Hence, the underlying high-fidelity solver should be carefully designed to guarantee the \emph{compatibility} among snapshots. In particular, let $\mathbf{u}_h\big( \bg{\mu}^{(j)} \big)$ and $\mathbf{u}_h\big( \bg{\mu}^{(k)} \big) $ be the vectors collecting the degrees of freedom for $\wt{u}_h \big( \bg{\mu}^{(j)} \big)$ and $\wt{u}_h \big( \bg{\mu}^{(j)} \big)$, respectively. Then, we should ensure that:		
+		\begin{enumerate}[label=(\alph*)]
+			\item $\text{dim} \big( \mathbf{u}_h \big( \bg{\mu}^{(j)} \big) \big) = \text{dim} \big( \mathbf{u}_h \big( \bg{\mu}^{(k)} \big) \big)$, i.e. the number of degrees of freedom must be the same;
+			\label{first-compatibility-condition}
+			\item corresponding entries of the two vectors must be correlated.
+			\label{second-compatibility-condition}
+		\end{enumerate}	
+		For a mesh-based numerical method, the conditions \ref{first-compatibility-condition} and \ref{second-compatibility-condition} can be satisfied by preserving the connectivity of the underlying meshes across different domains, i.e., different values of $\bg{\mu}_g$. To this end, we formulate and solve the differential problem over a fixed, \emph{parameter-independent} domain $\Omega$. This can be accomplished upon introducing a parametrized map $\bg{\Phi} ~ : ~ \Omega \times \mathcal{P}_g \rightarrow \wt{\Omega}$ such that
+		\begin{equation*}
+			\label{eq:parametrized-map}
+			\wt{\Omega}(\bg{\mu}_g) = \bg{\Phi}(\Omega; \, \bg{\mu}_g) \, .
+		\end{equation*}
+		The transformation $\bg{\Phi}$ allows to restate the general problem \eqref{eq:pde-differential-form}. Let $V$ be a suitable Hilbert space over $\Omega$ and $V'$ be its dual. Suppose $V$ is equipped with the scalar product $(\cdot, \, \cdot)_V ~ : ~ V \times V \rightarrow \mathbb{R}$ and the induced norm $\norm{\cdot}_V = \sqrt{(\cdot, \, \cdot)_V} ~ : ~ V \rightarrow [0,\infty)$. Given the parametrized map $G ~ : V \times \mathcal{P} \rightarrow V'$ representing the (nonlinear) PDE over the reference domain $\Omega$, we focus on differential problems of the form: given $\bg{\mu} \in \mathcal{P}$, find $u(\bg{\mu}) \in V$ such that
+		\begin{equation}
+			\label{eq:pde-differential-reference}
+			G(u(\bg{\mu}); \, \bg{\mu}) = 0 \hspace*{0.3cm} \text{in $V'$} \, .
+		\end{equation}
+		The weak formulation of problem \eqref{eq:pde-differential-reference} reads: given $\bg{\mu} \in \mathcal{P}$, seek $u(\bg{\mu}) \in V$ such that
+		\begin{equation}
+			\label{eq:pde-weak-reference}
+			g(u(\bg{\mu}), \, v; \, \bg{\mu}) = 0 \hspace*{0.3cm} \forall v \in V \, ,
+		\end{equation}
+		where $g ~ : ~ V \times V \times \mathcal{P} \rightarrow \mathbb{R}$ is defined as
+		\begin{equation*}
+			g(w, \, v; \, \bg{\mu}) = \langle G(w); \bg{\mu}), \, v \rangle_{V',V} \hspace*{0.3cm} \forall w, \, v \in V \, ,
+		\end{equation*}
+		with $\langle \cdot, \, \cdot \rangle_{V',V} ~ : ~ V' \times V \rightarrow \mathbb{R}$ the dual pairing between $V$ and $V'$. Observe that the explicit expression of $g(\cdot, \, \cdot; \, \bg{\mu})$ involves the map $\bg{\Phi}$, thus keeping track of the original domain $\wt{\Omega}(\bg{\mu}_g)$. Then, the solution $\wt{u}(\bg{\mu})$ over the original domain $\wt{\Omega}(\bg{\mu}_g)$ can be recovered as
+		\begin{equation*}
+			\wt{u}(\bg{\mu}) = u(\bg{\mu}) \circ \bg{\Phi}(\bg{\mu}) \, .
+		\end{equation*}
+		For any $\bg{\mu} \in \mathcal{P}$ we seek a discrete solution $u_h(\bg{\mu})$ to the problem \eqref{eq:pde-differential-reference} on a \emph{parameter-independent} cover $\Omega_h$ of the domain $\Omega$. Provided a convenient choice for $\Omega$, this makes the mesh generation process easier. In addition, we note that discretizing the problem \eqref{eq:pde-differential-reference} over $\Omega_h$ is equivalent to approximating the original problem \eqref{eq:pde-differential-form} over the mesh $\wt{\Omega}_h(\bg{\mu}_g)$, given by
+		\begin{equation*}
+			\label{eq:parametrized-map-discrete}
+			\wt{\Omega}_h(\bg{\mu}_g) = \bg{\Phi}(\Omega_h; \, \bg{\mu}_g) \, .
+		\end{equation*}
+		Therefore, the requirements \ref{first-compatibility-condition} and \ref{second-compatibility-condition} are automatically fulfilled provided the map $\bg{\Phi}(\cdot; \, \bg{\mu}_g)$ is \emph{conformal} for any $\bg{\mu}_g \in \mathcal{P}_g$. To ensure conformality, in our numerical tests we resort to a particular choice for $\bg{\Phi}$ - the boundary displacement-dependent transfinite map (BDD TM) proposed in \cite{JIR14}.
+		
+		
+	%
+	% Problems of interest
+	%
+		
+	\subsection{Problems of interest}
+	\label{section:Problems of interest}
+	
+		Within the wide range of PDEs which suit the functional framework portrayed so far, in this work we focus on two relevant examples - the nonlinear Poisson equation and the stationary Navier-Stokes equations - which will serve as test cases in Section \ref{}.
+		
+		
+	%
+	% Poisson
+	%
+		
+	\subsubsection{Nonlinear Poisson equation}
+	\label{section:Nonlinear Poisson equation}
+	
+		Despite a rather simple form, the Poisson equation has proved itself to be effective to model steady phenomena occurring in, e.g., electromagnetism, heat transfer, and underground flows \cite{MM10}. We consider the following version of the parametrized Poisson equation for a state variable $\wt{u} = \wt{u}(\bg{\mu})$:		
+		\begin{subequations}
+			\label{eq:poisson-differential}
+			\begin{empheq}[left=\empheqlbrace]{align}
+				\label{eq:poisson-differential-first-equation}
+				- \wt{\nabla} \cdot \left( \wt{k}(\wt{\bg{x}}, \, \wt{u}(\bg{\mu}); \bg{\mu}_{ph}) ~ \wt{\nabla} \wt{u}(\bg{\mu}) \right) & = \wt{s}(\wt{\bg{x}}; \, \bg{\mu}_{ph}) & \text{in $\wt{\Omega}(\bg{\mu}_g)$} \, , \\
+				\wt{u}(\bg{\mu}) & = \wt{g}(\wt{\bg{\sigma}}; \, \bg{\mu}_{ph}) & \text{on $\wt{\Gamma}_D$} \, , \\
+				\wt{k}(\wt{\bg{\sigma}}, \, \wt{u}(\bg{\mu}); \bg{\mu}_{ph}) ~ \wt{\nabla} \wt{u}(\bg{\mu}) \cdot \wt{\bg{n}} & = 0 & \text{on $\wt{\Gamma}_N$} \, .
+			\end{empheq}
+		\end{subequations}
+		Here, for any $\bg{\mu}_g \in \mathcal{P}_g$:
+		\begin{itemize}
+			\item $\wt{\bg{x}}$ and $\wt{\bg{\sigma}}$ denote a generic point in $\wt{\Omega}$ and on $\wt{\Gamma}$, respectively;
+			\item $\wt{\nabla}$ is the nabla operator with respect to $\wt{\bg{x}}$;
+			\item $\wt{\bg{n}} = \wt{\bg{n}}(\wt{\bg{\sigma}})$ denotes the outward normal to $\wt{\Gamma}$ in $\wt{\bg{\sigma}}$;
+			\item $\wt{k} ~ : ~ \wt{\Omega} \times \mathbb{R} \times \mathcal{P}_{ph} \rightarrow (0,\infty)$ is the diffusion coefficient, $\wt{s} ~ : ~ \wt{\Omega} \times \mathcal{P}_{ph} \rightarrow \mathbb{R}$ is the source term, and $\wt{g} ~ : ~ \wt{\Gamma}_D \times \mathcal{P}_{ph} \rightarrow \mathbb{R}$ encodes the Dirichlet boundary conditions; 
+			\item to ease the subsequent discussion, we limit the attention to homogeneous Neumann boundary constraints.
+		\end{itemize}
+		Let us fix $\bg{\mu} \in \mathcal{P}$ and set 
+		\begin{equation*}
+			\wt{V} = H^1_{\wt{\Gamma}_D}(\wt{\Omega}) = \big\lbrace v \in H^1(\wt{\Omega}) ~ : ~ v \big\rvert_{\wt{\Gamma}_D} = 0 \big\rbrace \, ,
+		\end{equation*}
+		Multiplying \eqref{eq:poisson-differential-first-equation} by a \emph{test} function $v \in \wt{V}$, integrating over $\wt{\Omega}$, and exploiting integration by parts on the left-hand side, yields:
+		\begin{equation}
+			\label{eq:poisson-weak-derivation}
+			\int_{\wt{\Omega}(\bg{\mu}_g)} \wt{k}(\wt{u}(\bg{\mu}); \, \bg{\mu}_{ph}) ~ \wt{\nabla} \wt{u}(\bg{\mu}) \cdot \wt{\nabla} v ~ d\wt{\Omega}(\bg{\mu}_g) = \int_{\wt{\Omega}(\bg{\mu}_g)} \wt{s}(\bg{\mu}_{ph}) ~ v ~ d\wt{\Omega}(\bg{\mu}_g) \, ,
+		\end{equation}
+		where we have omitted the dependence on the space variable $\wt{\bg{x}}$ for ease of notation. For the integrals in Eq. \eqref{eq:poisson-weak-derivation} to be well-defined, we require, for any $\bg{\mu}_g \in \mathcal{P}_g$, 
+		\begin{equation*}
+			\text{$|\wt{k}(\wt{\bg{x}}, \, r; \, \bg{\mu}_g)| < \infty$ for almost any (a.a.) $\wt{\bg{x}} \in \wt{\Omega}(\bg{\mu}_g), \, r \in \mathbb{R}$}  \hspace*{0.3cm} \text{and} \hspace*{0.3cm} \wt{s}(\bg{\mu}_{ph}) \in L^2 \big( \wt{\Omega}(\bg{\mu}_g) \big) \, .
+		\end{equation*}
+		Let then $\wt{l} = \wt{l}(\bg{\mu}) \in H^1 \big( \wt{\Omega}(\bg{\mu}_g) \big)$ be a \emph{lifting} function such that $\wt{l}(\bg{\mu}) \big\rvert_{\wt{\Gamma}_D} = \wt{g}(\bg{\mu}_{ph})$, with $\wt{g}(\bg{\mu}_{ph}) \in H^{1/2} \big( \wt{\Gamma}_D \big)$. We assume that such a function can be constructed, e.g., by interpolation of the boundary condition. Hence, upon defining
+		\begin{subequations}
+			\label{eq:poisson-weak-forms}
+			\begin{align}
+				&
+				\begin{aligned}
+				\wt{a}(w, \, v; \, \bg{\mu}) := & \int_{\wt{\Omega}(\bg{\mu}_g)} \wt{k}(w + \wt{l}(\bg{\mu}); \, \bg{\mu}_{ph}) ~ \wt{\nabla} w \cdot \wt{\nabla} v ~ d\wt{\Omega}(\bg{\mu}_g) \\
+				& + \int_{\wt{\Omega}(\bg{\mu}_g)} \wt{k}(w + \wt{l}(\bg{\mu}); \, \bg{\mu}_{ph}) ~ \wt{\nabla} \wt{l}(\bg{\mu}) \cdot \wt{\nabla} v ~ d\wt{\Omega}(\bg{\mu}_g) \hspace*{1cm} \forall w, \, v \in \wt{V}(\bg{\mu}_g) \, , 
+				\end{aligned} \\
+				& \wt{f}(v; \, \bg{\mu}) := \int_{\wt{\Omega}(\bg{\mu}_g)} \wt{s}(\bg{\mu}_{ph}) ~ v ~ d\wt{\Omega}(\bg{\mu}_g) \hspace*{1cm} \hspace*{3.775cm} \forall v \in \wt{V}(\bg{\mu}_g) \, ,
+			\end{align}
+		\end{subequations}
+		the weak formulation of problem \eqref{eq:poisson-differential} reads: given $\bg{\mu} \in \mathcal{P}$, find $\wt{u}(\bg{\mu}) \in \wt{V}(\bg{\mu}_g)$ such that
+		\begin{equation}
+			\label{eq:poisson-weak}
+			\wt{a}(\wt{u}(\bg{\mu}), \, v; \, \bg{\mu}) = \wt{f}(v; \, \bg{\mu}) \hspace*{0.3cm} \forall v \in \wt{V}(\bg{\mu}_g) \, , 
+		\end{equation}
+		Then, the weak solution of problem \eqref{eq:poisson-differential} is given by $\wt{u}(\bg{\mu}) + \wt{l}(\bg{\mu})$. Note that using a lifting function makes the formulation \eqref{eq:poisson-weak} \emph{symmetric}, i.e., both the solution and the test functions are picked up from the same functional space \cite{Qua10}.
+		
+		%Lastly, let us remark that the weak formulation \eqref{eq:poisson-weak} can be cast in the form \eqref{eq:pde-variational-form} upon setting, for any $v \in \wt{V}(\bg{\mu}_g)$:
+		%	\begin{equation*}
+		%		\langle \wt{G}(\wt{u}(\bg{\mu}); \bg{\mu}_{ph}); v \rangle_{\wt{V},\wt{V}'} = \wt{g}(\wt{u}(\bg{\mu}), \, v; \, \bg{\mu}) = \wt{a}(\wt{u}(\bg{\mu}), \, v; \, \bg{\mu}) - \wt{f}(v; \, \bg{\mu}) \, .
+		%	\end{equation*} 
+		
+		Let us now re-state the variational problem \eqref{eq:poisson-weak} onto the reference domain $\Omega$. For this purpose, let $\Gamma_D$ and $\Gamma_N$ be the portions of the boundary $\Gamma = \partial \Omega$ on which we impose Dirichlet and Neumann boundary conditions, respectively. Moreover, we denote by $\mathbb{J}_{\bg{\Phi}}(\bg{\mu})$ the Jacobian of the parametrized map $\bg{\Phi}(\cdot; \, \bg{\mu})$, with determinant $\lvert \mathbb{J}_{\bg{\Phi}}(\bg{\mu}) \rvert$, and we set
+		\begin{equation*}
+			k(\bg{x}, \, \cdot; \, \bg{\mu}) = \wt{k}(\bg{\Phi}(\bg{x}; \, \bg{\mu}), \, \cdot; \, \bg{\mu}) \, , \hspace*{0.2cm} s(\bg{x}; \, \bg{\mu}) = \wt{s}(\bg{\Phi}(\bg{x}; \, \bg{\mu}); \, \bg{\mu}) \hspace*{0.2cm} \text{and} \hspace*{0.2cm} g(\bg{x}; \bg{\mu}) = \wt{g}(\bg{\Phi}(\bg{x}; \bg{\mu}); \, \bg{\mu}) \, .
+		\end{equation*}
+		Letting \[ V = H^1_{\Gamma_D}(\Omega) \] and exploiting standard change of variables formulas, the variational formulation of the Poisson problem \eqref{eq:poisson-differential} over $\Omega$ reads: given $\bg{\mu} \in \mathcal{P}$, find $u(\bg{\mu}) \in V$ such that
+		\begin{equation}
+			\label{eq:poisson-weak-reference}
+			a(u(\bg{\mu}), \, v; \, \bg{\mu}) = f(v; \, \bg{\mu}) \hspace*{0.3cm} \forall v \in V \, ,
+		\end{equation}
+		with
+		\begin{subequations}
+			\label{eq:poisson-weak-forms-reference}
+			\begin{align}
+				\label{eq:poisson-weak-forms-reference-first}
+				&
+				\begin{aligned}
+				a(w, \, v; \, \bg{\mu}) = & \int_{\Omega} k(w + l(\bg{\mu}); \, \bg{\mu}) ~ \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}) \nabla w \cdot \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}) \nabla v ~ \lvert \mathbb{J}_{\bg{\Phi}}(\bg{\mu}) ~ \rvert \, d \Omega \\
+				& + \int_{\Omega} k(w + l(\bg{\mu}); \, \bg{\mu}) ~ \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}) \nabla l(\bg{\mu}) \cdot \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}) \nabla v ~ \lvert \mathbb{J}_{\bg{\Phi}}(\bg{\mu}) ~ \rvert \, d \Omega \, ,
+				\end{aligned} \\
+				\label{eq:poisson-weak-forms-reference-second}
+				& f(v; \, \bg{\mu}) = \int_{\Omega} s(\bg{\mu}) ~ v ~ \lvert \mathbb{J}_{\bg{\Phi}}(\bg{\mu}) \rvert \, d \Omega \, ,  
+			\end{align}
+		\end{subequations}
+		for any $w$, $v \in V$ and $\bg{\mu} \in \mathcal{P}$. Note that, as done in \eqref{eq:poisson-weak-forms}, we resort to a lifting function $l(\bg{\mu}) \in H^1(\Omega)$ with $l(\bg{\mu}) \big\rvert_{\Gamma_D} = g(\bg{\mu})$, such that the weak solution to problem \eqref{eq:poisson-differential} re-stated over $\Omega$ is obtained as $u(\bg{\mu}) + l(\bg{\mu})$.
+		
+		Let us also remark that, when on a parameter-independent configuration, one can avoid to distinguish between physical and geometrical parameters, since even the latter now affect the integrands in \eqref{eq:poisson-weak-forms-reference-first} and \eqref{eq:poisson-weak-forms-reference-second}, and not the domain of integration.
+	
+		
+	%
+	% Navier-Stokes
+	%
+		
+	\subsubsection{Steady uncompressible Navier-Stokes equations}
+	\label{section:Steady uncompressible Navier-Stokes equations}
+	
+		The system of the Navier-Stokes equations model the conservation of mass and momentum for an incompressible Newtonian viscous fluid confined in a region $\wt{\Omega}(\bg{\mu}_g) \subset \mathbb{R}^d$, $d = 2, \, 3$ \cite{Ran99}. Letting $\wt{\bg{v}} = \wt{\bg{v}}(\wt{\bg{x}}; \, \bg{\mu})$ and $\wt{p} = \wt{p}(\wt{\bg{x}}; \, \bg{\mu})$ be the velocity and pressure of the fluid, respectively, the parametrized steady version of the Navier-Stokes equations considered in this work reads:
+		\begin{subequations}
+			\label{eq:ns-differential}
+			\begin{empheq}[left=\empheqlbrace]{align}
+				\label{eq:mass-conservation}
+				\wt{\nabla} \cdot \wt{\bg{v}}(\bg{\mu}) & = 0 & \text{in $\wt{\Omega}(\bg{\mu}_g)$} \, , \\
+				\label{eq:momentum-conservation}
+				- \nu(\bg{\mu}) ~ \wt{\Delta} \wt{\bg{v}}(\bg{\mu}) + (\wt{\bg{v}}(\bg{\mu}) \cdot \wt{\nabla}) \wt{\bg{v}}(\bg{\mu}) + \dfrac{1}{\rho(\bg{\mu})} \wt{\nabla} \wt{p}(\bg{\mu}) & = \bg{0} & \text{in $\wt{\Omega}(\bg{\mu}_g)$} \, , \\
+				\wt{\bg{v}}(\bg{\mu}) & = \wt{\bg{g}}(\bg{\mu}_{ph}) & \text{on $\wt{\Gamma}_D(\bg{\mu}_g)$} \, , \\
+				\wt{p}(\bg{\mu}) \wt{\bg{n}} - \nu(\bg{\mu}) \wt{\nabla} \wt{\bg{v}}(\bg{\mu}) \cdot \wt{\bg{n}} & = \bg{0} & \text{on $\wt{\Gamma}_N(\bg{\mu}_g)$} \, .
+			\end{empheq}
+		\end{subequations}
+		Here, $\wt{\bg{g}}(\bg{\mu}_{ph})$ denotes the velocity field prescribed on $\wt{\Gamma}_D$, whereas homogeneous Neumann conditions are applied on $\wt{\Gamma}_N$. Furthermore, $\rho(\bg{\mu})$ and $\nu(\bg{\mu})$ represent the uniform density and kinematic viscosity of the fluid, respectively. Note that, despite these quantities encode physical properties, we let them depend on the geometrical parameters as well. Indeed, fluid dynamics can be characterized (and controlled) by means of a wealth of dimensionless quantities, e.g., the Reynolds number, which combine physical properties of the fluid with geometrical features of the domain. Therefore, a numerical study of the sensitivity of the system \eqref{eq:ns-differential} with respect to $\bg{\mu}_g$ may be carried out by adapting either $\rho(\bg{\mu})$ or $\nu(\bg{\mu})$ as $\bg{\mu}_g$ varies, so to preserve a dimensionless quantity of interest; we refer the reader to Section \ref{} for a practical example. \\
+		For our purpose, it is worth noticing that the nonlinearity of problem \eqref{eq:ns-differential} lies in the convective term
+		\begin{equation*}
+			\big( \wt{\bg{v}}(\bg{\mu}) \cdot \wt{\nabla} \big) \wt{\bg{v}}(\bg{\mu}) \, ,
+		\end{equation*}
+		which gives rise to a \emph{quadratic} nonlinearity. %Conversely, the other terms appearing in the momentum equation \eqref{eq:momentum-conservation} and in Eq. \eqref{eq:mass-conservation}, which enforces mass conservation \cite{QMN15}, are linear in the solution $(\wt{\bg{v}}(\bg{\mu}), \, \wt{p}(\bg{\mu}))$.
+		
+		To write the differential system \eqref{eq:ns-differential} in weak form over a $\bg{\mu}_g$-independent configuration $\Omega$, let us introduce the velocity and pressure spaces \[ \wt{X}(\bg{\mu}_g) = \big[ H^1_{\wt{\Gamma}_D} \big( \wt{\Omega}(\bg{\mu}_g) \big) \big]^d ~~ \text{and} ~~ \wt{Q}(\bg{\mu}_g) = L^2 \big( \wt{\Omega}(\bg{\mu}_g) \big) \, , \] respectively, with \[ X = \big[ H^1_{\Gamma_D} \big( \Omega \big) \big]^d ~~ \text{and} ~~ Q = L^2 \big( \Omega \big) \] be their respective counterparts over $\Omega$. By multiplying \eqref{eq:ns-differential} for test functions $\big( \wt{\bg{\chi}}, \, \wt{\xi} \big) \in \wt{X}(\bg{\mu}_g) \times \wt{Q}(\bg{\mu}_g)$, integrating by parts and then tracing everything back onto $\Omega$ by means of the parametrized map $\bg{\Phi}(\cdot; \, \bg{\mu})$, we end up with the following parametrized weak variational problem: given $\bg{\mu} \in \mathcal{P}$, find $u(\bg{\mu}) = (\bg{v}(\bg{\mu}), \, p(\bg{\mu})) \in V = X \times Q$ so that
+		\begin{subequations}
+			\label{eq:ns-weak-reference}
+			\begin{align}
+				a(\bg{v}(\bg{\mu}), \, \bg{\chi}; \, \bg{\mu}) + c(\bg{v}(\bg{\mu}), \, \bg{v}(\bg{\mu}), \, \bg{\chi}; \, \bg{\mu}) + d(\bg{v}(\bg{\mu}), \, \bg{\chi}; \, \bg{\mu}) + b(p(\bg{\mu}), \, \nabla \cdot \bg{\chi}; \, \bg{\mu}) & = f_1(\bg{\chi}; \, \bg{\mu}) \, , \\
+				b(\nabla \cdot \bg{v}(\bg{\mu}), \, \xi; \, \bg{\mu}) & = f_2(\xi; \, \bg{\mu}) \, ,
+			\end{align}
+		\end{subequations}
+		for all $(\bg{\chi}, \, \xi) \in V$, with, for any $\bg{\mu} \in \mathcal{P}$,	
+		\begin{subequations}
+			\label{eq:ns-weak-forms}
+			\begin{align}
+				\label{eq:ns-weak-forms-c-reference}
+				& c(\bg{\psi}, \, \bg{\chi}, \, \bg{\eta}; \, \bg{\mu}) = \int_{\Omega} \left( \bg{\psi} \cdot \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}) \nabla \right) \bg{\chi} \cdot \bg{\eta} ~ \lvert \mathbb{J}_{\bg{\Phi}}(\bg{\mu}) \rvert \, d \Omega & \forall \bg{\psi}, \, \bg{\chi}, \, \bg{\eta} \in \big[ H^1(\Omega) \big]^d \, , \\[0.1cm]
+				\label{eq:ns-weak-forms-a-reference}
+				& a(\bg{\psi}, \, \bg{\chi}; \, \bg{\mu}) = \nu(\bg{\mu}) \int_{\Omega} \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}) \nabla \bg{\psi} ~ : ~ \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}) \nabla \bg{\chi} ~ \lvert \mathbb{J}_{\bg{\Phi}}(\bg{\mu}) \rvert \, d \Omega & \forall \bg{\psi}, \, \bg{\chi} \in X \, , \\[0.1cm]
+				\label{eq:ns-weak-forms-b-reference}
+				& b(\bg{\psi}, \, \xi; \, \bg{\mu}) = - \dfrac{1}{\rho(\bg{\mu})} \int_{\Omega} \left( \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}) \nabla \cdot \bg{\psi} \right) ~ \xi ~ \lvert \mathbb{J}_{\bg{\Phi}}(\bg{\mu}) \rvert \, d \Omega & \forall \bg{\psi} \in X \, , \forall \xi \in Q \, , \\[0.1cm]
+				\label{eq:ns-weak-forms-d-reference}
+				& d(\bg{\psi}, \, \bg{\chi}; \, \bg{\mu}) = c(\bg{l}(\bg{\mu}), \, \bg{\psi}, \, \bg{\chi}; \, \bg{\mu}) + c(\bg{\psi}, \, \bg{l}(\bg{\mu}), \, \bg{\chi}; \, \bg{\mu}); & \forall \bg{\psi}, \, \bg{\chi} \in X \, , \\[0.1cm]
+				\label{eq:ns-weak-forms-f1-reference}
+				& f_1(\bg{\psi}; \, \bg{\mu}) = - a(\bg{l}(\bg{\mu}), \, \bg{\psi}; \, \bg{\mu}) - c(\bg{l}(\bg{\mu}), \, \bg{l}(\bg{\mu}), \, \bg{\psi}; \, \bg{\mu}) & \forall \bg{\psi} \in X \, , \\[0.2cm]
+				\label{eq:ns-weak-forms-f2-reference}
+				& f_2(\xi; \, \bg{\mu}) = - b(\bg{l}(\bg{\mu}), \, \xi; \, \bg{\mu}) & \forall \xi \in Q \, .
+			\end{align}
+		\end{subequations}
+		Here, $\bg{l}(\bg{\mu}) \in \big[ H^1(\Omega) \big]^d$ denotes the lifting vector field, with $\bg{l}(\bg{\mu}) \big\rvert_{\Gamma_D} = \bg{g}(\bg{\mu})$, $\bg{g}(\bg{x}; \, \bg{\mu}) = \wt{\bg{g}}(\bg{\Phi}(\bg{x}; \, \bg{\mu}); \, \bg{\mu})$ being the velocity field prescribed on $\Gamma_D$. Hence, the weak solution to \eqref{eq:ns-differential} defined over the fixed domain $\Omega$ is given by $\big( \bg{v}(\bg{\mu}) + \bg{l}(\bg{\mu}), p(\bg{\mu}) \big)$.
+		
+	
+	%
+	% Discrete full-order model
+	%
+	
+	\section{Discrete full-order model}
+	\label{section:Discrete full-order model}
+	
+		Let $V_h \subset V$ be a finite-dimensional subspace of $V$ of dimension $M$. The FE approximation of the weak problem \eqref{eq:pde-weak-reference} can be cast in the form: given $\bg{\mu} \in \mathcal{P}$, find $u_h(\bg{\mu}) \in V_h$ such that 
+		\begin{equation}
+			\label{eq:galerkin}
+			g(u_h(\bg{\mu}), \, v_h; \, \bg{\mu}) = 0 \hspace*{0.3cm} \forall v_h \in V_h \, .
+		\end{equation}
+		The discretization \eqref{eq:galerkin} is known as \emph{Galerkin approximation}, and therefore $u_h(\bg{\mu})$ is referred to as the \emph{Galerkin solution} to the problem \eqref{eq:pde-differential-reference}. 
+		
+		Due to the nonlinearity of $g(\cdot, \, \cdot; \, \bg{\mu})$ in its first argument, one has to resort to some iterative method, e.g., Newton's method, to solve the Galerkin problem \eqref{eq:galerkin}. In this regard, let \[ dg[z](\cdot, \, \cdot; \, \bg{\mu}) ~ : ~ V \times V \rightarrow \mathbb{R} \]
+		be the partial Frech\'et derivative of $g(\cdot, \, \cdot; \, \bg{\mu})$ with respect to its first argument, evaluated at $z \in V$. Starting from an initial guess $u_h^0(\bg{\mu})$, we construct a collection of approximations $\big\lbrace u_h^k(\bg{\mu}) \big\rbrace_{k \geq 0}$ to the Galerkin solution $u_h(\bg{\mu})$ by iteratively solving the linearized problems
+		\begin{equation*}
+			\label{eq:newton-linearized-problem}
+			dg \big[ u_h^k(\bg{\mu}) \big](\delta u_h^k(\bg{\mu}), \, v_h; \, \bg{\mu}) = - g(u_h^k(\bg{\mu}), \, v_h; \, \bg{\mu}) \hspace*{0.3cm} \forall v_h \in V_h
+		\end{equation*}
+		in the unknown $\delta u_h^k(\bg{\mu}) \in V_h$, and then setting $u_h^{k+1}(\bg{\mu}) = u_h^k(\bg{\mu}) + \delta u_h^k(\bg{\mu})$.
+		
+		To derive the algebraic counterpart of the Galerkin-Newton method, let $\big\lbrace \phi_1, \, \ldots \, , \phi_M \big\rbrace$ be a basis for the $M$-dimensional space $V_h$, so that the solution $u_h(\bg{\mu})$ can be expressed as a linear combination of the basis functions, i.e.,
+		\begin{equation}
+			\label{eq:galerkin-solution}
+			u_h(\bg{x}; \, \bg{\mu}) = \sum_{j = 1}^M u_h^{(j)}(\bg{\mu}) ~ \phi_j(\bg{x}) \, .
+		\end{equation} 
+		Hence, denoting by $\mathbf{u}_h(\bg{\mu}) \in \mathbb{R}^M$ the vector collecting the \emph{degrees} \emph{of} \emph{freedom} $\big\lbrace u_h^{(j)} \big\rbrace_{j = 1}^M$ and exploiting the linearity of $g(\cdot, \, \cdot; \, \bg{\mu})$ in the second argument, the problem \eqref{eq:galerkin} is equivalent to: given $\bg{\mu} \in \mathcal{P}$, find $\mathbf{u}_h(\bg{\mu}) \in \mathbb{R}^M$ such that
+		\begin{equation*}
+			\label{eq:galerkin-algebraic}
+			g \left( \sum_{j = 1}^M u_h^{(j)}(\bg{\mu}) ~ \phi_j, \, \phi_i; \, \bg{\mu} \right) = 0 \hspace*{0.3cm} \forall i = 1, \, \ldots \, , M \, .
+		\end{equation*}
+		We observe now that the above problem can be written in compact form as
+		\begin{equation}
+			\label{eq:galerkin-nonlinear-system}
+			\mathbf{G}_h (\mathbf{u}_h(\bg{\mu}); \, \bg{\mu}) = \bg{0} \in \mathbb{R}^M \, ,
+		\end{equation}
+		where the $i$-th component of the \emph{residual vector} $\mathbf{G}(\cdot; \, \bg{\mu}) \in \mathbb{R}^M$ is given by
+		\begin{equation}
+			\label{eq:galerkin-nonlinear-system-equation}
+			\left( \mathbf{G}_h(\mathbf{u}_h(\bg{\mu}); \, \bg{\mu}) \right)_i = g \left( \sum_{j = 1}^M u_h^{(j)}(\bg{\mu}) ~ \phi_j, \, \phi_i; \, \bg{\mu} \right) \, , \hspace*{0.3cm} i = 1, \, \ldots \, , M \, .
+		\end{equation}
+		Then, for $k \geq 0$, the $k$-th iteration of Newton's method applied to the system \eqref{eq:galerkin-nonlinear-system} entails the resolution of the \emph{linear} system
+		\begin{equation}
+			\label{eq:galerkin-linear-system}
+			\mathbb{J}_h \big( \mathbf{u}^k_h(\bg{\mu}); \, \bg{\mu} \big) ~ \delta \mathbf{u}^k_h(\bg{\mu}) = - \mathbf{G}_h \big( \mathbf{u}^k_h(\bg{\mu}); \, \bg{\mu} \big) \, , \hspace*{0.3cm} \delta \mathbf{u}^k_h(\bg{\mu}) \in \mathbb{R}^M \, ,
+		\end{equation}
+		so that $\mathbf{u}^{k+1}_h(\bg{\mu}) = \mathbf{u}^k_h(\bg{\mu}) + \delta \mathbf{u}^k_h(\bg{\mu})$. Here, $\mathbb{J}_h(\cdot; \, \bg{\mu}) \in \mathbb{R}^{M \times M}$ denotes the Jacobian of the residual vector $\mathbf{G}_h(\cdot; \, \bg{\mu})$; exploiting the bilinearity of $dg[z](\cdot, \, \cdot; \, \bg{\mu})$, $\mathbb{J}_h(\cdot; \, \bg{\mu})$ is defined as
+		\begin{equation*}
+			\left( \mathbb{J}_h \big( \mathbf{u}^k_h(\bg{\mu}); \, \bg{\mu} \big) \right)_{i,j} = dg\big[u^k_h(\bg{\mu})\big](\phi_j, \, \phi_i; \, \bg{\mu}) \, , \hspace*{0.3cm} i, \, j = 1, \, \ldots \, , M \, .
+		\end{equation*} 
+		
+		
+	%
+	% Projection-based RB methods
+	%
+	
+	\section{Projection-based reduced basis method}
+	\label{section:Projection-based reduced basis method}
+	
+		As detailed in the previous section, the finite element discretization of the $\bg{\mu}$-dependent nonlinear differential problem \eqref{eq:pde-weak-reference}, combined with Newton's method, entails the assembly and resolution of (possibly) many linear systems of the form \eqref{eq:galerkin-linear-system}, whose dimension is directly related to $(i)$ the size of the underlying grid and $(ii)$ the order of the polynomial FE spaces adopted. Since the accuracy of the resulting discretization heavily relies on these two factors, a direct numerical approximation of the full-order model implies severe computational costs. Therefore, even resorting to high-performance parallel workstations, this approach is hardly affordable in \emph{many-query} and \emph{real-time} contexts. %, where one is interested in a fast and reliable prediction of an \emph{output of interest}, i.e, a functional of the field variable $u(\bg{\mu})$, for many instances of $\bg{\mu} \in \mathcal{P}$ \cite{Dep08}. 
+		This motivates the broad use of \emph{reduced-order} models, across several inter-disciplinary areas, e.g., parameter estimation, optimal control, shape optimization and uncertainty quantification \cite{HSR16, QMN15}. 
+		
+		\iffalse
+		To derive a standard projection-based reduced basis method, we introduce the notion of \emph{solution manifold} $\mathcal{M}$, defined as
+		\begin{equation*}
+			\mathcal{M} = \big\lbrace u(\bg{\mu}) ~ : ~ \bg{\mu} \in \mathcal{P} \big\rbrace \subset V \, .
+		\end{equation*}
+		Similarly, its discrete counterpart $\mathcal{M}_h$ is given by
+		\begin{equation*}
+			\mathcal{M}_h = \big\lbrace u_h(\bg{\mu}) ~ : ~ \bg{\mu} \in \mathcal{P} \big\rbrace \subset V_h \, .
+		\end{equation*}
+		For any $\bg{\mu} \in \mathcal{P}$, we assume that the FE solution $u_h(\bg{\mu})$ can be lead as close as desired (in the $V$-norm) to the corresponding continuous solution $u_h(\bg{\mu})$ (either by refining the computational mesh or by increasing the order of the FE space), so that $\mathcal{M}_h$ provides a good approximation of $\mathcal{M}$. Hence, in the following we refer to $u_h(\bg{\mu})$ as the \emph{truth} solution.
+		\fi
+		
+		Reduced basis methods seek an approximated solution to the problem \eqref{eq:pde-weak-reference} as a linear combination of parameter-independent functions \[ \big\lbrace \psi_1, \, \ldots \, , \psi_L \big\rbrace \subset V_h \, , \] called \emph{reduced basis functions}, built from a collection of high-fidelity solutions \[ \big\lbrace u_h \big( \bg{\mu}^{(1)} \big), \, \ldots \, , u_h \big( \bg{\mu}^{(N)} \big) \big\rbrace \subset \mathcal{M}_h \, , \] called \emph{snapshots}, where the discrete and finite set \[ \Xi_N = \big\lbrace \bg{\mu}^{(1)}, \, \ldots \, , \bg{\mu}^{(N)} \big\rbrace \subset \mathcal{P} \] may consist of either a uniform lattice or randomly generated points over the parameter domain $\mathcal{P}$ \cite{HSR16}. The basis functions $\big\lbrace \psi_l \big\rbrace_{l = 1}^L$ generally follow from a principal component analysis (PCA) of the set of snapshots (in that case, $N > L$), or they might coincide with the snapshots themselves (in that case, $N = L$). In the latter approach, typical of any \emph{greedy} method, the parameters $\big\lbrace \bg{\mu}^{(n)} \big\rbrace_{n = 1}^N$ must be carefully chosen according to some optimality criterium (see, e.g., \cite{Chen17}). Here, we pursue the first approach, employing the well-known Proper Orthogonal Decomposition (POD) method \cite{Vol08}, detailed in the following subsection.
+		
+		Assume now that a reduced basis is available and let $V_{\texttt{rb}} \subset V_h$ be the associated \emph{reduced basis space}, i.e.,
+		\begin{equation*}
+			V_{\texttt{rb}} = \text{span} \big\lbrace \psi_1, \, \ldots \, , \psi_L \big\rbrace \, .
+		\end{equation*} 
+		A \emph{reduced basis solution} $u_{L}(\bg{\mu})$ is sought in the form
+		\begin{equation}
+			\label{eq:rb-solution}
+			u_{L}(\bg{x}; \, \bg{\mu}) = \sum_{l = 1}^L u_{\texttt{rb}}^{(l)}(\bg{\mu}) ~ \psi_l(\bg{x}) ~ \in ~ V_{\texttt{rb}} \, ,
+		\end{equation}
+		with \[ \mathbf{u}_{\texttt{rb}}(\bg{\mu}) = \big[ u_{\texttt{rb}}^{(1)}(\bg{\mu}), \, \ldots \, , u_{\texttt{rb}}^{(L)}(\bg{\mu}) \big]^T \in \mathbb{R}^L \] be the \emph{coefficients} (also called \emph{generalized coordinates}) for the expansion of the RB solution in the RB basis functions. 
+		
+		%Before further proceeding with the derivation of the method, let us gain some insights into the rational behind the reduced basis approach. 
+		
+		As one can foresee, RB methods (potentially) enable a relevant reduction in the computational effort when the dimension of the associated test and trial space $V_{\texttt{rb}}$ is significantly smaller than the dimension of the original finite element space $V_h$; in other terms, $L << M$ must hold. However, this assumes that the solution manifold $\mathcal{M} \subset V$ (or, equivalently, $\mathcal{M}_h \subset V_h$) is actually of low-dimension, and can then be accurately approximated by a subspace of reduced dimension $L$ \cite{HSR16}. To further investigate this necessary hypothesis, it is worth introducing the notion of Kolmogorov $L$-width. The definition is \cite{Mad06}:
+		
+		\begin{definition}
+			\emph{
+			Let $X$ be a linear space equipped with the norm $\norm{\cdot}_X$, $A$ be a subset of $X$ and $X_L$ be a generic $L$-dimensional subspace of $X$. The deviation of $A$ from $X_L$ is defined as
+			\begin{equation*}
+				E(A; \, X_L) = \adjustlimits \sup_{x \in A} \inf_{y \in X_L}  \norm{x - y}_X \, .
+			\end{equation*}
+			Then, the \emph{Kolmogorov $L$-width} of $A$ in $X$ is given by
+			\begin{equation}
+				\label{eq:kolmogorov-L-width}
+				\begin{aligned}
+					d_L(A, \, X) & = \inf \big\lbrace E(A; \, X_L) ~ : ~ \text{$X_L$ is an $L$-dimensional subspace of $X$} \big\rbrace \\
+					& = \adjustlimits \inf_{X_L} \sup_{x \in A} \inf_{y \in X_L} \norm{x - y}_X \, .
+				\end{aligned}
+			\end{equation}
+			}
+		\end{definition}
+		
+		\noindent Therefore, $d_L(A, \, X)$ measures the extent to which the subset $A$ of the vector space $X$ can be well-approximated by an $L$-dimensional subspace \cite{Mad06}. Indeed, there exist many situations in which the Kolmogorov $L$-width shows a graceful behaviour with $L$, e.g., an exponential decay. In our case, $X = V$ and $A = \mathcal{M}$, and we can refer to regularity of the solutions $u(\bg{\mu})$ with respect to the parameter $\bg{\mu}$, or even to analyticity in the parameter dependence \cite{Buf12}.
+		
+		Nevertheless, we still have to ensure that the RB space $V_{\texttt{rb}}$, i.e., the chosen $X_L$ in \eqref{eq:kolmogorov-L-width}, attains the infimum $d_L(\mathcal{M}, \, V)$, or at least a value close to the infimum. At this regard, let us consider the following bound for the error committed when approximating the continuous solution $u(\bg{\mu})$ with $u_L(\bg{\mu})$:
+		\begin{equation*}
+			\norm{u(\bg{\mu}) - u_L(\bg{\mu})}_V \leq \norm{u(\bg{\mu}) - u_h(\bg{\mu})}_V + \norm{u_h(\bg{\mu}) - u_L(\bg{\mu})}_V \hspace*{0.3cm} \forall \bg{\mu} \in \mathcal{P} \, .
+		\end{equation*}
+		The first term on the right-hand side measures the discrepancy between the continuous solution and its high-fidelity approximation. For what previously said, this error can be lower to any desired level of accuracy. Therefore, the reliability of the solution provided by any reduced basis technique relies on a sound control of the second term of the right-hand side $\norm{u_h(\bg{\mu}) - u_L(\bg{\mu})}_V$, i.e., the error between the truth and the reduced solution. The last decade has whitnessed the development of different \emph{a priori} and \emph{a posteriori} estimates for such error (see, e.g., \cite{Buf12, HSR16, Mad06}), thus \emph{certifying} the RB procedure, that is, enabling the user to trust the output of the RB method. However, as already mentioned, the range of application of these estimates is usually limited to linear problems with an affine dependence on the parameters. Although recent and relevant improvements have been achieved also for the Navier-Stokes equations (see, e.g., \cite{Dep08, QMN15}), they rely on non-trivial results from functional analysis and involve rather long calculations. Hence, it is not the intent of this work to further investigate and employ these estimates. Yet, in our numerical simulations we will \emph{empirically} study the effectiveness of the POD-Galerkin method by evaluating the error $\norm{u_h(\bg{\mu}) - u_L(\bg{\mu})}_V$ on a finite and discrete \emph{test} dataset $\Xi_{te} \in \mathcal{P}$. We refer the reader to Section \ref{} for a deeper discussion.
+		
+		Let us now resume the derivation of the POD-Galerkin RB method. To unearth $u_L(\bg{\mu})$, whose general form is given in \eqref{eq:rb-solution}, we proceed to project the variational problem \eqref{eq:pde-weak-reference} onto the RB space $V_{\texttt{rb}}$ by pursuing a standard Galerkin approach, leading to the following \emph{reduced basis problem}: given $\bg{\mu} \in \mathcal{P}$, find $u_L(\bg{\mu}) \in V_{\texttt{rb}}$ so that
+		\begin{equation}
+			\label{eq:pde-rb}
+			g(u_L(\bg{\mu}), \, v_L; \, \bg{\mu}) = 0 \hspace*{0.3cm} \forall v_L \in V_{\texttt{rb}} \, .
+		\end{equation}
+		Then, Newton's method applied to \eqref{eq:pde-rb} entails, at each iteration $k \geq 0$, the solution of the linearized problem: given $\bg{\mu} \in \mathcal{P}$, seek $\delta u_{L}^k(\bg{\mu})$ such that
+		\begin{equation*}
+			\label{eq:pde-rb-newton}
+			dg \big[ u_{L}^k(\bg{\mu}) \big] \big( \delta u_{L}^k(\bg{\mu}), \, v_{L}; \, \bg{\mu} \big) = - g \big( u_{L}^k(\bg{\mu}), \, v_{L}; \, \bg{\mu} \big) \hspace*{0.3cm} \forall v_{L} \in V_{\texttt{rb}} \, ,
+		\end{equation*}
+		with $u_{L}^{k+1}(\bg{\mu}) = u_{L}^k(\bg{\mu}) + \delta u_{L}^k(\bg{\mu})$.
+		
+		Let us point out that the RB functions $\big\lbrace \psi_l \big\rbrace_{l = 1}^L$ belong to $V_h$, i.e., they are actual FE functions. Hence, we denote by $\bg{\psi}_l \in \mathbb{R}^M$ the vector collecting the nodal values of $\psi_l$, for $l = 1, \, \ldots \, , L$, and introduce the matrix $\mathbb{V} = \big[ \bg{\psi}_1, \, \big| \, \ldots \, \big| \, , \bg{\psi}_L \big] \in \mathbb{R}^{M \times L}$. For any $v_{L} \in V_{\texttt{rb}}$, the matrix $\mathbb{V}$ encodes the change of variables from the RB basis to the standard (Lagrangian) FE basis, i.e.,
+		\begin{equation}
+			\label{eq:rb-fe-coefficients}
+			\mathbf{v}_L = \mathbb{V} ~ \mathbf{v}_{\texttt{rb}} \, .
+		\end{equation}
+		Therefore, each element $v_{L}$ of the reduced space admits two (algebraic) representations:
+		\begin{itemize}
+			\item $\mathbf{v}_{\texttt{rb}} \in \mathbb{R}^L$, collecting the coefficients for the expansion of $v_{L}$ in terms of the RB basis $\big\lbrace \psi_1, \, \ldots \, , \psi_L \big\rbrace$;
+			\item $\mathbf{v}_{L} \in \mathbb{R}^M$, collecting the coefficients for the expansion of $v_{L}$ in terms of the FE basis $\big\lbrace \phi_1, \, \ldots \, , \phi_M \big\rbrace$.
+		\end{itemize}
+		Note that the latter is also available for any $v_h \in V_h$, while the former characterizes the element in the subspace $V_{\texttt{rb}}$.
+		
+		Upon choosing $v_{L} = \psi_l$, $l = 1, \, \ldots \, , L$, in the RB problem \eqref{eq:pde-rb}, for any $\bg{\mu} \in \mathcal{P}$ we get the set of equations
+		\begin{equation}
+			\label{eq:rb-algebraic-formulation-1}
+			g(u_{L}(\bg{\mu}), \, \psi_l; \, \bg{\mu}) = 0 \hspace*{0.3cm} 1 \leq l \leq L \, .
+		\end{equation}
+		Inserting into \eqref{eq:rb-algebraic-formulation-1} the expansion of $\psi_l$, $l = 1, \, \ldots \, , L$, in terms of the canonical FE basis $\big\lbrace \phi_m \big\rbrace_{m = 1}^M$, i.e.,
+		\begin{equation*}
+			\psi_l(\bg{x}) = \sum_{m = 1}^M \psi_l^{(m)} ~ \phi_m(\bg{x}) = \sum_{m = 1}^M \mathbb{V}_{m,l} ~ \phi_m(\bg{x}) \, ,
+		\end{equation*} 
+		and exploiting the linearity of $g(\cdot,\cdot; \bg{\mu})$ in the second argument, yields:
+		\begin{equation*}
+			0 = \sum_{m = 1}^M \mathbb{V}_{m,l} ~ g(u_L(\bg{\mu}), \, \phi_m; \, \bg{\mu}) = \big( \mathbb{V}^T \mathbf{G}_h(\mathbf{u}_L(\bg{\mu}); \bg{\mu}) \big)_l \hspace*{0.3cm} 1 \leq l \leq L \, ,
+		\end{equation*}
+		where the last equality follows from the definition \eqref{eq:galerkin-nonlinear-system-equation} of the residual vector $\mathbf{G}_h(\cdot; \bg{\mu})$ and the notation introduced in \eqref{eq:rb-fe-coefficients}. Then, the algebraic formulation of the reduced basis problem \eqref{eq:pde-rb} can be written in compact form as:
+		\begin{equation}
+			\label{eq:rb-nonlinear-system}
+			\mathbf{G}_{\texttt{rb}}(\mathbf{u}_{\texttt{rb}}(\bg{\mu}); \, \bg{\mu}) = \mathbb{V}^T \mathbf{G}_h(\mathbf{u}_L(\bg{\mu}); \, \bg{\mu}) = \mathbb{V}^T \mathbf{G}_h(\mathbb{V} ~ \mathbf{u}_{\texttt{rb}}(\bg{\mu}); \, \bg{\mu}) = \bg{0} \in \mathbb{R}^L \, .
+		\end{equation}
+		This \emph{reduced nonlinear system} imposes the orthogonality (in the Euclidean scalar product) of the residual vector $\mathbf{G}_h(\cdot; \bg{\mu})$, evaluated in $\mathbb{V} \mathbf{u}_{\texttt{rb}}(\bg{\mu})$, to the columns of $\mathbb{V}$, thus encoding the Galerkin approach pursued at the variational level.
+		
+		Finally, exploiting the chain rule and the Jacobian $\mathbb{J}_h(\cdot; \bg{\mu})$ of $\mathbf{G}_h(\cdot; \bg{\mu})$, the Jacobian $\mathbb{J}_{\texttt{rb}}(\cdot; \bg{\mu})$ of $\mathbf{G}_{\texttt{rb}}(\cdot; \bg{\mu})$ is given by
+		\begin{equation}
+			\label{eq:rb-nonlinear-system-jacobian}
+			\mathbb{J}_{\texttt{rb}}(\mathbf{w}; \, \bg{\mu}) = \mathbb{V}^T \mathbb{J}_h(\mathbb{V} ~ \mathbf{w}; \, \bg{\mu}) \, \mathbb{V} \in \mathbb{R}^{L \times L} \hspace*{0.3cm} \forall \mathbf{w} \in \mathbb{R}^L \, , \, \forall \bg{\mu} \in \mathcal{P} \, .
+		\end{equation}
+		Hence, starting from an initial guess $\mathbf{u}_{\texttt{rb}}^0 \in \mathbb{R}^L$, each iteration $k$, $k \geq 0$, of Newton's method applied to the reduced nonlinear system \eqref{eq:rb-nonlinear-system} entails the resolution of the linear system
+		\begin{equation}
+			\label{eq:rb-nonlinear-system-newton}
+			\mathbb{J}_{\texttt{rb}}(\mathbf{u}_{\texttt{rb}}^k(\bg{\mu}); \, \bg{\mu}) ~ \delta \mathbf{u}_{\texttt{rb}}^k(\bg{\mu}) = - \mathbf{G}_{\texttt{rb}}(\mathbf{u}_{\texttt{rb}}^k(\bg{\mu}); \, \bg{\mu}) \, ,
+		\end{equation}
+		with $\mathbf{u}_{\texttt{rb}}^{k+1}(\bg{\mu}) = \mathbf{u}_{\texttt{rb}}^k(\bg{\mu}) + \delta \mathbf{u}_{\texttt{rb}}^k(\bg{\mu})$. Therefore, applying the POD-Galerkin RB method enables a dramatic reduction of the size of the linear systems to solve whenever the dimension $L$ of the reduced space $V_{\texttt{rb}}$ is much lower than the dimension $M$ of the underlying finite element space $V_h$. 
+		
+		%In the upcoming subsection, we detail the construction of a reduced basis via the POD method, highlighting its optimality properties and potential disadvantages.
+		
+	
+	%
+	%
+		
+	\subsection{Proper Orthogonal Decomposition}
+	\label{section:Proper Orthogonal Decomposition} 
+		
+		%In a general sense, \emph{Proper Orthogonal Decomposition} (POD) is a powerful method of data analysis aimed at reducing the cardinality of a given high-dimensional dataset (or system). First, an orthonormal basis for the original data space is generated, consisting of basis vectors called \emph{modes} or \emph{principal components}. Ideally, the first modes embody much of the \emph{energy} of the system, and so they express the \emph{essential information} of data \cite{QMN15}. Therefore, a meaningful low-dimensional representation of data is obtained by truncating the orthonormal basis to retain only a few POD modes, then projecting the system onto the truncated basis \cite{Vol08}. This approach perfectly fits our needs, as we shall see hereunder. However, it is clear that the interest in the POD method extends far beyond the field of reduced-order modeling techniques, finding a fertile ground in, e.g., random variables, image processing, and data compression \cite{Lia02}.
+		
+		Consider a collection of $N$ snapshots $\big\lbrace u_h \big( \bg{\mu}^{(1)} \big), \, \ldots \, , u_h \big( \bg{\mu}^{(N)} \big) \big\rbrace \subset \mathcal{M}_h$ corresponding to the finite and discrete parameter set $\Xi_N = \big\lbrace \bg{\mu}^{(1)}, \, \ldots \, , \bg{\mu}^{(N)} \big\rbrace \subset \mathcal{P}$, and let $\mathcal{M}_{\Xi_N}$ be the subspace spanned by the snapshots, i.e.,
+		\begin{equation*}
+			\mathcal{M}_{\Xi_N} = \text{span} \big\lbrace u_h \big( \bg{\mu}^{(1)}), \, \ldots \, , u_h(\bg{\mu}^{(N)} \big) \big\rbrace \, .
+		\end{equation*}
+		Clearly, $\mathcal{M}_{\Xi_N} \subset \mathcal{M}_h$ and we can assume that $\mathcal{M}_{\Xi_N}$ provides a good approximation of $\mathcal{M}_h$, as long as the number of snapshots is sufficiently large (but typically much smaller than the dimension $M$ of the FE space). Then, we aim at finding a parameter-independent \emph{reduced basis} for $\mathcal{M}_{\Xi_N}$, i.e., a collection of FE functions $\big\lbrace \psi_1, \, \ldots \, , \psi_L \big\rbrace \subset \mathcal{M}_{\Xi_N}$, with $L \ll M, \, N$, and $L$ \emph{independent} of both $M$ and $N$, so that the associated linear space 
+		\begin{equation*}
+			V_{\texttt{rb}} = \text{span} \big\lbrace \psi_1, \, \ldots \, , \psi_L \big\rbrace
+		\end{equation*}
+		constitutes a low-rank approximation of $\mathcal{M}_{\Xi_N}$, optimal in some later defined sense.
+		
+		To this end, we work at the algebraic level. Let $\mathbf{u}_h \big( \bg{\mu}^{(n)} \big) \in \mathbb{R}^M$ be the vector collecting the degrees of freedom (with respect to the FE basis) for the $n$-th snapshots $u_h \big( \bg{\mu}^{(n)} \big)$, $n = 1, \, \ldots \, , N$, and consider the \emph{snapshot matrix} $\mathbb{S} \in \mathbb{R}^{M \times N}$ storing such vectors in a column-wise sense, i.e.,
+		\begin{equation*}
+			\mathbb{S} = \big[ \mathbf{u}_h \big( \bg{\mu}^{(1)} \big) \, \big| \, \ldots \, \big| \, \mathbf{u}_h \big( \bg{\mu}^{(N)} \big) \big] \, .
+		\end{equation*}
+		Denoting by $R$ the rank of $\mathbb{S}$, with $R \leq \min \big\lbrace{ M, \, N \big\rbrace}$, the singular value decomposition (SVD) of $\mathbb{S}$ ensures the existence of two orthogonal matrices $\mathbb{W} = \big[ \mathbf{w}_1 \, \big| \, \ldots \, \big| \, \mathbf{w}_M \big] \in \mathbb{R}^{M \times M}$ and $\mathbb{Z} = \big[ \mathbf{z}_1 \, \big| \, \ldots \, \big| \, \mathbf{z}_N \big] \in \mathbb{R}^{N \times N}$, and a diagonal matrix $\mathbb{D} = \text{diag}(\sigma_1, \, \ldots \, , \sigma_R) \in \mathbb{R}^{R \times R}$, with $\sigma_1 \geq \sigma_2 \geq \ldots \geq \sigma_r > 0$, such that
+		\begin{equation}
+			\label{eq:svd}
+			\mathbb{S} = \mathbb{W} 
+			\begin{bmatrix}
+			\hspace*{-0.15cm}
+			\begin{array}{cc}
+				\mathbb{D} & 0 \\
+				0 & 0
+			\end{array} 
+			\hspace*{-0.15cm}
+			\end{bmatrix}
+			\mathbb{Z}^T = \mathbb{W} ~ \Sigma ~ \mathbb{Z}^T \, ,
+		\end{equation}
+		where the zeros denote null matrices of appropriate dimensions. The real values $\big\lbrace \sigma_i \big\rbrace_{i = 1}^R$ are called \emph{singular values} of $\mathbb{S}$, the columns $\mathbf{w}_m \in \mathbb{R}^M$, $m = 1, \, \ldots \, , M$, of $\mathbb{W}$ are called \emph{left singular vectors} of $\mathbb{S}$, and the columns $\mathbf{z}_n \in \mathbb{R}^N$, $n = 1, \, \ldots \, , N$, of $\mathbb{Z}$ are called \emph{right singular vectors} of $\mathbb{S}$, and they are related by the following relations:
+		\begin{align}
+			\label{eq:left-singular-vectors}
+			\mathbb{S} \mathbb{S}^T \mathbf{w}_m & = 
+			\begin{cases}
+				& \hspace*{-0.3cm} \sigma_m^2 ~ \mathbf{w}_m \hspace*{0.3cm} \text{for $1 \leq m \leq R$} \, , \\
+				& \hspace*{-0.3cm} \mathbf{0} \hspace*{1.34cm} \text{for $R+1 \leq m \leq M$} \, ,
+			\end{cases} \\
+			\label{eq:right-singular-vectors}
+			\mathbb{S}^T \mathbb{S} ~ \mathbf{z}_n & =
+			\begin{cases}
+				& \hspace*{-0.3cm} \sigma_n^2 ~ \mathbf{z}_n \hspace*{0.57cm} \text{for $1 \leq n \leq R$} \, , \\
+				& \hspace*{-0.3cm} \mathbf{0} \hspace*{1.34cm} \text{for $R+1 \leq n \leq N$} \, ,
+			\end{cases} \\
+			\label{eq:snapshot-method}
+			\mathbb{S} ~ \mathbf{z}_i & = \sigma_i ~ \mathbf{w}_i \hspace*{0.95cm} \text{for $1 \leq i \leq R$} \, , \\
+			\mathbb{S}^T \mathbf{w}_i & = \sigma_i ~ \mathbf{z}_i \hspace*{1.07cm} \text{for $1 \leq i \leq R$} \, .
+		\end{align}
+		
+		%In particular, \eqref{eq:left-singular-vectors} and \eqref{eq:right-singular-vectors} state that the first $R$ columns of $\mathbb{W}$ and $\mathbb{Z}$ are eigenvectors of $\mathbb{S} \mathbb{S}^T$ and $\mathbb{S}^T \mathbb{S}$, respectively, with eigenvalues $\lambda_i = \sigma_i^2$, $i = 1, \, \ldots \, , R$, while the remaining columns (if any, i.e., if $R < M$ or $R < N$, respectively) belongs to the kernel of $\mathbb{S} \mathbb{S}^T$ and $\mathbb{S}^T \mathbb{S}$, respectively. 
+		
+		\noindent Due to the sparsity pattern of $\Sigma$ in \eqref{eq:svd}, the SVD of $\mathbb{S}$ can be cast in the compact form:
+		\begin{equation*}
+			\label{eq:svd-compact}
+			\mathbb{S} = \mathbb{W}_R^{} ~ \mathbb{D} ~ \mathbb{Z}_R^T \, ,
+		\end{equation*}
+		with $\mathbb{W}_R \in \mathbb{R}^{M \times R}$ and $\mathbb{Z}_R \in \mathbb{R}^{N \times R}$ retaining only the first $R$ columns of $W$ and $Z$, respectively, i.e.,
+		\begin{equation}
+			\label{eq:svd-compact-matrices}
+			\mathbb{W}_R = \big[ \mathbf{w}_1 \, \big| \, \ldots \, \big| \, \mathbf{w}_R \big] \hspace*{0.3cm} \text{and} \hspace*{0.3cm} \mathbb{Z}_R = \big[ \mathbf{z}_1 \, \big| \, \ldots \, \big| \, \mathbf{z}_R \big] \, .
+		\end{equation}
+		
+		Letting $\mathbb{B}_R^{} = \mathbb{D} ~ \mathbb{Z}_R^T \in \mathbb{R}^{R \times N}$ and exploiting the orthonormality of the columns of $\mathbb{W}_R$, the generic column $\mathbf{s}_n = \mathbf{u}_h \big( \bg{\mu}^{(n)} \big)$ of $\mathbb{S}$, $n = 1, \, \ldots \, N$, can be expressed as \cite{Vol08}:
+		\begin{equation*}
+			\begin{aligned}
+				\mathbf{s}_n & = \sum_{r = 1}^R \big( \mathbb{B}_R \big)_{r,n} \mathbf{w}_r = \sum_{r = 1}^R \big( \mathbb{D} ~ \mathbb{Z}_R^T \big)_{r,n} \mathbf{w}_r = \sum_{r = 1}^R \big( \underbrace{ \mathbb{W}_R^T ~ \lefteqn{\overbrace{\phantom{\mathbb{W}_R ~ \mathbb{D} ~ \mathbb{Z}_R^T}}^{\mathbb{S}}} \mathbb{W}_R^{}}_{\mathbb{I}_R \in \mathbb{R}^{R \times R}} ~ \mathbb{D} ~ \mathbb{Z}_R^T \big)_{r,n} \mathbf{w}_j \\
+				& = \sum_{r = 1}^R \big( \big( \mathbb{W}_R \big)^T \mathbb{S} \big)_{r,n} \mathbf{w}_r = \sum_{r = 1}^R \big( \mathbf{w}_r^T \mathbf{s}_n \big) \mathbf{w}_r = \sum_{r = 1}^R (\mathbf{s}_n, \, \mathbf{w}_r)_{\mathbb{R}^M} \mathbf{w}_r \, ,
+			\end{aligned}
+		\end{equation*}
+		where $(\cdot,\cdot)_{\mathbb{R}^M}$ denotes the Euclidean scalar product in $\mathbb{R}^M$. Therefore, the columns $\big\lbrace \mathbf{w}_1, \, \ldots \, , \mathbf{w}_R \big\rbrace$ of $\mathbb{W}_R$ constitute an orthonormal basis for the column space $\text{Col}(\mathbb{S})$ of $\mathbb{S}$. Moreover, from the above calculations follow that $\big( \mathbb{B}_R \big)_{r,n} = (\mathbf{s}_n, \, \mathbf{w}_r)_{\mathbb{R}^M}$ for $n = 1, \, \ldots \, , N$ and $r = 1, \, \ldots \, , R$.
+		
+		Assume we seek to approximate the columns of $\mathbb{S}$ by means of $L$ orthonormal vectors $\big\lbrace \wt{\mathbf{w}}_1, \, \ldots \, , \wt{\mathbf{w}}_L \big\rbrace$, with $L < R$. It is an easy matter to show that for each $\mathbf{s}_n$, $n = 1, \, \ldots \, , N$, the element of $\text{span} \big\lbrace \wt{\mathbf{w}}_1, \, \ldots \, , \wt{\mathbf{w}}_L \big\rbrace$ closest to $\mathbf{s}_n$ in the Euclidean norm $\norm{\cdot}_{\mathbb{R}^M}$ is given by
+		\begin{equation*}
+			\sum_{l = 1}^L \big( \mathbf{s}_n, \, \wt{\mathbf{w}}_l \big)_{\mathbb{R}^M} \wt{\mathbf{w}}_l \, .
+		\end{equation*} 
+		Hence, we could measure the error committed by approximating the columns of $\mathbb{S}$ via the vectors $\big\lbrace \wt{\mathbf{w}}_l \big\rbrace_{l = 1}^L$ through the quantity
+		\begin{equation}
+			\label{eq:basis-error}
+			\varepsilon(\wt{\mathbf{w}}_1, \, \ldots \, , \wt{\mathbf{w}}_L) = \sum_{n = 1}^N \norm{\mathbf{s}_n - \sum_{l = 1}^L \big( \mathbf{s}_n, \, \wt{\mathbf{w}}_l \big)_{\mathbb{R}^M} \wt{\mathbf{w}}_l}_{\mathbb{R}^M}^2 \, .
+		\end{equation}
+		The following theorem states that the basis $\big\lbrace \mathbf{w}_1, \, \ldots \, , \mathbf{w}_L \big\rbrace$ consisting of the first $L$ left singular values of $\mathbb{S}$ minimizes \eqref{eq:basis-error} among all the orthonormal bases of $\mathbb{R}^L$.
+		
+		\begin{theorem}[Schmidt-Eckart-Young]
+			Consider a rectangular matrix $\mathbb{S} = \big[ \mathbf{s}_1 \, \big| \, \ldots \, | \, \mathbf{s}_N \big] \in \mathbb{R}^{M \times N}$ with rank $R \leq \min \big\lbrace M, \, N \big\rbrace$, and let $\mathbb{S} = \mathbb{W} ~ \Sigma ~ \mathbb{Z}^T$ be the singular value decomposition (SVD) of $\mathbb{S}$, with $\mathbb{W} = \big[ \mathbf{w}_1 \, \big| \, \ldots \, | \, \mathbf{w}_M \big] \in \mathbb{R}^{M \times M}$ and $\mathbb{Z} = \big[ \mathbf{z}_1 \, \big| \, \ldots \, | \, \mathbf{z}_N \big] \in \mathbb{R}^{N \times N}$ orthogonal matrices, and $\Sigma \in \mathbb{R}^{M \times N}$ defined as in \eqref{eq:svd}. Further, let $\mathbb{S} = \mathbb{W}_R ~ \mathbb{D} ~ \mathbb{Z}_R^T = \mathbb{W}_R ~ \mathbb{B}_R$ be the compact form of the SVD of $\mathbb{S}$, with $\mathbb{W}_R \in \mathbb{R}^{M \times R}$ and $\mathbb{Z}_R \in \mathbb{R}^{N \times R}$ defined as in \eqref{eq:svd-compact-matrices}, $\mathbb{D} = \text{\emph{diag}}(\sigma_1, \, \ldots \, , \sigma_R) \in \mathbb{R}^{R \times R}$, and $\mathbb{B}_R = \mathbb{D} ~ \mathbb{Z}_R^T \in \mathbb{R}^{R \times N}$. \\
+			Suppose that ~ $\widehat{\mathbb{W}}_R \in \mathbb{R}^{M \times R}$ denotes a matrix with pairwise orthonormal columns $\widehat{\mathbf{w}}_r$, $r = 1, \, \ldots \, , R$, and that the expansion of the columns of ~ $\mathbb{S}$ in the basis $\big\lbrace \widehat{\mathbf{w}}_n \big\rbrace_{n = 1}^N$ is given by
+			\begin{equation*}
+				\mathbb{S} = \widehat{\mathbb{W}}_R ~ \mathbb{C}_R \, ,
+			\end{equation*}
+			with $\mathbb{C}_R \in \mathbb{R}^{R \times N}$, defined as
+			\begin{equation*}
+				\big( \mathbb{C}_R \big)_{r,n} = \big( \widehat{\mathbf{w}}_r, \, \mathbf{s}_n \big)_{\mathbb{R}^M} \hspace*{0.3cm} \text{for $1 \leq r \leq R$, $1 \leq n \leq N$} \, .
+			\end{equation*}
+			Then for every $L \in \big\lbrace 1, \, \ldots \, , R \big\rbrace$ we have
+			\begin{equation}
+				\label{eq:pod-optimality}
+				\norm{\mathbb{S} - \mathbb{W}_L ~ \mathbb{B}_L}_F \leq \norm{\mathbb{S} - \widehat{\mathbb{W}}_L ~ \mathbb{C}_L}_F \, .
+			\end{equation}
+			Here, $\norm{\cdot}_F$ denotes the Frobenius norm given by
+			\begin{equation*}
+				\norm{\mathbb{A}}_F = \sqrt{\sum_{m = 1}^M \sum_{n = 1}^N \abs{A_{m,n}}^2} = \sqrt{\text{tr} \big( \mathbb{A}^T \mathbb{A} \big)} \hspace*{0.3cm} \text{for any $\mathbb{A} \in \mathbb{R}^{M \times N}$} \, ,
+			\end{equation*}
+			the matrix $\mathbb{W}_L$ (respectively, $\widehat{\mathbb{W}}_L$) denotes the first $L$ columns of ~ $\mathbb{W}$ (resp., $\widehat{\mathbb{W}})$, and $\mathbb{B}_L$ (resp., $\mathbb{C}_L$) denotes the first $L$ rows of ~ $\mathbb{B}$ (resp., $\mathbb{C}$) \cite{Vol08}.
+		\end{theorem}
+		
+	\iffalse
+		\noindent Regarding \eqref{eq:pod-optimality}, let us note that
+		\begin{equation*}
+			\begin{aligned}
+				\norm{\mathbb{S} - \widehat{\mathbb{W}}_L ~ \mathbb{C}_L}_F^2 & = \sum_{m = 1}^M \sum_{n = 1}^N \abs{\mathbb{S}_{m,n} - \sum_{l = 1}^L \big( \widehat{\mathbb{W}}_L \big)_{m,l} ~ \mathbb{C}_{l,n}}^2 = \sum_{n = 1}^N \sum_{m = 1}^M \abs{(\mathbf{s}_n)_m - \sum_{l = 1}^L \big( \mathbf{s}_n, \, \widehat{\mathbf{w}}_l \big)_{\mathbb{R}^M} (\mathbf{w}_l)_m} \\
+				& = \sum_{n = 1}^N \norm{\mathbf{s}_n - \sum_{l = 1}^L \big( \mathbf{s}_n, \, \widehat{\mathbf{w}}_l \big)_{\mathbb{R}^M} \mathbf{w}_l}_{\mathbb{R}^M}^2 = \, .
+			\end{aligned}
+		\end{equation*}
+		Then, according to \eqref{eq:basis-error}, 
+		\begin{equation*}
+			\varepsilon(\widehat{\mathbf{w}}_1, \, \ldots \, , \widehat{\mathbf{w}}_L) = \norm{\mathbb{S} - \widehat{\mathbb{W}}_L ~ \mathbb{C}_L}_F^2 \, ,
+		\end{equation*}
+		and, analogously,
+		\begin{equation*}
+			\varepsilon(\mathbf{w}_1, \, \ldots \, , \mathbf{w}_L) = \norm{\mathbb{S} - \mathbb{W}_L ~ \mathbb{B}_L}_F^2 \, . 
+		\end{equation*}
+		Hence, the optimality condition \eqref{eq:pod-optimality} implies
+		\begin{equation*}
+			\varepsilon(\mathbf{w}_1, \, \ldots \, , \mathbf{w}_L) \leq \varepsilon(\widehat{\mathbf{w}}_1, \, \ldots \, , \widehat{\mathbf{w}}_L)
+		\end{equation*}
+		for any set $\big\lbrace \widehat{\mathbf{w}}_l \big\rbrace_{l = 1}^L$ of pairwise orthonormal vectors. Moreover, it can be shown that (see, e.g., \cite{Vol08})
+		\begin{equation}
+			\label{eq:pod-error}
+			\varepsilon(\mathbf{w}_1, \, \ldots \, , \mathbf{w}_L) = \sum_{j = L+1}^R \sigma_j^2 \, ,
+		\end{equation}
+		i.e., the error is given by the sum of the square of the discarded singular values.
+	\fi
+	
+		\noindent The orthonormal basis $\big\lbrace \mathbf{w}_1, \, \ldots \, , \mathbf{w}_L \big\rbrace$ is known as the \emph{POD basis} of rank $L$. Returning to the POD-Galerkin RB method, we set $\bg{\psi}_l = \mathbf{w}_l$, for all $l = 1, \, \ldots \, , L$, so that
+		\begin{equation*}
+			\mathbb{V} = \big[ \mathbf{w}_1 \, \big| \, \ldots \, \big| \, \mathbf{w}_L \big] \, . %\, \footnote{Please observe that generally we do not decorate $\mathbb{V}$ with any subscript nor superscript reporting the dimension of the reduced basis it represents, unless not clear from the context.} \, .
+		\end{equation*}
+		Hence, in the reduced basis problem \eqref{eq:pde-rb} the test and trial functions are picked from the subspace $V_{\texttt{rb}}$ of $V_h$ spanned by the functions $\big\lbrace \psi_l \big\rbrace_{l = 1}^L$, given by
+		\begin{equation}
+			\label{eq:pod-fe-basis-functions}
+			\psi_l(\bg{x}) = \sum_{m = 1}^M \psi_l^{(m)} ~ \phi_m(\bg{x}) = \sum_{m = 1}^M (\mathbf{w}_l)_m ~ \phi_m(\bg{x}) \hspace*{0.3cm} \text{for $1 \leq l \leq L$} \, .
+		\end{equation}
+		
+	\iffalse
+		Let us point out that, in case of a scalar underlying differential equation, the POD basis functions $\big\lbrace \psi_l \big\rbrace_{l = 1}^L$ are orthonormal on $V_h = X_h^r$ with respect to the following discrete scalar product $(\cdot,\cdot)_h$:
+		\begin{equation}
+			\label{eq:discrete-scalar-product}
+			(\chi_h, \, \xi_h)_h = \sum_{i = 1}^M \chi_h(\bg{N}_i) ~ \xi_h(\bg{N}_i) = \sum_{i = 1}^M \chi_h^{(i)} ~ \xi_h^{(i)} = (\bg{\chi}_h, \, \bg{\xi}_h)_{\mathbb{R}^M} \, .
+		\end{equation}
+	\fi
+	
+		\noindent From a computational viewpoint, the first $L$ left singular vectors $\big\lbrace \mathbf{w}_l \big\rbrace_{l = 1}^L$ of $\mathbb{S}$ can be efficiently computed through the so-called \emph{method of snapshots}. We should distinguish two cases:
+		\begin{enumerate}[label=(\alph*)]
+			\item if $M \leq N$: directly solve the eigenvalue problems
+			\begin{equation*}
+				\mathbb{S} \mathbb{S}^T \mathbf{w}_l = \lambda_l ~ \mathbf{w}_l \hspace*{0.3cm} \text{for $1 \leq l \leq L$} \, ;
+			\end{equation*}
+			\item if $M > N$: compute the \emph{correlation} matrix $\mathbb{M} = \mathbb{S}^T \mathbb{S}$ and solve the eigenvalue problems
+			\begin{equation*}
+				\mathbb{M} ~ \mathbf{z}_l = \lambda_l ~ \mathbf{z}_l \hspace*{0.3cm} \text{for $1 \leq l \leq L$} \, .
+			\end{equation*} 
+			Then, by \eqref{eq:snapshot-method} we have
+			\begin{equation*}
+				\mathbf{w}_l = \dfrac{1}{\sqrt{\lambda_l}} \mathbb{S} ~ \mathbf{z}_l \hspace*{0.3cm} \text{for $1 \leq l \leq L$} \, .
+			\end{equation*}
+		\end{enumerate}
+		
+	\iffalse
+		Let us conclude by discussing the estimate \eqref{eq:pod-error} for the error committed by approximating the columns of the snapshot matrix $\mathbb{S}$ by means of the POD basis $\big\lbrace \mathbf{w}_l \big\rbrace_{l = 1}^M$. First, note that it heavily relies on the magnitude of the first discarded singular value \cite{HSR16}. Luckily, in many situations the singular values show a graceful decay with the order, so that one can typically get accurate approximations by picking a few tens of basis vectors \cite{Bur06}. In particular, the minimum number of basis functions ensuring a POD error smaller than a desired tolerance $\delta$ corresponds with the smallest integer $L$ satisfying the following inequality:
+		\begin{equation}
+			\label{eq:relative-information-content}
+			\dfrac{\sum_{l = 1}^{L} \sigma_l^2}{\sum_{l = 1}^R \sigma_l^2} > 1 - \delta \, .
+		\end{equation}
+		In other terms, the energy retained by the first $L$ POD modes must be greater than the fraction $1 - \delta$ of the total energy of the snapshots \cite{QMN15}. This criterium, also known as \emph{relative information content}, has been embodied into Algorithm \ref{alg:pod} summarizing the POD method. Moreover, it also implies that
+		\begin{equation*}
+			\dfrac{\norm{\mathbb{S} - \mathbb{W}_{L} ~ \mathbb{B}_{L}}_F}{\norm{\mathbb{S}}_F} < \delta \, .
+		\end{equation*}
+		However, \eqref{eq:pod-error} and \eqref{eq:relative-information-content} only hold for the columns of $\mathbb{S}$, i.e., for the snapshots. While it can be readly generalized to any element in the snapshot manifold $\mathcal{M}_{\Xi_N}$ \footnote{
+		Let $\mathbf{s} = \alpha_1 \, \mathbf{s}_1 + \, \ldots \, + \alpha_N \, \mathbf{s}_N \in \text{Col}(\mathbb{V})$. Then:
+		\begin{equation*}
+			\begin{aligned}
+				& \norm{\mathbf{s} - \sum_{l = 1}^L \big( \mathbf{s}, \, \mathbf{w}_l \big)_{\mathbb{R}^M} \mathbf{w}_l}_{\mathbb{R}^M}^2 = \norm{\sum_{n = 1}^N \alpha_n \, \mathbf{s}_n - \sum_{n = 1}^N \alpha_n \sum_{l = 1}^L \big( \mathbf{s}_n, \, \mathbf{w}_l \big)_{\mathbb{R}^M} \mathbf{w}_l}_{\mathbb{R}^M}^2 \\
+				& \leq \sum_{n = 1}^N \alpha_n^2 \norm{\mathbf{s}_n - \sum_{l = 1}^L \big( \mathbf{s}_n, \, \mathbf{w}_l \big)_{\mathbb{R}^M} \mathbf{w}_l}_{\mathbb{R}^M}^2 \leq \left( \max_{1 \leq n \leq N} \alpha_n^2 \right) \sum_{j = L+1}^R \sigma_j^2 \, .
+			\end{aligned}
+		\end{equation*}}, we do not have any guarantee for all the other elements in the discrete solution manifold $\mathcal{M}_h$. Therefore, one may need a large number of shapshots, so ensuring that $\mathcal{M}_{\Xi_N}$ provides a good approximation of $\mathcal{M}_h$ and that the POD error can be bounded for a sufficiently large number of vectors. In our test cases, we will check the validity and reliability of the computed reduced basis \emph{empirically}, by evaluating the projection error on a discrete and finite parameter test set $\Xi_{te} \subset \mathcal{P}$, with $\Xi_{te} \cap \Xi_N = \emptyset$ (see Chapter \ref{chapter:Numerical results}).
+		
+		\begin{algorithm}[H]	
+			\begin{algorithmic}[1]
+				\Function{$\mathbb{V} = $ POD}{$\mathbb{S}$, $\delta$}
+					\If{$M \leq N$}
+						\State $\mathbb{M} = \mathbb{S}^T \mathbb{S}$
+						\For{$i = 1, \, \ldots \, , R$}
+							\State solve the eigenvalue problem $\mathbb{M} ~ \mathbf{w}_i = \lambda_i ~ \mathbf{w}_i$
+						\EndFor
+					\Else
+						\State $\mathbb{K} = \mathbb{S} \mathbb{S}^T$
+						\For{$i = 1, \, \ldots \, , R$}
+							\State solve the eigenvalue problem $\mathbb{K} ~ \mathbf{z}_i = \lambda_i ~ \mathbf{z}_i$
+							\State $\mathbf{w}_i = \dfrac{1}{\sqrt{\lambda_i}} \mathbb{S} ~ \mathbf{z}_i$
+						\EndFor
+					\EndIf
+					\State find the minimum $L$ satisfying \eqref{eq:relative-information-content}
+					\State $\mathbb{V} = \big[ \mathbf{w}_1 \, \big| \, \ldots \, \big| \, \mathbf{w}_L \big]$
+				\EndFunction
+			\end{algorithmic}
+			
+			\caption{The POD algorithm.}
+			\label{alg:pod}
+		\end{algorithm}
+	\fi
+		
+	
+	%
+	% Bibliography
+	%
+	
+	\clearpage
+	
+	\section*{References}
+		
+	\begin{thebibliography}{50}
+		
+		\bibitem{Ams10}
+		Amsallem., D. (2010). \emph{Interpolation on manifolds of CFD-based fluid and finite element-based structural reduced-order models for on-line aeroelastic predictions}. Doctoral dissertation, Department of Aeronautics and Astronautics, Stanford University.
+		
+		\bibitem{Bal14}
+		Ballarin, F., Manzoni, A., Quarteroni, A., Rozza, G. (2014). \emph{Supremizer stabilization of POD-Galerkin approximation of parametrized Navier-Stokes equations}. MATHICSE Technical Report, \'Ecole Polytechnique F\'ed\'erale de Lausanne.
+	
+		\bibitem{Bar04}
+		Barrault, M., Maday, Y., Nguyen, N. C., Patera, A. T. (2004). \emph{An 'empirical interpolation' method: Application to efficient reduced-basis discretization of partial differential equations}. Comptes Rendus Mathematique, 339(9):667-672.
+		
+		\bibitem{BNR00}
+		Barthelmann, V., Novak, E., Ritter, K. (2000). \emph{High-dimensional polynomial interpolation on sparse grids}. Advances in Computational Mathematics, 12(4):273-288.
+		
+		\bibitem{Ben04}
+		Bends\o{}e, M. P., Sigmund, O. (2004). \emph{Topology optimization: Theory, methods and applications}. Heidelberg, DE: Springer Science \& Business Media. 
+		
+		\bibitem{Bro93}
+		Brown, P. F., Pietra, V. J. D., Pietra, S. A. D., Mercer, R. L. (1993). \emph{The mathematics of statistical machine translation: Parameter estimation}. Computational linguistics, 19(2):263-311.
+		
+		\bibitem{Buf12}
+		Buffa, A., Maday, Y., Patera, A. T., Prud'Homme, C., Turinici, G. (2012). \emph{A priori convergence of the greedy algorithm for the parametrized reduced basis method}. ESAIM: Mathematical Modelling and Numerical Analysis, 46:595-603.
+		
+		\bibitem{Bur06}
+		Burkardt, J., Gunzburger, M., Lee, H. C. (2006). \emph{POD and CVT-based reduced-order modeling of Navier-Stokes flows}. Computer Methods in Applied Mechanics and Egninnering, 196:337-355.
+		
+		\bibitem{Cas15}
+		Casenave, F., Ern, A., Lelièvre, T. (2015). \emph{A nonintrusive reduced basis method applied to aeroacoustic simulations}. Advances in Computational Mathematics, 41:961-986.
+		
+		\bibitem{Cha10}
+		Chaturantabut, S., Sorensen, D. C. (2010). \emph{Nonlinear model reduction via discrete empirical interpolation}. SIAM Journal on Scientific Computing, 32(5):2737-2764.
+		
+		\bibitem{CR97}
+		Caloz, G., Rappaz, J. (1997). \emph{Numerical analysis and bifurcation problems}. Handbook of numerical analysis, 5(2):487-637.
+		
+		\bibitem{Chen17}
+		Chen, W., Hesthaven, J. S., Junqiang, B., Yang, Z., Tihao, Y. (2017). \emph{A greedy non-intrusive reduced order model for fluid dynamics}. Submitted to American Institute of Aeronautics and Astronautics.
+	
+		\bibitem{Cyb88}
+		Cybenko, G. (1988). \emph{Continuous valued neural networks with two hidden layers are sufficient}. Technical Report, Department of Computer Science, Tufts University.
+		
+		\bibitem{Cyb89}
+		Cybenko, G. (1989). \emph{Approximation by superpositions of a sigmoidal function}. Mathematics of Control, Signals, and Systems, 2(4):303–314.
+		
+		\bibitem{Deb78}
+		De Boor, C. (1978). \emph{A practical guide to splines}. New York, NY: Springer-Verlag.
+		
+		%\bibitem{Deb87}
+		%De Boor, C., H\"{o}llig, K., Sabin, M. (1987). \emph{High accuracy geometric Hermite interpolation}. Computer Aided Geometric Design, 4(4):269-278.
+		
+		\bibitem{Dep08}
+		Deparis, S. (2008). \emph{Reduced basis error bound computation of parameter-dependent Navier-Stokes equations by the natural norm approach}. SIAM Journal of Numerical Analysis, 46(4):2039-2067.
+		
+		\bibitem{Dho14}
+		Dhondt, G. (2014). \emph{CalculiX CrunchiX user's manual}. Available at \url{http://web.mit.edu/calculix_v2.7/CalculiX/ccx_2.7/doc/ccx/node1.html}.
+		
+		\bibitem{Eft08}
+		Eftang, J. L. (2008). \emph{Reduced basis methods for partial differential equations}. Master thesis, Department of Mathematical Sciences, Norwegian University of Science and Technology.
+		
+		\bibitem{ESW04}
+		Elman, H. C., Silvester, D. J., Wathen, A. (2004). \emph{Finite elements and fast iterative solvers with applications in incompressible fluid dynamics}. New York, NY: Oxford University Press.
+		
+		\bibitem{Fah88}
+		Fahlman, S. E. (1988). \emph{An empirical study of learning speed in back-propagation networks}. Technical Report CMU-CS-88-162, CMU.
+		
+		\bibitem{GMW81}
+		Gill, P. E., Murray, W., Wright, M. H. (1981). \emph{Practical optimization}. Academic Press.
+		
+		\bibitem{Hag94}
+		Hagan, M. T., Menhaj, M. B. (1994). \emph{Training feedforward networks with the Marquardt algorithm}. IEEE Transactions on Neural Networks, 5(6):989-993.
+		
+		\bibitem{Hag14}
+		Hagan, M. T., Demuth, H. B., Beale, M. H., De Jes\'us, O. (2014). \emph{Neural Network Design, 2nd Edition}. Retrieved from \url{http://hagan.okstate.edu/NNDesign.pdf}.
+		
+		\bibitem{Haa13}
+		Hassdonk, B. (2013). \emph{Model reduction for parametric and nonlinear problems via reduced basis and kernel methods}. CEES Computational Geoscience Seminar, Stanford University.
+		
+		\bibitem{Hay05}
+		Haykin, S. (2004). \emph{Neural Networks: A comprehensive foundation}. Upper Saddle River, NJ: Prentice Hall.
+		
+		\bibitem{Heb49}
+		Hebb, D. O. (1949). \emph{The organization of behaviour: A neuropsychological theory}. New York, NY: John Wiley \& Sons. 
+		
+		\bibitem{Lia02}
+		Liang, Y. C., Lee, H. P., Lim, S. P., Lin, W. Z., Lee, K. H., Wu, C. G. (2002) \emph{Proper Orthogonal Decomposition and its applications - Part I: Theory}. Journal of Sound and Vibration, 252(3):527-544.
+		
+		\bibitem{OBS}
+		Hassibi, B., Stork, D. G. (1993). \emph{Second order derivatives for network pruning: Optimal Brain Surgeon}. Advances in neural information processing systems, 164-171.
+		
+		\bibitem{HSR16}
+		Hesthaven, J. S., Stamn, B., Rozza, G. (2016). \emph{Certified reduced basis methods for parametrized partial differential equations}. New York, NY: Springer.
+		
+		\bibitem{HSZ14}
+		Hesthaven, J. S., Stamn, B., Zhang, S. (2014). \emph{Efficienty greedy algorithms for high-dimensional parameter spaces with applications to empirical interpolation and reduced basis methods}. ESAIM: Mathematical Modelling and Numerical Analysis, 48(1):259-283.
+		
+		\bibitem{Hop82}
+		Hopfield, J. J. (1982). \emph{Neural networks and physical systems with emergent collective computational abilities}. Proceedings of the National Acadamedy Science, 79:2554-2558.
+		
+		\bibitem{Imam08}
+		Imam, R. L. (2008). \emph{Latin hypercube sampling}. Encyclopedia of Quantitative Risk Analysis and Assessment.
+		
+		\bibitem{JIR14}
+		Jaggli, C., Iapichino, L., Rozza, G. (2014). \emph{An improvement on geometrical parametrizations by transfinite maps}. Comptes Rendus de l'Acad\'emie des Sciences Paris, Series I, 352:263-268. 
+				
+		\bibitem{KLM96}
+		Kaelbling, L. P., Littman, M. L., Moore, A. W. (1996). \emph{Reinforcement Learning: A Survey}. Journal of Artificial Intelligence Reserch, 4:237-285.
+		
+		\bibitem{Koh95}
+		Kohavi, R. (1995). \emph{A study of cross-validation and bootstrap for accuracy estimation and model selection}. Proceedings of the $40^{th}$ International Joint Conference on Artificial Intelligence, 2(12):1137-1143.
+		
+		\bibitem{Koh98}
+		Kohonen, T. (1998). \emph{The self-organizing map}. Neurocomputing, 21(1-3):1-6.
+		
+		\bibitem{Kri07}
+		Kriesel, D. (2007). \emph{A Brief Introduction to Neural Networks}. Retrieved from \url{http://www.dkriesel.com/en/science/neural_networks}.
+		
+		\bibitem{LeM10}
+		Le Ma\^{i}tre, O., Knio, O. M. (2010). \emph{Spectral methods for uncertainty quantification with applications to computational fluid dynamics}. Berlin, DE: Springer Science \& Business Media.
+		
+		\bibitem{LM67}
+		Lee, E. B., Markus, L. (1967). \emph{Foundations of optimal control theory}. New York, NY: John Wiley \& Sons.
+		
+		\bibitem{Mad06}
+		Maday, Y. (2006) \emph{Reduced basis method for the rapid and reliable solution of partial differential equations}. Proceedings of the International Congress of Mathematicians, Madrid, Spain, 1255-1269.
+		
+		\bibitem{Mar63}
+		Marquardt, D. W. (1963). \emph{An algorithm for least-squares estimation of nonlinear parameters}. Journal of the Society for Industrial and Applied Mathematics, 11(2):431-441.
+		
+		\bibitem{Mat16}
+		The MathWorks, Inc. (2016). \emph{Machine learning challenges: Choosing the best model and avoiding overfitting}. Retrieved from \url{https://it.mathworks.com/campaigns/products/offer/common-machine-learning-challenges.html}.
+		
+		\bibitem{MM10}
+		Mitchell, W., McClain, M. A. (2010). \emph{A collection of 2D elliptic problems for testing adaptive algorithms}. NISTIR 7668.
+		
+		\bibitem{MN16}
+		Manzoni, A., Negri, F. (2016). \emph{Automatic reduction of PDEs defined on domains with variable shape}. MATHICSE technical report, \'Ecole Polytechnique F\'ed\'erale de Lausanne.
+		
+		\bibitem{Mol93}
+		M\o{}ller, M. D. (1993). \emph{A scaled conjugate gradient algorithm for fast supervised learning}. Neural Networks, 6:525-533.
+						
+		\bibitem{MR86}
+		McClelland, J. L., Rumelhart, D. E. (1986). \emph{Parallel Distributed Processing: Explorations in the Microstructure of Cognition}. Cambridge, UK: MIT Press.
+		
+		\bibitem{Nie15}
+		Nielsen, M. A. (2015). \emph{Neural Networks and Deep Learning}. Determination Press.
+				
+		\bibitem{NMA15}
+		Negri, F., Manzoni, A., Amsallem, D. (2015). \emph{Efficient model reduction of parametrized systems by matrix discrete empirical interpolation}. Journal of Computational Physics, 303:431-454.
+		
+		\bibitem{Per02}
+		Persson, P. O. (2002). \emph{Implementation of finite-element based Navier-Stokes solver}. Massachussets Institue of Technology.
+		
+		\bibitem{Pru02}
+		Prud'homme, C., Rovas, D. V., Veroy, K., Machiels, L., Maday, Y., Patera, A. T., Turinici, G. (2002). \emph{Reliable real-time solution of parametrized partial differential equations: Reduced-basis output bound methods}. Journal of Fluids Engineering, 124(1):70-80.
+		
+		\bibitem{Qua10}
+		Quarteroni, A. (2010). \emph{Numerical models for differential problems} (Vol. 2). New York, NY: Springer Science \& Business Media.
+		
+		\bibitem{QMN15}
+		Quarteroni, A., Manzoni, A., Negri, F. (2015). \emph{Reduced basis methods for partial differential equations: An introduction} (Vol. 92). New York, NY: Springer, 2015.
+		
+		\bibitem{Ran99}
+		Rannacher, R. (1999). \emph{Finite element methods for the incompressible Navier-Stokes equations}. Lecture notes, Institute of Applied Mathematics, University of Heidelberg.
+		
+		\bibitem{RB93}
+		Riedmiller, M., Braun, H. (1993). \emph{A direct adaptive method for faster backpropagation learning: The rprop algorithm}. Neural Networks, IEEE International Conference on, 596-591.
+		
+		\bibitem{Ros58}
+		Rosenblatt, F. (1958). \emph{The perceptron: A probabilistic model for information storage and organization in the brain}. Psychological Review, 65:386-408.
+		
+		\bibitem{Rud64}
+		Rudin, W. (1964). \emph{Principles of mathematical analysis} (Vol. 3). New York, NY: McGraw-Hill.
+		
+		\bibitem{SD13}
+		Stergiou, C., Siganos, D. (2013). \emph{Neural Networks}. Retrieved from \url{https://www.doc.ic.ac.uk/~nd/surprise_96/journal/vol4/cs11/report.html#Introduction to neural networks}.
+		
+		\bibitem{Vol08}
+		Volkwein, S. (2008). \emph{Model reduction using proper orthogonal decomposition}. Lecture notes, Department of Mathematics, University of Konstanz.
+		
+		\bibitem{WH60}
+		Widrow, B., Hoff, M. E. (1960). \emph{Adaptive switching circuits}. Proceedings WESCON, 96-104.
+		
+	\end{thebibliography}
+	
+\end{document}

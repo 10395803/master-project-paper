@@ -1,0 +1,160 @@
+PREFACE
+
+RB methods represent a very efficient approach for the numerical approximation of problems involving the repeated solution of differential equations arising from engineering and applied sciences. Noteworthy examples include partial differential equations depending on several parameters, PDE-constrained optimization, and optimal control and inverse problems.
+
+ROMs aim at replacing the original large-dimension numerical problem (high-fidelity approximation) by a reduced problem of substantially smaller dimension. Strategies to generate the reduced problem can be manifold.
+
+The strategy adopted in RB methods consists in the projection of the high-fidelity problem upon a subspace made of specially selected basis function, representing a set of high-fidelity solutions corresponding to suitable chosen parameters. --> Actually, basis functions may not be solutions to full approximation, but they are surely related.
+
+Work of Patera and Maday led to a decisive improvement in the computational aspects of RB methods owing to an efficient criterion for the selection of the basis functions, a systematic splitting of the computational procedure into an offline (parameter-independent) and an online (parameter-dependent) phase, and the use of a posteriori estimates that guarantee certified numerical solutions for the reduced problem.
+
+Treatment of nonlinear and/or parametrically nonaffine problems by the so-called empirical interpolation method and its several extensions. This has substantially imporved RB methods, making possible thei application to a broad variety of complex problems such as time-dependent problems, optimal control and design problems, and real-time computing.
+
+We carry out both a priori and a posteriori error analysis, formulate strategies for the construction of accurate reduced basis spaces, and analyze offline-online decomposition strategies to ensure the reduction of computational complexity.
+
+INTRODUCTION
+
+Numerical simulations of PDEs currently provide a virtual platform ancillary to material/mechanics testing or in vitro experiments.
+
+The constant increase of available computational power, accompanied by the progressive improvement of algorithms for solving large linear systems, make nowadays possible the numerical solution of complex, multiscale and multiphysics phenomena by means of high-fidelity (or full-order) approximation techniques such as FE, FV, FD or spectral methods.
+
+several hourse of CPU time required, also on powerful hardware parallel architectures.
+
+High-fidelity approximation techniques can become prohibitive when we expect them to deal quickly and efficiently with the repetitive solution of PDEs --> PDEs depending on several parameters (parametrized PDEs)
+
+In these cases, evaluating the behavior of the system by means of a high-fidelity technique, such as the FE method, is computationally expensive because it entails the solution of very large (nonlinear) algebraic systems, arising from the discretization of the underpinning PDE.
+
+ROM is a generic expression used to identify any approach aimed at replacing the high-fidelity problem by one featuring a much lower numerical complexity. being able to evaluate the solution of this latter problem, for any new parameter instance, at a cost that is independent of the dimension of the original high-fidelity problem, is the key to the computational success of any reduced-order model.
+
+RB methods represent a remarkable instance of reduced-order modeling techniques. They exploit the parametric dependence of the PDE solution by combining a handful of high-fidelity solutions (or snapshots) computed for a possibly small set of parameter values. 
+
+NUMERICAL SIMULATION AND BEYOND
+
+The field variable given by the exact solution of a parametrized PDE can be seen as a map that to any parameter value associates the solution u(mu) belonging to a suitable functional space V.
+
+The parameters may characterize geometric features of the computational domain, or some physical or material propetries of the model at hand, or else initial and boundary conditions and source terms.
+
+domain = open bounded connected region with Lipschitz boundary
+k = viscosity = diffusion coefficient
+
+Why one may be interested in solving the PDE for many parameter values?
+1. compute solution by varying the parameter
+2. evaluate outputs of interest
+3. reach a specified target, such as a temperature distribution over the domain, by controlling the system. 
+
+In many contexts, we might be interested in controlling a system, that is, either minimize or maximize a physical quantity expressing some desired properties and/or performances of the underlying PDE system by acting on some control variables or on the shape of the domain itself. In the former case, we deal with optimal control problems, while we refer to the latter as shape optimization or optimal design problems.
+
+Identification or inverse problems: whenever some parameters characterizing a system are unknown or uncertain, their values may be inferred from indirect observations or measures by solving an inverse problem: given an observed or measured output, the values of the input resulting in that observation can be found by driving the solution of the pde - and the corresponding computed output - as near as possible to the observed output.
+
+Many-query context: several input/output evaluations as well as many repeated solutions of the given pde
+--> Other examples of many-query problems: sensitivity analyses of PDE solutions with respect to input data, parametric studies and statistical analyses employed in the design of experiments.
+
+Despite the massive computer resources currently available, problems involving the repeated solution of PDEs on different data settings (many-query context) or requiring a numerical solution within a real time context still represent a challenge for classical numerical techniques.
+
+THE NEED FOR REDUCTION
+
+The stiffness matrix encodes the differential operator, fh the data, and uh is the vector of degrees of freedom representing the high-fidelity solution.
+
+Time level tn, time step dt
+
+Nonlinear systems solved through an iterative method, e.g. Newton --> solve as many linear systems as the number of iterations, then an even higher computational cost.
+
+Reduced-order modeling tackle this difficulty by:
+(i) replacing the high-fidelity problem with a reduced problem featuring a dramatically lower computational complexity, yet
+(ii) retaining the essential features of the map mu -> uh(mu), and
+(iii) guaranteeing that the error between the solution of the reduced problem and the high-fidelity one stays below a desired threshold.
+
+Among the wide range of reduced-order modeling approaches available, we shall focus on the so-called projection-based mathods, in particular the Galerkin and Petrov-Galerkin reduced basis methods. These methods rely on a suitable orthogonality criterion that is applied in step (i) to generate the reduced problem from the high-fidelity one.
+
+RB methods that are not projection-based can be constructed as well; an instance is given by RB collocation methods.
+
+A first intuitive algebraic representation of RB methods...
+
+RECUCED BASIS METHODS FOR PDES AT A GLANCE
+
+The key idea of a RB method is to seek, for any new parameter value μ ∈ P, in a subspace of lower dimension N << Nh an approximate solution of (1.2), expressed as a linear combination of suitable, problem-dependent, basis functions. The latter are generated from a given set of solutions to the high-fidelity problem, called snapshots, corresponding to a suitably chosen set of parameter values.
+
+Formally speaking...
+
+V: parameter-independent transformation matrix, whose columns collect the degrees of freedom of the basis functions, called reduced basis functions.
+
+uN: reduced basis solution
+
+A classical criterion to obtain the RB problem from the high-fidelity one is to force the residual to be orthogonal to the subspace VN generated by the columns of V --> this is why RB methods can be regarded as projection-based methods.
+
+So far, we have highlighted those features that better characterize RB methods (and make them attractive). However, several challenges hide behind the above procedure, namely:
+1. how to construct a reduced basis efficiently
+2. how to derive a priori/a posteriori bounds for the error ||uh - V uN||
+3. how to treat those cases where the affine parametric dependence 
+does not hold.
+
+wealth of numerical examples
+
+The most common and efficient strategies available to build a reduced basis space, namely proper orthogonal decomposition (POD) and greedy algorithms.
+
+Computational tools developed in the context of RB methods present general reduction paradigms, that turn out to be useful also for many other reduced-order modeling techniques.
+
+CONTENT OF THE BOOK
+
+Goal is to furnish a general mathematical formulation apt to embrace several (apparently different) RB approaches
+
+Linear elliptic PDEs: relatively simple, yet relevant to many important applications --> this class of problems proves to be convenient vehicle for setting up the mathematical formulation on one hand, and illustrating the results of this methodology, which can be extended to other more general problems, on the other.
+
+discuss the way to obtain a suitable offline/online decomposition in order to reduce the computational complexity. We show how to derive a posteriori error estimates in order to bound the error of the RB approximation with respect to the underpinning high-fidelity approximation. 
+
+REPRESENTATIVE PROBLEMS: ANALYSIS AND (HIGH-FIDELITY) APPROXIMATION
+
+PDEs represent the foundation upon which many mathematical models for real-life applications are erected. In order to solve these equations one almost invariably has to resort to efficient approximation techniques. These are also called high-fidelity approximations, and represent the building blocks of any kind of reduced-order model, such as the RB method for parametrized PDEs. We review the formulation, analysis and approximation...
+
+boundary conditions are enforced
+
+The Stokes equations describe the flow of a Newtonian, incompressible viscous fluid confined in a domain Omega when convective forces are negligible with respect to viscous forces
+
+Second equations enforces the mass conservation
+
+Upon inserting a convective term in the momentum equation of the Stokes system we obtain the steady Navier-Stokes equations
+
+N-S feature a quadratic nonlinear term
+
+Abstract frameworks
+
+In this section we introduce some basic results of functional analysis, essential for a correct variational formulation of a broad variety of boundary value problems, encompassinh, as special cases, the four problems addressed in ...
+
+Functional setting of an equation
+
+Main results ensuring their well posedness: Lax Milgram lemma, Necas theorem, Brezzi theorem.
+
+In inf-sup condition (page 16): infimum and supremum are actually attained, and can be replaced with minimum and maximum.
+
+The weak formulation of problem () can be cast in the abstract form () upon choosing ...
+
+For Navier-Stokes: velocity space X and pressure space Q
+
+rg: lifting vector --> lets us use the same space for solution and trial functions, i.e. leads to a symmetric formulation
+
+ON THE NUMERICAL APPROXIMATION OF VARIATIONAL PROBLEMS
+
+In this section we recall the most important results related to the numerical approximation of the variational problems introduced above, Since these approximations are obtained by projecting the original problem upon a finite-dimensional subspace, their well-posedness is subject to assumptions which are similar to the ones required for the analysis of their infinite-dimensional counterpart.
+
+standpoint = viewpoint = point of view
+
+FINITE ELEMENT SPACES
+
+To define approximations of the space H1 that depend on a parameter h, let us first introduce a triangulation of the domain Omega. 
+
+Meshes (or grids) which represent their cover (of domains) with non-overlapping triangles (d = 2) or tetrahedra (d = 3).
+
+The coefficients of the exapnsion of a generic function of X_h^r in the basis itself will be the values taken by the function at carefully chosen points N_i of the grid Th, which we call nodes (and which form, in general, a superset of the vertices of Th). We call such a basis a Lagrangian basis.
+
+RB METHODS: BASIC PRINCIPLES, BASIC PROPERTIES
+
+Any reduced basis approximation is, in a nutshell, a (Petrov-)Galerkin projection onto an N-dimensional space V_N (the RB space) that approximates the high-fidelity (say, finite element) solution of the given PDE, for any choice of the parameter within a prescribed parameter set.
+
+Parametrized PDEs are partial differential equations that depend on a set of parameters. The latter may represent material coefficients, boundary conditions and source terms. We will denote them by mu_ph (the subscript standing for "physical"). Sometimes the computational domain itself can be represented in terms of (additional) parameters, say mu_g (the subscript standing for "geometric"). 
+
+mu: input-parameter vector collecting both mu_ph and mu_g
+
+In those cases where the computational domain depends on a set of (geometric) parameters, it is convenient to reformulate (and solve) the original parametrized PDE onto a new, fixed (parameter independent) reference domain. This in particular will allow to combine high-fidelity solutions that would be otherwise computed on different domains and with different grids.
+
+GENERAL FRAMEWORK FOR NAVIER-STOKES AND SEMILINEAR ELLIPTIC PROBLEMS: CHAPTER 11
+

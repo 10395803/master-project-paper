@@ -1,0 +1,51 @@
+PREFACE
+
+During the last decade, reduced order modeling has attracted growing interest in computational science and engineering. It now plays an important role in delivering high-performance computing (and bridging applications) accross industrial domains, from mechanical to electronic engineering, and in the basic and applied sciences, including neurosciences, medicine, biology, chemistry, etc. Such methods are also becoming increasingly important in emerging application domains dominated by multi-physics, multi-scale problems as well as uncertainty quantification.
+
+Provision of reduced models of guaranteed fidelity --> enables the user to trust the output of the model and balance the needs for computational efficiency and model fidelity
+
+Different sampling strategies, providing a comparison between classic techniques based on singular value decomposition (SVD), proper orthogonal decomposition (POD), and greedy algorithms. --> Kologorov N-width
+
+Empirical interpolation method: emerging as a standard element to address problems exhibiting non-affine parametrizations and nonlinearities.
+
+loosely based
+
+INTRODUCTION
+
+Models expressed as parametrized partial differential equations are ubiquitous throughout engineering and the applied sciences as models for unsteady and steady heat and mass transfer, acoustics, solid and fluid mechanics, electromagnetics or problems of finance. 
+
+In such models a number of input-parameters are used to char-
+acterize a particular problem and possible variations in its geometric configuration,
+physical properties, boundary conditions or source terms
+
+We focus on problems in which the solution is sought for a large number of different parameter values. --> Examples: optimization, control, design, uncertainty quantification, real-time query. 
+
+It is not only the accuracy of the model that matters, but the computational efficiency of the model is likewise critical
+
+The complexity and computational cost associated with solving the full partial differential equation for each new parameter value rules out a direct approach. --> We must seek a different approach that allows us to evaluate the desired output at minimal cost, yet without sacrificing the predictive accuracy of the complex model.
+
+It is not the goal of the reduced basis methods to replace the expensive computational model but rather to build upon it. Indeed, the accuracy of the reduced model will be measured directly against the precision of the expensive computational model. This direct comparison against the expensive model allows us to verify the accuracy of the reduced model and, thus, certify the validity of the predicted output. In other words, the goal is to pursue an algorithmic collaboration rather than an algorithmic competition with the expensive direct solution method.
+
+The POD approach, relying on the identification of the suitable reduced model by a singular value decomposition of a large number of snapshots, is often prohibitively expensive in the offline phase.
+
+Recent work has focused on achieving a full decoupling of the finite element scheme and the reduced order model through an offline-online procedure. In this approach, the complexity of the offline stage depends on the complexity of the finite element approximation of the parametrized partial differential equation, while the complexity of the online stage depends solely on the complexity of the reduced order model. When combined with the a posteriori error estimation, the online stage guarantees the accuracy of the high-fidelity finite element approximation at the low cost of a reduced order model.
+
+In the case of nonaffine parameter dependence, the development of offline-online strategies is much less transarent, and has only recently been addressed by the development of the empirical interpolation method. This last development, essential for the overall efficiency of the offline-online decomposition, has opened up for the development of reduced basis methods and their use in real-time and many-query contexts for complex applications, including nonlinear problems.
+
+RB methods can be effectively applied also to nonlinear problems, although this typically introduces both numerical and theoretical complications, and many questions remain open. For classical problems with a quadratic nonlinearity, there has been substantial progress (e.g., Navier-Stokes)
+
+In parallel with many of these more fundamental and algorithmic developments, there are substantial activities seeking to imporve the computational performance for complex problems by performing the offline work on large scale computational platforms and allow the use of the reduced models on deployed platforms.
+
+REDUCED BASIS METHODS
+
+With target applications characterized by computationally intensive parametrized problems that require repeated evaluation, it is clear that we need to seek alternatives to simply solving the full problem many times.
+
+When introducing reduced models it is inevitable to familiarize the reader with the notion of a solution manifold, that is the set of all solutions to the parametrized problem under variation of the parameter. The final goal of RB methods is to approximate any member of this solution manifold with a low number of, say N, basis functions. This set of basis functions is denoted as the reduced basis.
+
+The RB method is based on a two stage procedure, comprising an offline and an online stage. During the potantially very costly offline stage, one empirically explores the solution manifold to construct a reduced basis that approximates any member of the solution manifold to within a prescribed accuracy.
+
+The online stage consists of a Galerkin projection onto the space spanned by the reduced basis. During this stage, one can explore the parameter space at a substantially reduced cost, ideally at a cost independent of N.
+
+The online procedure can be embedded in a computer environment that has only limited computational power and memory to allow rapid online query of the response of an otherwise complex system for control, visualization and analysis using a deployed device.
+
+Discrete version of the solution manifold --> \mathcal{M}
