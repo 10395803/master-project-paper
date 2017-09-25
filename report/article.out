@@ -1,9 +1,21 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}% 1
-\BOOKMARK [1][-]{section.2}{Parametrized partial differential equations}{}% 2
-\BOOKMARK [2][-]{subsection.2.1}{From physical to reference domain}{section.2}% 3
-\BOOKMARK [2][-]{subsection.2.2}{Problems of interest}{section.2}% 4
-\BOOKMARK [3][-]{subsubsection.2.2.1}{Nonlinear Poisson equation}{subsection.2.2}% 5
-\BOOKMARK [3][-]{subsubsection.2.2.2}{Steady uncompressible Navier-Stokes equations}{subsection.2.2}% 6
-\BOOKMARK [1][-]{section.3}{Discrete full-order model}{}% 7
-\BOOKMARK [1][-]{section.4}{Projection-based reduced basis method}{}% 8
-\BOOKMARK [2][-]{subsection.4.1}{Proper Orthogonal Decomposition}{section.4}% 9
+\BOOKMARK [1][-]{section.2}{Artifical neural networks}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Neuronal model}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Network topology: the feedforward neural network}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Training a multi-layer feedforward neural network}{section.2}% 5
+\BOOKMARK [3][-]{subsubsection.2.3.1}{The Levenberg-Marquardt algorithm}{subsection.2.3}% 6
+\BOOKMARK [1][-]{section.3}{Parametrized partial differential equations}{}% 7
+\BOOKMARK [2][-]{subsection.3.1}{From physical to reference domain}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.2}{Problems of interest}{section.3}% 9
+\BOOKMARK [3][-]{subsubsection.3.2.1}{Nonlinear Poisson equation}{subsection.3.2}% 10
+\BOOKMARK [3][-]{subsubsection.3.2.2}{Steady uncompressible Navier-Stokes equations}{subsection.3.2}% 11
+\BOOKMARK [1][-]{section.4}{Discrete full-order model}{}% 12
+\BOOKMARK [1][-]{section.5}{Projection-based reduced basis method}{}% 13
+\BOOKMARK [2][-]{subsection.5.1}{Proper Orthogonal Decomposition}{section.5}% 14
+\BOOKMARK [2][-]{subsection.5.2}{Implementation: details and issues}{section.5}% 15
+\BOOKMARK [1][-]{section.6}{A non-intrusive reduced basis method using artificial neural networks}{}% 16
+\BOOKMARK [1][-]{section.7}{Numerical results}{}% 17
+\BOOKMARK [2][-]{subsection.7.1}{One-dimensional Poisson equation}{section.7}% 18
+\BOOKMARK [2][-]{subsection.7.2}{Two-dimensional Poisson equation}{section.7}% 19
+\BOOKMARK [2][-]{subsection.7.3}{The lid-driven cavity problem}{section.7}% 20
+\BOOKMARK [1][-]{section.8}{Conclusion}{}% 21
