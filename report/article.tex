@@ -234,13 +234,7 @@
 		A valuable alternative to address this concern is represented by \emph{non-intrusive} RB methods, which refer to the high-fidelity model solely to generate the snapshots, without involving it in the projection process \cite{Chen17}. The projection coefficients are then obtained via interpolation over the parameter domain of a database of reduced-order information \cite{Cas15}. However, since reduced bases generally belong to nonlinear, matrix manifolds, standard interpolation techniques may fail, as they cannot enforce the constraints characterizing those manifolds, unless using a large amount of samples \cite{Ams10, BNR00}. 
 		
 		In this work, we develop a non-intrusive RB method employing POD for the generation of the reduced basis and resorting to (artificial) neural networks, in particular multi-layer perceptrons, in the interpolation step. Hence, in the following we refer to the proposed RB procedure as the POD-NN method. Being of non-intrusive nature, POD-NN is suitable for a fast and reliable resolution of complex nonlinear PDEs featuring a non-affine parametric dependence. To test this assertion, the POD-NN method is applied to the one- and two-dimensional nonlinear Poisson equation and to the steady uncompressible Navier-Stokes equations. Both physical and geometrical parametrizations are considered.
-		
-		\iffalse
-		As their biological counterpart, \emph{artificial neural networks} (ANNs) \cite{Hay05} are computing systems consisting of information-processing units, called \emph{neurons}, interconnected through \emph{weighted synapses}. The attractive feature of ANNs lies in their capability of \emph{learning} from experience \cite{Kri07}. As a result, ANNs have found most used in those applications, such as cluster detection, image identification or speech recognition, which are difficult to address via computer algorithms using rule-based programming \cite{Mat16}. However, ANNs have been successfully applied also in more traditional contexts, e.g., continuous function approximation, as a valid alternative to the programming approach to investigate complexity, nonlinearity and uncertainties of a high order \cite{Nie15}. 
-		
-		The learning of an ANN is accomplished through a \emph{training} process, during which the network is exposed to a collection of examples and its weights are properly adjusted so that it can provide reasonable responses in similar (yet not identical) situations. As shown later in the paper, the training and the subsequent evaluation of a neural network perfectly fit the offline-online framework, offering the POD-NN method a significant online speed-up with respect to the standard projection-based POD-Garlerkin (POD-G) RB procedure.
-		\fi
-		
+				
 		The paper is organized as follows. Section \ref{section:Parametrized partial differential equations} defines the (parametrized) functional and variational framework which is required to develop a finite element solver, briefly outlined in Subsection \ref{section:Discrete full-order model}. The standard projection-based POD-Galerkin (POD-G) RB method is then derived in Section \ref{section:Projection-based reduced basis method}. Section \ref{section:Artificial neural networks} discusses components, topology and learning process for the artificial neural networks used in the simulations. This is preparatory for the subsequent Section \ref{section:A non-intrusive RB method using neural networks}, which details the non-intrusive POD-NN RB procedure; both theoretical and practical aspects are addressed. Several numerical results, aiming to show the reliability and efficiency of the proposed RB technique, are offered in Section \ref{section:Numerical results} for the Poisson equation (Subsection \ref{section:Nonlinear Poisson equation}) and the lid-driven cavity problem for the steady Navier-Stokes equations (Subsection \ref{section:Steady uncompressible Navier-Stokes equations}). Finally, Section \ref{section:Conclusion} gathers some relevant conclusions and suggests future developments.
 		
 		
@@ -321,12 +315,13 @@
 	\subsection{Discrete full-order model}
 	\label{section:Discrete full-order model}
 	
-		Let $V_h \subset V$ be a suitable FE subspace of $V$ of (finite) dimension $N_h$, with $h \geq 0$ being the characteristic size of the underlying mesh $\Omega_h$ which discretizes the domain $\Omega$. The FE approximation of the weak problem \eqref{eq:pde-weak-reference} can be cast in the form: given $\bg{\mu} \in \mathcal{P}$, find $u_h(\bg{\mu}) \in V_h$ such that 
+		Let $V_h \subset V$ be a suitable FE subspace of $V$ of (finite) dimension $N_h$, with $h \geq 0$ being the characteristic size of the underlying mesh $\Omega_h$ which discretizes $\Omega$. The FE approximation of the weak problem \eqref{eq:pde-weak-reference} can be cast in the form: given $\bg{\mu} \in \mathcal{P}$, find $u_h(\bg{\mu}) \in V_h$ such that 
 		\begin{equation}
 			\label{eq:galerkin}
 			g(u_h(\bg{\mu}), \, v_h; \, \bg{\mu}) = 0 \hspace*{0.3cm} \forall v_h \in V_h \, .
 		\end{equation}
-		The discretization \eqref{eq:galerkin} is known as \emph{Galerkin approximation}, and therefore $u_h(\bg{\mu})$ is referred to as the \emph{Galerkin solution} to the problem \eqref{eq:pde-differential-reference}. Due to the nonlinearity of $g(\cdot, \, \cdot; \, \bg{\mu})$ in its first argument, one has to resort to some iterative method, e.g., Newton's method, to solve the Galerkin problem \eqref{eq:galerkin}. In this regard, let \[ dg[z](\cdot, \, \cdot; \, \bg{\mu}) ~ : ~ V \times V \rightarrow \mathbb{R} \]
+		%The discretization \eqref{eq:galerkin} is known as \emph{Galerkin approximation}, and therefore $u_h(\bg{\mu})$ is referred to as the \emph{Galerkin solution} to the problem \eqref{eq:pde-differential-reference}. 
+		Due to the nonlinearity of $g(\cdot, \, \cdot; \, \bg{\mu})$ in its first argument, one has to resort to some iterative method, e.g., Newton's method, to solve the Galerkin problem \eqref{eq:galerkin}. In this regard, let \[ dg[z](\cdot, \, \cdot; \, \bg{\mu}) ~ : ~ V \times V \rightarrow \mathbb{R} \]
 		be the partial Frech\'et derivative of $g(\cdot, \, \cdot; \, \bg{\mu})$ with respect to its first argument, evaluated at $z \in V$. Starting from an initial guess $u_h^0(\bg{\mu})$, we construct a collection of approximations $\big\lbrace u_h^k(\bg{\mu}) \big\rbrace_{k \geq 0}$ to the Galerkin solution $u_h(\bg{\mu})$ by iteratively solving the linearized problems
 		\begin{equation*}
 			\label{eq:newton-linearized-problem}
@@ -367,12 +362,10 @@
 	\section{Projection-based reduced basis method}
 	\label{section:Projection-based reduced basis method}
 	
-		As detailed in the previous section, the finite element discretization of the $\bg{\mu}$-dependent nonlinear differential problem \eqref{eq:pde-weak-reference}, combined with Newton's method, entails the assembly and resolution of (possibly) many linear systems of the form \eqref{eq:galerkin-linear-system}, whose dimension $N_h$ is directly related to $(i)$ the size of the underlying grid and $(ii)$ the order of the polynomial FE space adopted. Since the accuracy of the resulting discretization heavily relies on these two factors, a direct numerical approximation of the full-order model implies severe computational costs. Therefore, this approach is hardly affordable in \emph{many-query} and \emph{real-time} contexts, even resorting to high-performance parallel workstations. %where one is interested in a fast and reliable prediction of an \emph{output of interest}, i.e, a functional of the field variable $u(\bg{\mu})$, for many instances of $\bg{\mu} \in \mathcal{P}$ \cite{Dep08}. 
-		This motivates the broad use of \emph{reduced-order} models across several inter-disciplinary areas, e.g., parameter estimation, optimal control, shape optimization and uncertainty quantification \cite{HSR16, QMN15}. 
+		As detailed in the previous subsection, the finite element discretization of the $\bg{\mu}$-dependent nonlinear differential problem \eqref{eq:pde-weak-reference}, combined with Newton's method, entails the assembly and resolution of (possibly) many linear systems of the form \eqref{eq:galerkin-linear-system}, whose dimension $N_h$ is directly related to $(i)$ the size of the underlying grid and $(ii)$ the order of the polynomial FE space adopted. Since the accuracy of the resulting discretization heavily relies on these two factors, a direct numerical approximation of the full-order model implies severe computational costs. Therefore, this approach is hardly affordable in \emph{many-query} and \emph{real-time} contexts, even resorting to high-performance parallel workstations. %where one is interested in a fast and reliable prediction of an \emph{output of interest}, i.e, a functional of the field variable $u(\bg{\mu})$, for many instances of $\bg{\mu} \in \mathcal{P}$ \cite{Dep08}. 
+		This motivates the broad use of \emph{reduced-order} models across several inter-disciplinary areas \cite{HSR16, QMN15}. %, e.g., parameter estimation, optimal control, shape optimization and uncertainty quantification \cite{HSR16, QMN15}. 
 						
-		Reduced basis methods seek an approximated solution to problem \eqref{eq:pde-weak-reference} as a linear combination of parameter-independent functions $\big\lbrace \psi_1, \, \ldots \, , \psi_L \big\rbrace \subset V_h$, called \emph{reduced basis functions}, built from a collection of high-fidelity snapshots $\big\lbrace u_h \left( \bg{\mu}^{(1)} \right), \, \ldots \, , u_h \left( \bg{\mu}^{(N)} \right) \big\rbrace$, where the discrete and finite set $\Xi_N = \big\lbrace \bg{\mu}^{(1)}, \, \ldots \, , \bg{\mu}^{(N)} \big\rbrace \subset \mathcal{P}$ may consist of either a uniform lattice or randomly generated points over the parameter domain $\mathcal{P}$ \cite{HSR16}. The basis functions \smash{$\big\lbrace \psi_l \big\rbrace_{1 \leq l \leq L}$} generally follow from a principal component analysis (PCA) of the set of snapshots (in that case, $N > L$), or they might coincide with the snapshots themselves (in that case, $N = L$). In the latter approach, typical of any \emph{greedy} method, the parameters \smash{$\big\lbrace \bg{\mu}^{(n)} \big\rbrace_{1 \leq n \leq N}$} must be carefully chosen according to some optimality criterium (see, e.g., \cite{Chen17}). Here, we pursue the first approach, employing the well-known proper orthogonal decomposition (POD) method \cite{Lia02, Vol08}, detailed in the following subsection.
-		
-		Assume now that a reduced basis is available and let $V_{\texttt{rb}} \subset V_h$ be the associated \emph{reduced basis space}, i.e.,
+		Reduced basis methods seek an approximated solution to problem \eqref{eq:pde-weak-reference} as a linear combination of parameter-independent functions $\big\lbrace \psi_1, \, \ldots \, , \psi_L \big\rbrace \subset V_h$, called \emph{reduced basis functions}, built from a collection of high-fidelity snapshots $\big\lbrace u_h \left( \bg{\mu}^{(1)} \right), \, \ldots \, , u_h \left( \bg{\mu}^{(N)} \right) \big\rbrace$, where the discrete and finite set $\Xi_N = \big\lbrace \bg{\mu}^{(1)}, \, \ldots \, , \bg{\mu}^{(N)} \big\rbrace \subset \mathcal{P}$ may consist of either a uniform lattice or randomly generated points over the parameter domain $\mathcal{P}$ \cite{HSR16}. The basis functions \smash{$\big\lbrace \psi_l \big\rbrace_{1 \leq l \leq L}$} generally follow from a principal component analysis (PCA) of the set of snapshots (in that case, $N > L$), or they might coincide with the snapshots themselves (in that case, $N = L$). In the latter approach, typical of any \emph{greedy} method, the parameters \smash{$\big\lbrace \bg{\mu}^{(n)} \big\rbrace_{1 \leq n \leq N}$} must be carefully chosen according to some optimality criterium (see, e.g., \cite{Chen17}). Here, we pursue the first approach, employing the well-known proper orthogonal decomposition (POD) method \cite{Lia02, Vol08}, detailed in the following subsection. For now, assume that a reduced basis is available and let $V_{\texttt{rb}} \subset V_h$ be the associated \emph{reduced basis space}, i.e.,
 		\begin{equation*}
 			V_{\texttt{rb}} = \text{span} \big\lbrace \psi_1, \, \ldots \, , \psi_L \big\rbrace \, .
 		\end{equation*} 
@@ -391,22 +384,25 @@
 			\label{eq:pde-rb-newton}
 			dg \big[ u_{L}^k(\bg{\mu}) \big] \big( \delta u_{L}^k(\bg{\mu}), \, v_{L}; \, \bg{\mu} \big) = - g \big( u_{L}^k(\bg{\mu}), \, v_{L}; \, \bg{\mu} \big) \hspace*{0.3cm} \forall v_{L} \in V_{\texttt{rb}} \, ,
 		\end{equation*}
-		with $u_{L}^{k+1}(\bg{\mu}) = u_{L}^k(\bg{\mu}) + \delta u_{L}^k(\bg{\mu})$. At this stage, it is worth pointing out that the RB functions $\big\lbrace \psi_l \big\rbrace_{1 \leq l \leq L}$ belong to $V_h$, i.e., they are actual FE functions. Hence, denoting by $\bg{\psi}_l \in \mathbb{R}^{N_h}$ the vector collecting the nodal values of $\psi_l$, for $l = 1, \, \ldots \, , L$, let us introduce the matrix \[ \mathbb{V} = \big[ \bg{\psi}_1 \, \big| \, \ldots \, \big| \, \bg{\psi}_L \big] \in \mathbb{R}^{{N_h} \times L} \, .\] For any $v_{L} \in V_{\texttt{rb}}$, the matrix $\mathbb{V}$ encodes the change of variables from the RB basis to the standard (Lagrangian) FE basis, i.e.,
+		with $u_{L}^{k+1}(\bg{\mu}) = u_{L}^k(\bg{\mu}) + \delta u_{L}^k(\bg{\mu})$. 
+		
+		At this stage, it is worth pointing out that the RB functions $\big\lbrace \psi_l \big\rbrace_{1 \leq l \leq L}$ belong to $V_h$, i.e., they are actual FE functions. Hence, denoting by $\bg{\psi}_l \in \mathbb{R}^{N_h}$ the vector collecting the nodal values of $\psi_l$, for $l = 1, \, \ldots \, , L$, let us introduce the matrix \[ \mathbb{V} = \big[ \bg{\psi}_1 \, \big| \, \ldots \, \big| \, \bg{\psi}_L \big] \in \mathbb{R}^{{N_h} \times L} \, .\] For any $v_{L} \in V_{\texttt{rb}}$, the matrix $\mathbb{V}$ encodes the change of variables from the RB basis to the standard (Lagrangian) FE basis, i.e.,
 		\begin{equation}
 			\label{eq:rb-fe-coefficients}
 			\mathbf{v}_L = \mathbb{V} ~ \mathbf{v}_{\texttt{rb}} \, .
 		\end{equation}
-		Therefore, each element $v_{L}$ of the reduced space admits two (algebraic) representations:
-		\begin{itemize}
-			\item $\mathbf{v}_{\texttt{rb}} \in \mathbb{R}^L$, collecting the coefficients for the expansion of $v_{L}$ in terms of the RB basis $\big\lbrace \psi_1, \, \ldots \, , \psi_L \big\rbrace$;
-			\item $\mathbf{v}_{L} \in \mathbb{R}^{N_h}$, collecting the coefficients for the expansion of $v_{L}$ in terms of the FE basis $\big\lbrace \phi_1, \, \ldots \, , \phi_{N_h} \big\rbrace$.
-		\end{itemize}
-		Note that the latter is also available for any $v_h \in V_h$, while the former characterizes the element in the subspace $V_{\texttt{rb}}$. Then, due to \eqref{eq:galerkin-nonlinear-system-equation}, \eqref{eq:rb-fe-coefficients} and the linearity of $g(\cdot,\cdot; \bg{\mu})$ in the second argument, the algebraic formulation of the reduced basis problem \eqref{eq:pde-rb} can be written in compact form as: given $\bg{\mu} \in \mathcal{P}$, seek $\mathbf{u}_{\texttt{rb}} \in \mathbb{R}^L$ such that
+		%Therefore, each element $v_{L}$ of the reduced space admits two (algebraic) representations:
+		%\begin{itemize}
+		%	\item $\mathbf{v}_{\texttt{rb}} \in \mathbb{R}^L$, collecting the coefficients for the expansion of $v_{L}$ in terms of the RB basis $\big\lbrace \psi_1, \, \ldots \, , \psi_L \big\rbrace$;
+		%	\item $\mathbf{v}_{L} \in \mathbb{R}^{N_h}$, collecting the coefficients for the expansion of $v_{L}$ in terms of the FE basis $\big\lbrace \phi_1, \, \ldots \, , \phi_{N_h} \big\rbrace$.
+		%\end{itemize}
+		%Note that the latter is also available for any $v_h \in V_h$, while the former characterizes the element in the subspace $V_{\texttt{rb}}$. 
+		Then, due to \eqref{eq:galerkin-nonlinear-system-equation}, \eqref{eq:rb-fe-coefficients} and the linearity of $g(\cdot,\cdot; \bg{\mu})$ in the second argument, the algebraic formulation of the reduced basis problem \eqref{eq:pde-rb} can be written in compact form as: given $\bg{\mu} \in \mathcal{P}$, seek $\mathbf{u}_{\texttt{rb}} \in \mathbb{R}^L$ such that
 		\begin{equation}
 			\label{eq:rb-nonlinear-system}
 			\mathbf{G}_{\texttt{rb}}(\mathbf{u}_{\texttt{rb}}(\bg{\mu}); \, \bg{\mu}) = \mathbb{V}^T \mathbf{G}_h(\mathbf{u}_L(\bg{\mu}); \, \bg{\mu}) = \mathbb{V}^T \mathbf{G}_h(\mathbb{V} ~ \mathbf{u}_{\texttt{rb}}(\bg{\mu}); \, \bg{\mu}) = \bg{0} ~ \in ~ \mathbb{R}^L \, .
 		\end{equation}
-		Observe that this \emph{reduced nonlinear system} imposes the orthogonality (in the Euclidean scalar product) of the residual vector $\mathbf{G}_h(\cdot; \bg{\mu})$, evaluated in $\mathbb{V} \mathbf{u}_{\texttt{rb}}(\bg{\mu})$, to the columns of $\mathbb{V}$, thus encoding the Galerkin approach pursued at the variational level. Finally, exploiting the chain rule and the Jacobian $\mathbb{J}_h(\cdot; \bg{\mu})$ of $\mathbf{G}_h(\cdot; \bg{\mu})$, the Jacobian $\mathbb{J}_{\texttt{rb}}(\cdot; \bg{\mu})$ of $\mathbf{G}_{\texttt{rb}}(\cdot; \bg{\mu})$ is given by
+		Observe that this \emph{reduced nonlinear system} imposes the orthogonality (in the Euclidean scalar product) of the residual vector $\mathbf{G}_h(\cdot; \bg{\mu})$, evaluated in $\mathbb{V} ~ \mathbf{u}_{\texttt{rb}}(\bg{\mu})$, to the columns of $\mathbb{V}$, thus encoding the Galerkin approach pursued at the variational level. Finally, exploiting the chain rule and the Jacobian $\mathbb{J}_h(\cdot; \bg{\mu})$ of $\mathbf{G}_h(\cdot; \bg{\mu})$, the Jacobian $\mathbb{J}_{\texttt{rb}}(\cdot; \bg{\mu})$ of $\mathbf{G}_{\texttt{rb}}(\cdot; \bg{\mu})$ is given by
 		\begin{equation}
 			\label{eq:rb-nonlinear-system-jacobian}
 			\mathbb{J}_{\texttt{rb}}(\mathbf{w}; \, \bg{\mu}) = \mathbb{V}^T \mathbb{J}_h(\mathbb{V} ~ \mathbf{w}; \, \bg{\mu}) \, \mathbb{V} ~ \in ~ \mathbb{R}^{L \times L} \hspace*{0.3cm} \forall \mathbf{w} \in \mathbb{R}^L \, , \, \forall \bg{\mu} \in \mathcal{P} \, .
@@ -431,9 +427,9 @@
 		%In a general sense, \emph{Proper Orthogonal Decomposition} (POD) is a powerful method of data analysis aimed at reducing the cardinality of a given high-dimensional dataset (or system). First, an orthonormal basis for the original data space is generated, consisting of basis vectors called \emph{modes} or \emph{principal components}. Ideally, the first modes embody much of the \emph{energy} of the system, and so they express the \emph{essential information} of data \cite{QMN15}. Therefore, a meaningful low-dimensional representation of data is obtained by truncating the orthonormal basis to retain only a few POD modes, then projecting the system onto the truncated basis \cite{Vol08}. This approach perfectly fits our needs, as we shall see hereunder. However, it is clear that the interest in the POD method extends far beyond the field of reduced-order modeling techniques, finding a fertile ground in, e.g., random variables, image processing, and data compression \cite{Lia02}.
 		
 		Consider a collection of $N$ snapshots $\big\lbrace u_h \big( \bg{\mu}^{(1)} \big), \, \ldots \, , u_h \big( \bg{\mu}^{(N)} \big) \big\rbrace$, corresponding to the finite and discrete parameter set $\Xi_N = \big\lbrace \bg{\mu}^{(1)}, \, \ldots \, , \bg{\mu}^{(N)} \big\rbrace \subset \mathcal{P}$, and let $\mathcal{M}_{\Xi_N}$ be the associated subspace, i.e., \[ \mathcal{M}_{\Xi_N} = \text{span} \big\lbrace u_h \big( \bg{\mu}^{(1)} \big), \, \ldots \, , u_h \big( \bg{\mu}^{(N)} \big) \big\rbrace \, . \] We can assume that $\mathcal{M}_{\Xi_N}$ provides a good approximation of the \emph{discrete solution manifold} $\mathcal{M}_h$, \[ \mathcal{M}_h = \big\lbrace u_h(\bg{\mu}) ~ : ~ \bg{\mu} \in \mathcal{P} \big\rbrace \, , \] as long as the number of snapshots is sufficiently large (but typically much smaller than the dimension ${N_h}$ of the FE space). Then, we aim at finding a parameter-independent \emph{reduced basis} for $\mathcal{M}_{\Xi_N}$, i.e., a collection of FE functions $\big\lbrace \psi_1, \, \ldots \, , \psi_L \big\rbrace \subset \mathcal{M}_{\Xi_N}$, with $L \ll {N_h}$ and $L$ \emph{independent} of $N_h$, so that the associated linear space 
-		\begin{equation*}
-			V_{\texttt{rb}} = \text{span} \big\lbrace \psi_1, \, \ldots \, , \psi_L \big\rbrace
-		\end{equation*}
+		%\begin{equation*}
+		%	V_{\texttt{rb}} = \text{span} \big\lbrace \psi_1, \, \ldots \, , \psi_L \big\rbrace
+		%\end{equation*}
 		constitutes a low-rank approximation of $\mathcal{M}_{\Xi_N}$, optimal in some later defined sense. To this end, consider the \emph{snapshot matrix} $\mathbb{S} \in \mathbb{R}^{{N_h} \times N}$ gathering the nodal values of the snapshots in a column-wise sense, i.e.,
 		\begin{equation*}
 			\mathbb{S} = \big[ \mathbf{u}_h \big( \bg{\mu}^{(1)} \big) \, \big| \, \ldots \, \big| \, \mathbf{u}_h \big( \bg{\mu}^{(N)} \big) \big] \, .
@@ -489,7 +485,7 @@
 		%\end{equation*}
 		%where $(\cdot,\cdot)_{\mathbb{R}^{N_h}}$ denotes the Euclidean scalar product in $\mathbb{R}^{N_h}$. Therefore, the columns $\big\lbrace \mathbf{w}_1, \, \ldots \, , \mathbf{w}_R \big\rbrace$ of $\mathbb{W}_R$ constitute an orthonormal basis for the column space $\text{Col}(\mathbb{S})$ of $\mathbb{S}$. 
 		
-		\noindent Assume now we seek to approximate the columns of $\mathbb{S}$ by means of $L$ orthonormal vectors $\big\lbrace \wt{\mathbf{w}}_1, \, \ldots \, , \wt{\mathbf{w}}_L \big\rbrace$, with $L < R$. It is an easy matter to show that for each $\mathbf{s}_n$, $n = 1, \, \ldots \, , N$, the element of $\text{span} \big\lbrace \wt{\mathbf{w}}_1, \, \ldots \, , \wt{\mathbf{w}}_L \big\rbrace$ closest to $\mathbf{s}_n$ in the Euclidean norm $\norm{\cdot}_{\mathbb{R}^{N_h}}$ is given by
+		\noindent At the algebraic level, our goal is to approximate the columns of $\mathbb{S}$ by means of $L$ orthonormal vectors $\big\lbrace \wt{\mathbf{w}}_1, \, \ldots \, , \wt{\mathbf{w}}_L \big\rbrace$, with $L < R$. It is an easy matter to show that for each $\mathbf{s}_n$, $n = 1, \, \ldots \, , N$, the element of $\text{span} \big\lbrace \wt{\mathbf{w}}_1, \, \ldots \, , \wt{\mathbf{w}}_L \big\rbrace$ closest to $\mathbf{s}_n$ in the Euclidean norm $\norm{\cdot}_{\mathbb{R}^{N_h}} = \sqrt{(\cdot,\cdot)_{\mathbb{R}^{N_h}}}$ is given by
 		\begin{equation*}
 			\sum_{l = 1}^L \big( \mathbf{s}_n, \, \wt{\mathbf{w}}_l \big)_{\mathbb{R}^{N_h}} \wt{\mathbf{w}}_l \, .
 		\end{equation*} 
@@ -516,7 +512,7 @@
 		
 		\algrenewcommand\textproc{}
 		
-		\begin{algorithm}[t]	
+		\begin{algorithm}[b!]	
 			\begin{algorithmic}[1]
 				\Function{$\mathbb{V} = $ \textsc{PODG\_offline}}{$\mathcal{P}$, $\Omega_h$, $N$}
 					\State generate the parameter set $\Xi_N = \big\lbrace \bg{\mu}^{(1)}, \, \ldots \, , \bg{\mu}^{(N)} \big\rbrace$
@@ -551,7 +547,7 @@
 	
 		The numerical procedure presented so far can be efficiently carried out within an offline-online framework \cite{Pru02}. The parameter-independent \emph{offline} step consists of the generation of the snapshots through a high-fidelity, expensive discretization scheme and the subsequent construction of the reduced basis via POD. To determine an appropriate dimension for the basis, which ensures a desired degree of accuracy, one can resort to empirical criteria, like, e.g., the \emph{relative information content} \cite{QMN15}. Then, given a new parameter value $\bg{\mu} \in \mathcal{P}$, the nonlinear reduced system \eqref{eq:rb-nonlinear-system} is solved \emph{online} using, e.g., Newton's method, which entails the assembly and resolution of linear systems of the form \eqref{eq:rb-nonlinear-system-newton}. The main steps of the resulting POD-Galerkin (POD-G) RB method are summarized in Algorithm \ref{alg:pod-galerkin}.
 				
-		However, to enjoy a significant reduction in the computational burden with respect to traditional (full-order) discretization techniques, the complexity of any online query should be \emph{independent} of the original size of the problem. At this regard, notice that the operative definitions \eqref{eq:rb-nonlinear-system} and \eqref{eq:rb-nonlinear-system-jacobian} of the reduced residual vector $\mathbf{G}_{\texttt{rb}}(\cdot; \bg{\mu})$ and its Jacobian $\mathbb{J}_{\texttt{rb}}(\cdot; \bg{\mu})$ involve the evaluation of the (high-fidelity) residual vector $\mathbf{G}_h(\cdot; \bg{\mu})$ and its Jacobian $\mathbb{J}_h(\cdot; \bg{\mu})$, whose cost clearly depends on ${N_h}$. Moreover, due to the nonlinearity of the underlying PDE and the non-affinity in the parameter dependence (partially induced by the transformation map $\bg{\Phi}(\cdot; \bg{\mu}_g)$), the assembly of the reduced linear systems \eqref{eq:rb-nonlinear-system-newton} has to be embodied directly in the online stage, thus seriously compromising the efficiency of the overall procedure \cite{Bar04}. Without escaping the algebraic framework, this can be successfully overcome upon resorting to suitable techniques such as the discrete empirical interpolation method (DEIM) \cite{Cha10} or its matrix variant (MDEIM) \cite{NMA15}, aiming at recovering an affine dependency on the parameter $\bg{\mu}$. On the other hand, we should point out that the implementation of such techniques is problem-dependent and of an \emph{intrusive} nature, as it requires to access and modify the assembly routines of the corresponding computational code \cite{Cas15}. Moreover, any interpolation procedure unavoidably introduces a further level of approximation. As a matter of fact, typically one needs to generate a larger number of snapshots in the offline stage and then retain a larger number of POD modes to guarantee the same accuracy provided by the standard POD-Galerkin method \cite{Bar04}.		
+		However, to enjoy a significant reduction in the computational burden with respect to traditional (full-order) discretization techniques, the complexity of any online query should be \emph{independent} of the original size of the problem. At this regard, notice that the operative definitions \eqref{eq:rb-nonlinear-system} and \eqref{eq:rb-nonlinear-system-jacobian} of the reduced residual vector $\mathbf{G}_{\texttt{rb}}(\cdot; \bg{\mu})$ and its Jacobian $\mathbb{J}_{\texttt{rb}}(\cdot; \bg{\mu})$ involve the evaluation of the (high-fidelity) residual vector $\mathbf{G}_h(\cdot; \bg{\mu})$ and its Jacobian $\mathbb{J}_h(\cdot; \bg{\mu})$, whose cost clearly depends on ${N_h}$. Moreover, due to the nonlinearity of the underlying PDE and the non-affinity in the parameter dependence (partially induced by the transformation map $\bg{\Phi}(\cdot; \bg{\mu}_g)$), the assembly of the reduced linear systems \eqref{eq:rb-nonlinear-system-newton} has to be embodied directly in the online stage, thus seriously compromising the efficiency of the overall procedure \cite{Bar04}. Without escaping the algebraic framework, this can be successfully overcome upon resorting to suitable techniques such as the discrete empirical interpolation method (DEIM) \cite{Cha10} or its matrix variant (MDEIM) \cite{NMA15}, aiming at recovering an affine dependency on the parameter $\bg{\mu}$. Nevertheless, we should point out that the implementation of such techniques is problem-dependent and of an \emph{intrusive} nature, as it requires to access and modify the assembly routines of the corresponding computational code \cite{Cas15}. Moreover, any interpolation procedure unavoidably introduces a further level of approximation. As a matter of fact, typically one needs to generate a larger number of snapshots in the offline stage and then retain a larger number of POD modes to guarantee the same accuracy provided by the standard POD-Galerkin method \cite{Bar04}.		
 		
 		
 	%
@@ -561,8 +557,9 @@
 	\section{Artifical neural networks}
 	\label{section:Artificial neural networks}
 	
-		Inspired by the biological information processing system (see, e.g., \cite{Hay05, Kri07}), an \emph{artificial neural network} (ANN), usually simply referred to as \emph{neural network}, is a computational model capable to learn from observational data, i.e., by example, thus providing an alternative to the algorithmic programming paradigm \cite{Nie15}. As its original counterpart, it consists of a collection of processing units, called (artificial) \emph{neurons}, and directed \emph{ weighted synaptic} connections among the neurons. Data travel among neurons through the connections, following the direction imposed by the synapses. Hence, an artificial neural network is an \emph{oriented graph} to all intents and purposes, with the neurons as \emph{nodes} and the synapses as oriented \emph{edges}, whose weights are adjusted by means of a \emph{training} process to configure the network for a specific application \cite{SD13}. 
+		Inspired by the biological information processing system (see, e.g., \cite{Hay05, Kri07}), an \emph{artificial neural network} (ANN), usually simply referred to as \emph{neural network}, is a computational model capable to learn from observational data, i.e., by example, thus providing an alternative to the algorithmic programming paradigm \cite{Nie15}. As its original counterpart, it consists of a collection of processing units, called (artificial) \emph{neurons}, and a set of directed \emph{weighted synaptic} connections among the neurons. Data travel among neurons through the connections, following the direction imposed by the synapses. Hence, an artificial neural network is an \emph{oriented graph} to all intents and purposes, with the neurons as \emph{nodes} and the synapses as oriented \emph{edges}, whose weights are adjusted by means of a \emph{training} process to configure the network for a specific application \cite{SD13}. 
 		
+		\iffalse
 		Formally, a neural network could then be defined as follows \cite{Kri07}.
 		
 		\begin{definition}[Neural network]
@@ -571,8 +568,9 @@
 			A \emph{neural network} is a sorted triple $\left( \mathcal{N} \, , \mathcal{V} \, , w \right)$, where $\mathcal{N}$ is the set of \emph{neurons}, with cardinality $|\mathcal{N}|$, $\mathcal{V} = \big\lbrace (i \, , j), \, 1 \leq i \, , j  \leq |\mathcal{N}| \big\rbrace$ is the set of \emph{connections}, with $(i,j)$ denoting the oriented connection linking the sending neuron $i$ with the target neuron $j$, and $w : \mathcal{V} \rightarrow \mathbb{R}$ is the \emph{weight function}, defining the weight $w_{i,j} = w((i,j))$ of the connection $(i,j)$. A weight may be either positive or negative, making the underlying connection either excitatory or inhibitory, respectively. By convention, $w_{i,j} = 0$ means that neurons $i$ and $j$ are not directly connected.
 			}
 		\end{definition}
+		\fi
 		
-		\noindent In the following, we dive deeper into the structure and training of a neural network, starting by detailing the working principles of an artificial neuron.  
+		In the following, we dive deeper into the structure and training of a neural network, starting by detailing the working principles of an artificial neuron.  
 		
 				
 	%
@@ -582,49 +580,38 @@
 	\subsection{Neuronal model}
 	\label{section:Neuronal model}
 	
-		An artificial neuron represents a simplified model of a biological neuron \cite{Kri07}. To introduce the components of the model, let us consider the neuron $j$ represented in Fig. \ref{fig:neural-model}. Suppose that it is connected with $m$ sending neurons $\big\lbrace s_1, \, \ldots \, , s_m \big\rbrace$, and $n$ receiving (target) neurons $\big\lbrace r_1, \, \ldots \, , r_n \big\rbrace$. Denoting by $y_{\Omega}(t) \in \mathbb{R}$ the scalar output fired by a generic neuron $\Omega$ at time $t$, neuron $j$ gets the weighted inputs $w_{s_k,j} \, y_{s_k}(t)$, $k = 1, \, \ldots \, , m$, at time $t$, and sends out the output $y_j(t + \Delta t)$ to the target neurons $\big\lbrace r_1, \, \ldots \, , r_n \big\rbrace$ at time $t + \Delta t$. In particular, neuron $r_i$, $i = 1, \, \ldots \, , n$, receives as input $w_{j,r_i} \, y_j(t + \Delta t)$. Please note that in the context of ANNs, the time is discretized by introducing the timestep $\Delta t$. This is clearly not plausible from a biological viewpoint; however, it substantially simplifies the implementation. In the following, we will avoid to specify the dependence on time unless strictly necessary, thus to lighten the notation.
+		An artificial neuron represents a simplified model of a biological neuron \cite{Kri07}. To introduce the components of the model, let us consider the neuron $j$ represented in Fig. \ref{fig:neural-model}. Suppose that it is connected with $m$ sending neurons $\big\lbrace s_1, \, \ldots \, , s_m \big\rbrace$, and $n$ receiving (target) neurons $\big\lbrace r_1, \, \ldots \, , r_n \big\rbrace$. Denoting by $y_{\alpha}(t) \in \mathbb{R}$ the (scalar) output of a generic neuron $\alpha$ at time $t$ and by $w_{\alpha,\beta}$ the weight of the connection $(\alpha, \, \beta)$, neuron $j$ gets the weighted inputs $w_{s_k,j} \, y_{s_k}(t)$, $k = 1, \, \ldots \, , m$, at time $t$, and sends out the output $y_j(t + \Delta t)$ to the target neurons $\big\lbrace r_1, \, \ldots \, , r_n \big\rbrace$ at time $t + \Delta t$. In particular, neuron $r_i$, $i = 1, \, \ldots \, , n$, receives as input $w_{j,r_i} \, y_j(t + \Delta t)$. Please note that in the context of ANNs, the time is discretized by introducing the timestep $\Delta t$. This is clearly not plausible from a biological viewpoint; however, it substantially simplifies the implementation. In the following, we will avoid to specify the dependence on time unless strictly necessary, thus to lighten the notation.
 		
-		An artificial neuron $j$ is completely characterized by three functions: the propagation function, the activation function and the output function. These will be defined and detailed below in the same order they get involved in the data flow. 
-		
-		\vspace*{0.3cm}
-		
-		\noindent \textbf{Propagation function}. The propagation function $f_{prop}$ converts the vectorial input $\mathbf{p} = [y_{s_1}, \, \ldots \, , y_{s_m}]^T \in \mathbb{R}^m$ into a scalar $u_{j}$ often called \emph{net input}, i.e.,
+		An artificial neuron $j$ is completely characterized by three functions: the propagation function, the activation function and the output function. The \emph{propagation function} $f_{prop}$ converts the vectorial input $\mathbf{p} = [y_{s_1}, \, \ldots \, , y_{s_m}]^T \in \mathbb{R}^m$ into a scalar $u_{j}$ often called \emph{net input}, i.e.,
 		\begin{equation*}
 			\label{eq:propagation-function}
 			u_{j} = f_{prop}(w_{s_1,j}, \, \ldots \, , w_{s_m,j}, \, y_{s_1}, \, \ldots \, , y_{s_m}) \, .
 		\end{equation*}
 		A common choice for $f_{prop}$ (used also in this work) is the weighted sum, adding up the scalar inputs multiplied by their respective weights:
-		\begin{equation}
+		\begin{equation*}
 			\label{eq:weighted-sum}
 			f_{prop}(w_{s_1,j}, \, \ldots \, , w_{s_m,j}, \, y_{s_1}, \, \ldots \, , y_{s_m}) = \sum_{k = 1}^m w_{s_k,j} ~ y_{s_k} \, .
-		\end{equation} 
-		%The function \eqref{eq:weighted-sum} provides a simple, yet effective way of modeling the accumulation of different input electric signals within a biological neuron \cite{Hay05}.
-		
-		\vspace*{0.3cm}
-		
-		\noindent \textbf{Activation or transfer function}. At each timestep, the \emph{activation state} $a_j$, often referred to as \emph{activation}, quantifies to which extent neuron $j$ is currently \emph{active} or \emph{excited}. It results from the activation function $f_{act}$, which combines the net input $u_j$ with a threshold $\theta_j \in \mathbb{R}$ \cite{Kri07}: 
+		\end{equation*} 
+		At each timestep, the \emph{activation state} $a_j$, often referred to as \emph{activation}, quantifies to which extent neuron $j$ is currently \emph{active} or \emph{excited}. It results from the \emph{activation function} $f_{act}$, which combines the net input $u_j$ with a threshold $\theta_j \in \mathbb{R}$ \cite{Kri07}: 
 		\begin{equation*}
 			\label{eq:activation-function}
 			a_j = f_{act}(u_j; \, \theta_j) = f_{act} \big( \sum_{k = 1}^m w_{s_k,j} ~ y_{s_k} \, ; \, \theta_j \big) \, .
 		\end{equation*}
-		Note that the threshold $\theta_j$ is a parameter of the network and as such one may choose to adapt it through a training process, exactly as it can be done for the synaptic weights. To ease the runtime access of $\theta_j$, it is common practice to introduce a \emph{bias neuron} in the network. A bias neuron is a continuously firing neuron, with constant output $y_{b} = 1$, which is directly connected with neuron $j$, assigning the \emph{bias weight} $w_{b,j} = - \theta_j$ to the connection. As can be deduced by the representation on the right in Fig. \ref{fig:neural-model}, $\theta_j$ is now treated as a synaptic weight, while the neuron threshold is set to zero. Hence, the net input becomes
+		Note that the threshold $\theta_j$ is a parameter of the network and as such one may choose to adapt it through a training process, exactly as it can be done for the synaptic weights. To ease the runtime access of $\theta_j$, it is common practice to introduce a \emph{bias neuron} in the network. A bias neuron is a continuously firing neuron, with constant output $y_{b} = 1$, which is directly connected with neuron $j$, assigning the \emph{bias weight} $w_{b,j} = - \theta_j$ to the connection. As can be deduced by the representation on the right in Fig. \ref{fig:neural-model}, $\theta_j$ is now treated as a synaptic weight, while the neuron threshold is set to zero. Therefore, the net input and the activation state can be respectively expressed in the form
+		%\begin{equation*}
+		%	\label{eq:net-input}
+		%	u_j = \sum_{k = 1}^m w_{s_k,j} ~ y_{s_k} - \, \theta_j \, ,
+		%\end{equation*}
+		%i.e., the threshold is included in the propagation function rather than in the activation function, which can now be expressed in the form
 		\begin{equation*}
-			\label{eq:net-input}
-			u_j = \sum_{k = 1}^m w_{s_k,j} ~ y_{s_k} - \, \theta_j \, ,
-		\end{equation*}
-		i.e., the threshold is included in the propagation function rather than in the activation function, which can now be expressed in the form
-		\begin{equation*}
-			a_j = f_{act} \big( \sum_{k = 1}^m w_{s_k,j} ~ y_{s_k} - \, \theta_j \big) \, .
+			u_j = \sum_{k = 1}^m w_{s_k,j} ~ y_{s_k} - \, \theta_j \hspace*{0.5cm} \text{and} \hspace*{0.5cm} a_j = f_{act} \big( \sum_{k = 1}^m w_{s_k,j} ~ y_{s_k} - \, \theta_j \big) \, .
 		\end{equation*}		
 		Conversely to the propagation function, there exist various choices for the activation function. Among all, sigmoid activation functions have been widely used for the realization of artificial neural networks due to their graceful combination of linear and nonlinear behaviour \cite{Hay05}. Sigmoid functions are s-shaped, monotically increasing, and assume values in a bounded interval; a well-known instance is given by the hyperbolic tangent,
 		\begin{equation*}
 			\label{eq:hyperbolic-tangent}
 			f_{act}(v) = \dfrac{e^{v} - e^{-v}}{e^v + e^{-v}} \, .
 		\end{equation*}
-		
-		%\vspace*{0.3cm}
-		
-		\noindent \textbf{Output function}. Finally, the output function $f_{out}$ calculates the scalar \emph{output} $y_j \in \mathbb{R}$ based on the activation state $a_j$ of the neuron:
+		Finally, the \emph{output function} $f_{out}$ calculates the scalar \emph{output} $y_j \in \mathbb{R}$ based on the activation state $a_j$ of the neuron:
 		\begin{equation*}
 			\label{eq:output-function}
 			y_j = f_{out}(a_j) \, .
@@ -632,9 +619,7 @@
 		Typically, $f_{out}$ is the identity function, so that activation and output of a neuron coincides, i.e., $y_j = f_{out}(a_j) = a_j$. %Note that while the input $\mathbf{p} = [y_{s_1}, \, \ldots \, , y_{s_m}]^T \in \mathbb{R}^m$ of the neuron is generally vectorial, i.e., $m > 1$, the output is scalar. 
 		The output $y_j$ could then be sent either to other neurons or constitute a component of the overall output vector of the network, as for the neurons in the output layer of a feedforward neural network, illustrated in the following subsection.
 		
-		\vspace*{0.3cm}
-		
-		The neural model presented so far refers to the so called \emph{computing} neuron, i.e., a neuron which process input information to provide a response. However, in a neural network one may also identify \emph{source} neurons, supplying the network with the respective components of the activation pattern (input vector), without performing any computation \cite{Hay05}.
+		It should be pointed out that the neural model presented so far refers to the so called \emph{computing} neuron, i.e., a neuron which processes input information to provide a response. However, in a neural network one may also identify \emph{source} neurons, supplying the network with the respective components of the activation pattern (input vector), without performing any computation \cite{Hay05}.
 		
 		%\vspace*{0.5cm}
 		
@@ -657,10 +642,17 @@
 		\fi
 		
 		\begin{figure}[t]
-			\center
-			\includegraphics[scale = 0.55]{neural_model_ter.eps}
+			\begin{minipage}{0.49\textwidth}
+				\center
+				\vspace*{-0.35cm}
+				\includegraphics[scale = 0.55]{neural_model_ter.eps}
+			\end{minipage}
+			\begin{minipage}{0.49\textwidth}
+				\center
+				\includegraphics[scale = 0.55]{neural_model_bias.eps}
+			\end{minipage}
 			
-			\caption{Visualization of the generic $j$-th neuron of an artificial neural network. The neuron accumulates the weighted inputs $\big\lbrace w_{s_1,j} ~ y_{s_1}, \, \ldots \, , w_{s_m,j} ~ y_{s_m} \big\rbrace$ respectively coming from the sending neurons $s_1, \, \ldots \, , s_m$. Then, it fires $y_j$, sent to the target neurons $\big\lbrace r_1, \, \ldots \, , r_n \big\rbrace$ through the synapsis $\big\lbrace w_{j,r_1}, \, \ldots \, , w_{j,r_n} \big\rbrace$. The neuron threshold is reported in brackets within its body.} 
+			\caption{Visualization of the generic $j$-th neuron of an artificial neural network, including (right) or not (left) a bias neuron. On the left, the neuron accumulates the weighted inputs $\big\lbrace w_{s_1,j} ~ y_{s_1}, \, \ldots \, , w_{s_m,j} ~ y_{s_m} \big\rbrace$ respectively coming from the sending neurons $s_1, \, \ldots \, , s_m$; on the right, the neuron accumulates the weighted inputs $\big\lbrace w_{s_1,j} ~ y_{s_1}, \, \ldots \, , w_{s_m,j} ~ y_{s_m}, \, -\theta_j \big\rbrace$ respectively coming from the sending neurons $s_1, \, \ldots \, , s_m, \, b$, with $b$ the bias neuron. In both situations, the neuron then fires $y_j$, sent to the target neurons $\big\lbrace r_1, \, \ldots \, , r_n \big\rbrace$ through the synapsis $\big\lbrace w_{j,r_1}, \, \ldots \, , w_{j,r_n} \big\rbrace$. The neuron threshold is reported in brackets within its body.} 
 			\label{fig:neural-model}
 		\end{figure}
 		
@@ -678,9 +670,9 @@
 		
 		Feedforward networks can be classified according to the number of hidden layers or, equivalently, the number of layers of trainable weights. Single-layer perceptrons (SLPs) consist of the input and output layer, without any hidden layer. Because of their quite simple structure, the range of application of SLPs is rather limited. Indeed, only \emph{linearly separable} data can be properly represented using SLPs \cite{Kri07}. Conversely, multi-layer perceptrons (MLPs), with at least one hidden layer, are universal function approximators, as stated by Cybenko \cite{Cyb88, Cyb89}. In detail:
 		\begin{enumerate}[label=(\roman*)]
-			\item an MLP with \emph{one} layer of hidden neurons and differentiable activation functions can approximate \emph{any continuous} function; %\cite{Cyb89};
+			\item MLPs with \emph{one} hidden layer and differentiable activation functions can approximate \emph{any continuous} function; %\cite{Cyb89};
 			\label{cybenko-first-rule}
-			\item an MLP with \emph{two} layers of hidden neurons and differentiable activation functions can approximate \emph{any} function. %\cite{Cyb88}. 
+			\item MLPs with \emph{two} hidden layers and differentiable activation functions can approximate \emph{any} function. %\cite{Cyb88}. 
 			\label{cybenko-second-rule}
 		\end{enumerate}
 		Therefore, in many practical applications there is no reason to employ MLPs with more than two hidden layers. However, \ref{cybenko-first-rule} and \ref{cybenko-second-rule} do not give any practical advice neither on the number of hidden neurons nor the number of samples required to train the network: these should be found pursuing a \emph{trial-and-error} (and likely time-consuming) approach \cite{Hag14}.
@@ -705,138 +697,48 @@
 	
 		As previously mentioned, the principal characteristic of a neural network is its capability of \emph{learning} from the surrounding environment, storing the acquired knowledge via its internal parameters, i.e., the synaptic and bias weights. Learning is accomplished through a training process, during which the network is exposed to a collection of examples, called \emph{training patterns}. According to some performance measure, the weights are then adjusted by means of a well-defined set of rules. Therefore, the learning procedure is an \emph{algorithm}, typically iterative, such that after a successfull training, the neural network provides reasonable responses for unknown problems of the same class of the training set. This property is known as \emph{generalization} \cite{Kri07}. 
 		
-		Training algorithms can be classified based on the nature of the training set, i.e., the set of training patterns. We can then distinguish three \emph{learning paradigms}: supervised learning, unsupervised learning and reinforcement learning \cite{Hag14}. The choice of the learning paradigm is task-dependent. Particularly, for function approximation, the \emph{supervised} learning paradigm is the best choice. Consider the nonlinear unknown function $\bg{f}$,
-		\begin{equation*}
-			\begin{aligned}
-				\bg{f} ~ : ~ & \mathbb{R}^{M_I} \hspace*{-0.3cm} && \rightarrow ~~ \mathbb{R}^{M_O} \\
-						     & \mathbf{x} && \mapsto ~~ \mathbf{y} = \bg{f}(\mathbf{x}) \, ,
-			\end{aligned}
-		\end{equation*}
-		and a set of labeled examples $\big\lbrace \mathbf{p}_i, \mathbf{t}_i = \bg{f}(\mathbf{p}_i)\big\rbrace_{1 \leq i \leq N_{tr}}$ which form the training set. Note that at each \emph{input pattern} $\mathbf{p}_i \in \mathbb{R}^{M_I}$, $i = 1, \, \ldots \, , N_{tr}$, corresponds an associated desired output or \emph{teaching input} $\mathbf{t}_i \in \mathbb{R}^{M_O}$. The goal is to approximate $\bg{f}$ over a domain $D \subset \mathbb{R}^{M_I}$ up to a user-defined tolerance $\epsilon$, i.e.,
+		Training algorithms can be classified based on the nature of the training set, i.e., the set of training patterns. We can then distinguish three \emph{learning paradigms}: supervised learning, unsupervised learning and reinforcement learning \cite{Hag14}. The choice of the learning paradigm is clearly task-dependent. Particularly, for function approximation, the \emph{supervised} learning paradigm is the best choice. 
+		
+		Consider the nonlinear unknown function $\bg{f} ~ : ~ \mathbb{R}^{M_I} \rightarrow \mathbb{R}^{M_O}$ 
+		%\begin{equation*}
+		%	\begin{aligned}
+		%		\bg{f} ~ : ~ & \mathbb{R}^{M_I} \hspace*{-0.3cm} && \rightarrow ~~ \mathbb{R}^{M_O} \\
+		%				     & \mathbf{x} && \mapsto ~~ \mathbf{y} = \bg{f}(\mathbf{x}) \, ,
+		%	\end{aligned}
+		%\end{equation*}
+		and a set of labeled examples \smash{$\big\lbrace \mathbf{p}_i, \mathbf{t}_i = \bg{f}(\mathbf{p}_i)\big\rbrace_{1 \leq i \leq N_{tr}}$}, which form the training set. Note that at each \emph{input pattern} $\mathbf{p}_i \in \mathbb{R}^{M_I}$, $i = 1, \, \ldots \, , N_{tr}$, corresponds an associated desired output or \emph{teaching input} $\mathbf{t}_i \in \mathbb{R}^{M_O}$. The goal is to approximate $\bg{f}$ over a domain $D \subset \mathbb{R}^{M_I}$ up to a user-defined tolerance $\epsilon$, i.e.,
 		\begin{equation*}
 			||\bg{F}(\mathbf{x}) - \boldsymbol{f}(\mathbf{x})|| < \epsilon \hspace*{0.3cm} \text{$\forall \mathbf{x} \in D$} \, ,
 		\end{equation*}
-		where $\bg{F} : \mathbb{R}^{M_I} \rightarrow \mathbb{R}^{M_O}$ is the actual input-output map established by the neural network and $||\cdot||$ is some suitable norm on $\mathbb{R}^{M_O}$. To this end, the synaptic weights are iteratively adjusted according to a set of well-defined rules. Consider the synapsis between a sending neuron $i$ and a target neuron $j$. At the $t$-th iteration (also called \emph{epoch}) of the training procedure, the weight $w_{i,j}(t)$ of the connection $(i,j)$ is modified by the time-dependent quantity $\Delta w_{i,j}(t)$, whose form depends on the specific learning rule. Hence, at the subsequent iteration $t+1$ the synaptic weight is simply given by
+		where $\bg{F} : \mathbb{R}^{M_I} \rightarrow \mathbb{R}^{M_O}$ is the actual input-output map established by the neural network and $||\cdot||$ is some suitable norm on $\mathbb{R}^{M_O}$. %To this end, the synaptic and bias weights are iteratively adjusted according to a set of well-defined rules. 
+		For this purpose, consider the synapsis between a sending neuron $i$ and a target neuron $j$. At the $t$-th iteration (also called \emph{epoch}) of the training procedure, the weight $w_{i,j}(t)$ of the connection $(i,j)$ is modified by the time-dependent quantity $\Delta w_{i,j}(t)$, whose form depends on the specific learning rule. Hence, at the subsequent iteration $t+1$ the synaptic weight is simply given by
 		\begin{equation*}
 			\label{eq:weight-update}
 			w_{i,j}(t+1) = w_{i,j}(t) + \Delta w_{i,j}(t) \, .
 		\end{equation*}
 		The whole training process is driven by an \emph{error} or \emph{performance} function $E$, which measures the discrepancy between the neural network knowledge of the surrounding environment and the actual state of the environment itself. %In other terms, the larger the the performance function is, the farther the neural network representation of the world is from the actual reality. 
-		Therefore, every learning rule aims to \emph{minimize} the performance $E$. For this purpose, $E$ should be a scalar function of the free parameters, i.e., the weights, of the network, namely 
+		Therefore, every learning rule aims to \emph{minimize} the performance $E$, thought as a scalar function of the free parameters of the network, namely 
 		\begin{equation*}
 			\label{eq:performance-function}
 			E = E(\mathbf{w}) \in \mathbb{R} \, , 
 		\end{equation*}
-		with $\mathbf{w} \in \mathbb{R}^{|\mathcal{V}|}$ be the vector collecting the weights $\big\lbrace w_{i,j} = w( \, (i,j) \, ) \big\rbrace_{(i,j) \in \mathcal{V}}$. Thus, the point over the error surface reached at the end of a successful training process provides the \emph{optimal} configuration $\mathbf{w}_{opt}$ for the network. A common choice for the performance function is the (accumulated) mean squared error (MSE)
+		with $\mathbf{w} \in \mathbb{R}^{W}$ being the vector collecting all the synaptic and bias weights. Thus, the point over the error surface reached at the end of a successful training process provides the \emph{optimal} configuration $\mathbf{w}_{opt}$ for the network. A common choice for the performance function is the (accumulated) mean squared error (MSE)
 		\begin{equation}
 			\label{eq:accumulated-mse}
 			E(\mathbf{w}) = \sum_{\mathbf{p} \in P} E_{\mathbf{p}}(\mathbf{w}) = \sum_{\mathbf{p} \in P} \dfrac{1}{M_O} \sum_{j = 1}^{M_O} \left( t_{\mathbf{p},j} - q_{\mathbf{p},j} \right)^2 \, ,
 		\end{equation}
 		where for each input pattern $\mathbf{p}$ belonging to the training set $P$, $\mathbf{t}_{\mathbf{p}}$ and $\mathbf{q}_{\mathbf{p}}$ denote the corresponding teaching input and actual output, respectively. Observe that \eqref{eq:accumulated-mse} accounts for the error committed on each input pattern in the training set, leading to a so-called \emph{offline} learning procedure.
 		
-		In our numerical tests, at each epoch $t$ the (vectorial) weight update $\Delta \mathbf{w}(t)$ is computed via the Levenberg-Marquardt algorithm, derived in the following subsection.
-				
-		The Levenberg-Marquardt algorithm \cite{Mar63} stands as an approximation to Newton's method \cite{Hag94}. According to the latter, at each iteration the \emph{search direction} $\Delta \mathbf{w}$ is sought by solving the following linear system:
-		\begin{equation}
-			\label{eq:newton}
-			\nabla^2 E(\mathbf{w}) ~ \Delta \mathbf{w} = - \nabla E(\mathbf{w}) \, ,
-		\end{equation}
-		where $\nabla E(\mathbf{w})$ and $\nabla^2 E(\mathbf{w})$ respectively denotes the gradient vector and the Hessian matrix of $E$ with respect to its argument $\mathbf{w}$. Assume that the loss function is represented as the accumulated MSE and let $\mathbf{e}_{\mathbf{p}}$ be the error vector corresponding to the input pattern $\mathbf{p}$, namely, $\mathbf{e}_{\mathbf{p}} = \mathbf{t}_{\mathbf{p}} - \mathbf{q}_{\mathbf{p}}$. Introducing the Jacobian $\mathbb{J}_{\mathbf{p}}$ of the specific error vector $\mathbf{e}_{\mathbf{p}}$ with respect to $\mathbf{w}$, i.e., 
-		\begin{equation*}
-			\label{eq:jacobian}
-			\mathbb{J}_{\mathbf{p}}(\mathbf{w}) = 
-			\begin{bmatrix}
-				\vspace*{0.2cm}
-				\hspace*{-0.3cm} & \dfrac{\partial e_{\mathbf{p},1}}{\partial w_1} & \ldots & \dfrac{\partial e_{\mathbf{p},1}}{\partial w_{|\mathcal{V}|}} \\
-				\vspace*{0.2cm}
-				\hspace*{-0.3cm} & \vdots & \ddots & \vdots \\
-				\hspace*{-0.3cm} & \dfrac{\partial e_{\mathbf{p},M_O}}{\partial w_1} & \ldots & \dfrac{\partial e_{\mathbf{p},M_O}}{\partial w_{|\mathcal{V}|}}
-			\end{bmatrix}
-			\in \mathbb{R}^{M_O \times |\mathcal{V}|}
-		\end{equation*}
-		simple computations yield
-		\begin{equation}
-			\label{eq:gradient}
-			\nabla E(\mathbf{w}) = \sum_{\mathbf{p} \in P} \dfrac{2}{M_O} \mathbb{J}_{\mathbf{p}}(\mathbf{w})^T \mathbf{e}_{\mathbf{p}} \in \mathbb{R}^{|\mathcal{V}|}
-		\end{equation}
-		and
-		\begin{equation}
-			\label{eq:hessian}
-			\nabla^2 E(\mathbf{w}) = \sum_{\mathbf{p} \in P} \dfrac{2}{M_O} \left[ \mathbb{J}_{\mathbf{p}}(\mathbf{w})^T \mathbb{J}_{\mathbf{p}}(\mathbf{w}) + \mathbb{S}(\mathbf{w}) \right] \in \mathbb{R}^{|\mathcal{V}| \times |\mathcal{V}|} \, ,
-		\end{equation}
-		with
-		\begin{equation*}
-			\mathbb{S}(\mathbf{w}) = \sum_{\mathbf{p} \in P} \dfrac{2}{M_O} \sum_{j = 1}^{M_O} e_{\mathbf{p},j} \nabla^2 e_{\mathbf{p},j} \, .
-		\end{equation*}
-		Assuming $\norm{\mathbb{S}(\mathbf{w})} \approx 0$ in some suitable matrix norm $\norm{\cdot}$, inserting \eqref{eq:gradient} and \eqref{eq:hessian} into \eqref{eq:newton} we get the linear system
-		\begin{equation}
-			\label{eq:newton-quadratic-function}
-			\left[ \sum_{\mathbf{p} \in P} \mathbb{J}_{\mathbf{p}}(\mathbf{w})^T \mathbb{J}_{\mathbf{p}}(\mathbf{w}) \right] \Delta \mathbf{w} = - \sum_{\mathbf{p} \in P} \mathbb{J}_{\mathbf{p}}(\mathbf{w})^T \mathbf{e}_{\mathbf{p}}(\mathbf{w}) \, .
-		\end{equation} 
-		The Levenberg-Marquardt modification to Newton's method reads \cite{Hag94, Mar63}:
+		In our numerical tests, the weights are iteratively adjusted via the Levenberg-Marquardt algorithm \cite{Hag94, Mar63}. Letting $\mathbf{e}_{\mathbf{p}} \in \mathbb{R}^{M_O}$ be the error vector corresponding to the input pattern $\mathbf{p}$, i.e., $\mathbf{e}_{\mathbf{p}} = \mathbf{t}_{\mathbf{p}} - \mathbf{q}_{\mathbf{p}}$, and $\mathbb{J}_{\mathbf{p}} \in \mathbb{R}^{M_O \times W}$ be its Jacobian with respect to $\mathbf{w}$, at each epoch $t$ the (vectorial) weight update $\Delta \mathbf{w} = \Delta \mathbf{w}(t)$ is sought by solving the linear system
 		\begin{equation}
 			\label{eq:levenberg-marquardt}
 			\left[ \sum_{\mathbf{p} \in P} \mathbb{J}_{\mathbf{p}}(\mathbf{w})^T \mathbb{J}_{\mathbf{p}}(\mathbf{w}) + \mu \mathbb{I} \right] \Delta \mathbf{w} = - \sum_{\mathbf{p} \in P} \mathbb{J}_{\mathbf{p}}(\mathbf{w})^T \mathbf{e}_{\mathbf{p}}(\mathbf{w}) \, ,
 		\end{equation}
-		with $\mu \geq 0$ and $\mathbb{I}$ the identity matrix of size $|\mathcal{V}| \times |\mathcal{V}|$. Note that if $\mu = 0$ we recover Newton's method \eqref{eq:newton-quadratic-function}, while for $\mu \gg 1$ the search direction $\Delta \mathbf{w}$ approaches the antigradient of $E$. Hence, the Levenberg-Marquardt algorithm can be seen as an interpolation between Newton's method and the steepest descent method, aiming to retain the advantages of both techniques \cite{Hag94}.
+		with $\mu \geq 0$ and $\mathbb{I}$ the identity matrix of size $W \times W$. Note that if $\mu = 0$ we recover Newton's method \cite{Hag94}, while for $\mu \gg 1$ the search direction $\Delta \mathbf{w}$ approaches the antigradient of $E$. Hence, the Levenberg-Marquardt algorithm can be seen as an interpolation between Newton's method and the steepest descent method, aiming to retain the advantages of both techniques \cite{Mar63}.
 		
-		The Levenberg-Marquardt training algorithm proceeds as follows. At each epoch $t$, we solve the (potentially large) linear system \eqref{eq:levenberg-marquardt}. Whenever the step $\Delta \mathbf{w}(t)$ leads to a reduction in the performance function, i.e., $E(\mathbf{w}(t) + \Delta \mathbf{w}(t)) < E(\mathbf{w}(t))$, the parameter $\mu$ is reduced by a factor $\beta > 1$. Conversely, if $E(\mathbf{w}(t) + \Delta \mathbf{w}(t)) > E(\mathbf{w}(t))$ the parameter is multiplied by the same factor $\beta$. This reflects the idea that far from the actual minimum we should prefer the gradient method to Newton's method, since the latter may diverge. Yet, once in a neighborhood of the minimum, we switch to Newton's method so to exploit its faster convergence \cite{Mar63}.
+		The algorithm proceeds as follows. At each epoch $t$, we solve the (potentially large) linear system \eqref{eq:levenberg-marquardt}. Whenever the step $\Delta \mathbf{w}(t)$ leads to a reduction in the performance function, i.e., $E(\mathbf{w}(t) + \Delta \mathbf{w}(t)) < E(\mathbf{w}(t))$, the parameter $\mu$ is reduced by a factor $\beta > 1$. Conversely, if $E(\mathbf{w}(t) + \Delta \mathbf{w}(t)) > E(\mathbf{w}(t))$ the parameter is multiplied by the same factor $\beta$. This reflects the idea that far from the actual minimum we should prefer the gradient method to Newton's method, since the latter may diverge. Yet, once in a neighborhood of the minimum, we switch to Newton's method so to exploit its faster convergence. 
 		
-		The key step in the algorithm is the computation of the Jacobian $\mathbb{J}_{\mathbf{p}}(\mathbf{w})$ for each training vector $\mathbf{p}$. Suppose that the $k$-th element $w_k$ of $\mathbf{w}$ represents the weight $w_{i,j}$ of the connection $(i,j)$, for some $i$ and $j$, with $1 \leq i \, , j \leq |\mathcal{N}|$. Then, for any $h = 1, \, \ldots \, , M_O$ and $k = 1, \, \ldots \, , |\mathcal{V}|$, exploiting the chain rule we get (omitting the dependence on $\mathbf{w}$):
-		\begin{equation*}
-			\label{eq:jacobian-entry-equation}
-			\begin{aligned}
-				\big( \mathbb{J}_{\mathbf{p}} \big)_{h,k} = \dfrac{\partial e_{\mathbf{p},h}}{\partial w_{i,j}} = \dfrac{\partial e_{\mathbf{p},h}}{\partial u_{\mathbf{p},j}} ~ \dfrac{\partial u_{\mathbf{p},j}}{\partial w_{i,j}} 
-				= \dfrac{\partial e_{\mathbf{p},h}}{\partial y_{\mathbf{p},j}} ~ \dfrac{\partial y_{\mathbf{p},j}}{\partial u_{\mathbf{p},j}} ~ \dfrac{\partial u_{\mathbf{p},j}}{\partial w_{i,j}} 
-				= \dfrac{\partial e_{\mathbf{p},h}}{\partial y_{\mathbf{p},j}} ~ f'_{act}(u_{\mathbf{p},j}) ~ y_{\mathbf{p},i}
-				= \delta_{\mathbf{p},h,j} ~ y_{\mathbf{p},i} \, ,
-			\end{aligned}
-		\end{equation*} 
-		with
-		\begin{equation}
-			\label{eq:levenberg-marquardt-delta}
-			\delta_{\mathbf{p},h,j} := - \dfrac{\partial e_{\mathbf{p},h}}{\partial u_{\mathbf{p},j}} = - \dfrac{\partial e_{\mathbf{p},h}}{\partial y_{\mathbf{p},j}} ~ f'_{act}(u_{\mathbf{p},j}) \, .
-		\end{equation}
-		For the computation of the derivative 
-		\begin{equation*}
-			\dfrac{\partial e_{\mathbf{p},h}}{\partial y_{\mathbf{p},j}}
-		\end{equation*}
-		occurring in \eqref{eq:levenberg-marquardt-delta}, we assume that, within the set of neurons $\mathcal{N}$, items are ordered such that the output neurons come first, i.e.,
-		\begin{equation*}
-			\text{$j$ output neuron \hspace*{0.2cm} $\Leftrightarrow$ \hspace*{0.2cm} $1 \leq j \leq M_O$} \, .
-		\end{equation*} 
-		We can then distinguish three cases:
-		\begin{enumerate}[label=(\roman*)]
-			\item $j$ output neuron, $j = h$: since $e_{\mathbf{p},h} = e_{\mathbf{p},j} = t_{\mathbf{p},j} - y_{\mathbf{p},j}$, then 
-			\begin{equation*}
-				\label{eq:jacobian-first-case}
-				\dfrac{\partial e_{\mathbf{p},h}}{\partial y_{\mathbf{p},j}} = -1 \, ;
-			\end{equation*}
-			\item $j$ output neuron, $j \neq h$: the output of an output neuron can not influence the signal fired by another output neuron, hence 
-			\begin{equation*}
-				\label{eq:jacobian-second-case}
-				\dfrac{\partial e_{\mathbf{p},h}}{\partial y_{\mathbf{p},j}} = 0 \, ;
-			\end{equation*}
-			\item $j$ inner neuron: letting $R$ be the set of successors of $j$, the chain rule yields
-			\begin{equation*}
-				\label{eq:jacobian-third-case}
-				\dfrac{\partial e_{\mathbf{p},h}}{\partial y_{\mathbf{p},j}} = \sum_{r \in R} \dfrac{\partial e_{\mathbf{p},h}}{\partial u_{\mathbf{p},r}} ~ \dfrac{\partial u_{\mathbf{p},r}}{\partial y_{\mathbf{p},j}} = - \sum_{r \in R} \delta_{\mathbf{p},h,r} ~ w_{j,r} \, .
-			\end{equation*}
-		\end{enumerate}
-		Ultimately, at any iteration of the learning algorithm, the entries of the Jacobian matrix $\mathbb{J}_{\mathbf{p}}$ are given by
-		\begin{equation*}
-			\big( \mathbb{J}_{\mathbf{p}} \big)_{h,k} = \dfrac{\partial e_{\mathbf{p},h}}{\partial w_k} = \delta_{\mathbf{p},h,j} ~ y_{\mathbf{p},i} \, , \hspace*{0.3cm} 1 \leq h \leq M_O \, , 1 \leq k \leq |\mathcal{V}| \, , \text{$w_k = w_{i,j}$ for some $i$ and $j$} \, ,
-		\end{equation*}
-		with
-		\begin{subnumcases}{\delta_{\mathbf{p},h,j} =}
-			\label{eq:levenberg-marquardt-inner-neuron}
-		   	f'_{act}(u_{\mathbf{p},j}) \sum_{r \in R} \delta_{\mathbf{p},h,r} ~ w_{j,r} \, , & \text{if $j$ inner neuron} \, , \\
-		   	\label{eq:levenberg-marquardt-output-neuron}
-			f'_{act}(u_{\mathbf{p},j}) ~ \delta_{jh}^K \, , & \text{if $j$ output neuron} \, ,
-		\end{subnumcases}
-		where $\delta_{jh}^K$ is the Kronecker delta. Observe that \eqref{eq:levenberg-marquardt-inner-neuron} defines $\delta_{\mathbf{p},h,j}$ for a hidden node $j$ by relying on the neurons in the following layer, whereas \eqref{eq:levenberg-marquardt-output-neuron} only involves the net input $u_{\mathbf{p},j}$ of the neuron itself. Therefore, the coupled equations \eqref{eq:levenberg-marquardt-inner-neuron}-\eqref{eq:levenberg-marquardt-output-neuron} implicitly set the order in which the entries of $\mathbb{J}_{\mathbf{p}}(\mathbf{w})$ have to be determined: starting from the output layer, compute the terms related to connections ending in that layer, then move backwards to the preceeding layer. In this way, the error is \emph{backpropagated} from the output down to the input, leaving traces in each layer of the network \cite{Kri07, WH60}.
-		
-		Let us finally remark that a trial and error approach is required to find satisfactory values for $\mu$ and $\beta$; as proposed in \cite{Mar63}, a good starting point may be $\mu = 0.01$, with $\beta = 10$. Moreover, the dimension of the system \eqref{eq:levenberg-marquardt} increases nonlinearly with the number of neurons in the network, making the Levenberg-Marquardt algorithm poorly efficient for large networks \cite{Hag94}. However, it turns out to be efficient and accurate for networks with few hundreads of connections. 
+		Lastly, it should be remarked that a trial and error approach is required to find satisfactory values for $\mu$ and $\beta$; as proposed in \cite{Mar63}, a good starting point may be $\mu = 0.01$, with $\beta = 10$. Moreover, the dimension of the system \eqref{eq:levenberg-marquardt} increases nonlinearly with the number of neurons in the network, making the Levenberg-Marquardt algorithm poorly efficient for large networks \cite{Hag94}. However, it turns out to be efficient and accurate for networks with few hundreads of connections. 		
 		
 		
 	%
@@ -892,27 +794,25 @@
 		\end{equation*} 
 		According to the notation and nomenclature previously introduced, for any $i = 1, \, \ldots \, , N_{tr}$, $\mathbf{p}_i = \bg{\mu}^{(i)} \in \mathbb{R}^P$ represents the \emph{input pattern} and $\mathbf{t}_i =  \mathbb{V}^T \mathbf{u}_h \big( \bg{\mu}^{(i)} \big) \in \mathbb{R}^L$ the associated \emph{teaching input}; together, they constitute a \emph{training pattern}. In this respect, note that the teaching inputs $\mathbb{V}^T \mathbf{u}_h \big( \bg{\mu}^{(i)} \big)$, $i = 1, \, \ldots \, , N_{tr}$, are generated through the FE solver. On the one hand, this ensures the reliability of the teaching patterns, given the assumed high-fidelity of the FE scheme %(conversely to the reduced solver, as already appreciated before). 
 		On the other hand, this also suggests to incorporate the learning phase of the perceptron within the offline step of the POD-NN RB method, as described in Algorithm \ref{alg:pod-nn}. In doing so, we exploit the natural decoupling between the training and the evaluation of neural networks, thus fulfilling the necessary requirement to enable great online efficiency. %; we refer the reader to the following chapter for a numerical validation of this assertion. 
-				
-		However, it should be pointed out that the design of an effective learning procedure may require a larger amount of snapshots than the generation of the reduced space does. Moreover, we mentioned in Subsection \ref{section:Network topology} the time-consuming yet unavoidable \emph{trial}-\emph{and}-\emph{error} approach which one should pursue in the search for an optimal network topology. To this end, we propose an automatic procedure, resumed in the following. %Algorithm \ref{}.
-		
+						
 		\algrenewcommand\textproc{}
 		
-		\begin{algorithm}[b]	
+		\begin{algorithm}[b!]	
 			\begin{algorithmic}[1]
-				\Function{$\big[ \mathbb{V}, \mathcal{N}_{\texttt{rb}}, \mathcal{V}_{\texttt{rb}}, \mathbf{w}_{\texttt{rb}} \big] = $ \textsc{PODNN\_offline}}{$\mathcal{P}$, $\Omega_h$, $N$}
+				\Function{$\big[ \mathbb{V}, \mathbf{w}_{\texttt{rb}} \big] = $ \textsc{PODNN\_offline}}{$\mathcal{P}$, $\Omega_h$, $N$}
 					\State generate the parameter set $\Xi_N = \big\lbrace \bg{\mu}^{(1)}, \, \ldots \, , \bg{\mu}^{(N)} \big\rbrace$
 					\State compute the high-fidelity solutions $\big\lbrace \mathbf{u}_h \big( \bg{\mu}^{(1)} \big), \, \ldots \, , \mathbf{u}_h \big( \bg{\mu}^{(N)} \big) \big\rbrace$ via FE-Newton's method
 					\State generate the POD basis functions $\big\lbrace \mathbf{w}_1, \, \ldots \, , \mathbf{w}_L \big\rbrace$ via method of snapshots
 					\State assemble $\mathbb{V} = \big[ \mathbf{w}_1 \, \big| \, \ldots \, \big| \, \mathbf{w}_L \big]$
-					\State find an optimal network configuration $\big( \mathcal{N}_{\texttt{rb}}, \mathcal{V}_{\texttt{rb}}, \mathbf{w}_{\texttt{rb}} \big)$ relying upon LHS and Levenberg-Marquardt algorithm
+					\State find an optimal network configuration $\mathbf{w}_{\texttt{rb}}$ relying upon LHS and Levenberg-Marquardt algorithm
 				\EndFunction
 				
 				\vspace*{0.3cm}
 				
 				\setcounter{ALG@line}{0}
 				
-				\Function{$\mathbf{u}_L^{\texttt{NN}} (\bg{\mu}) = $ \textsc{PODNN\_online}}{$\bg{\mu}$, $\mathbb{V}$, $\mathcal{N}_{\texttt{rb}}$, $\mathcal{V}_{\texttt{rb}}$, $\mathbf{w}_{\texttt{rb}}$}
-					\State evaluate the output $\mathbf{u}_{\texttt{rb}}^{\texttt{NN}}(\bg{\mu})$ of the network $\big( \mathcal{N}_{\texttt{rb}}, \, \mathcal{V}_{\texttt{rb}}, \, \mathbf{w}_{\texttt{rb}} \big)$ for the input vector $\bg{\mu}$
+				\Function{$\mathbf{u}_L^{\texttt{NN}} (\bg{\mu}) = $ \textsc{PODNN\_online}}{$\bg{\mu}$, $\mathbb{V}$, $\mathbf{w}_{\texttt{rb}}$}
+					\State evaluate the output $\mathbf{u}_{\texttt{rb}}^{\texttt{NN}}(\bg{\mu})$ of the network for the input vector $\bg{\mu}$
 					\State $\mathbf{u}_L^{\texttt{NN}} (\bg{\mu}) = \mathbb{V} \, \mathbf{u}_{\texttt{rb}}^{\texttt{NN}}(\bg{\mu})$
 				\EndFunction
 			\end{algorithmic}
@@ -920,6 +820,10 @@
 			\caption{The offline and online stages for the POD-NN RB method.}
 			\label{alg:pod-nn}
 		\end{algorithm}
+		
+		\clearpage
+		
+		However, it should be pointed out that the design of an effective learning procedure may require a larger amount of snapshots than the generation of the reduced space does. Moreover, we mentioned in Subsection \ref{section:Network topology} the time-consuming yet unavoidable \emph{trial}-\emph{and}-\emph{error} approach which one should pursue in the search for an optimal network topology. To this end, we propose an automatic procedure, resumed in the following. %Algorithm \ref{}.
 		
 		While Cybenko's theorems (see Subsection \ref{section:Network topology}) allow one to consider perceptrons with no more than two hidden layers, no similar a priori and general results are available for the number $H$ of neurons per layer (to ease the work, we uniquely consider networks with the same number of neurons in both the first and the second hidden layer). Hence, given an initial amount $N_{tr}$ of training samples (say $N_{tr} = 100$), we train the network for increasing values of $H$, stopping when overfitting of training data occurs (due to an excessive number of neurons with respect to the number of training patterns). In case the best configuration, i.e., the one yielding the smallest error on a \emph{test} data set, does not meet a desired level of accuracy, we generate a new set of snapshots, which will enlarge the current training set, and we then proceed to re-train the network in different configurations. At this point, it is worth pointing out two remarks. 
 		\begin{enumerate}[label=(\roman*)]
@@ -942,7 +846,7 @@
 		\end{figure}
 		\fi
 		
-		In our numerical tests, we resort to the Levenberg-Marquardt algorithm to properly adjust the weights of the perceptron during the learning phase, relying on the mean squared error (MSE) \eqref{eq:accumulated-mse} as performance function. To motivate this choice, let 
+		In our numerical tests, we rely on the mean squared error \eqref{eq:accumulated-mse} as performance function driving the neural network training process. To motivate this choice, let 
 		\begin{equation*}
 			\mathbf{u}_{\texttt{rb}}^{\texttt{NN}}(\bg{\mu}) \in \mathbb{R}^L
 		\end{equation*}
@@ -1048,36 +952,30 @@
 			\label{eq:poisson-weak}
 			\wt{a}(\wt{u}(\bg{\mu}), \, v; \, \bg{\mu}) = \wt{f}(v; \, \bg{\mu}) \hspace*{0.3cm} \forall v \in \wt{V}(\bg{\mu}_g) \, , 
 		\end{equation}
-		Then, the weak solution of problem \eqref{eq:poisson-differential} is given by $\wt{u}(\bg{\mu}) + \wt{l}(\bg{\mu})$. Note that using a lifting function makes the formulation \eqref{eq:poisson-weak} \emph{symmetric}, i.e., both the solution and the test functions are picked up from the same functional space \cite{Qua10}.
+		Then, the weak solution of problem \eqref{eq:poisson-differential} is given by $\wt{u}(\bg{\mu}) + \wt{l}(\bg{\mu})$. %Note that using a lifting function makes the formulation \eqref{eq:poisson-weak} \emph{symmetric}, i.e., both the solution and the test functions are picked up from the same functional space \cite{Qua10}.
 		
 		%Lastly, let us remark that the weak formulation \eqref{eq:poisson-weak} can be cast in the form \eqref{eq:pde-variational-form} upon setting, for any $v \in \wt{V}(\bg{\mu}_g)$:
 		%	\begin{equation*}
 		%		\langle \wt{G}(\wt{u}(\bg{\mu}); \bg{\mu}_{ph}); v \rangle_{\wt{V},\wt{V}'} = \wt{g}(\wt{u}(\bg{\mu}), \, v; \, \bg{\mu}) = \wt{a}(\wt{u}(\bg{\mu}), \, v; \, \bg{\mu}) - \wt{f}(v; \, \bg{\mu}) \, .
 		%	\end{equation*} 
 		
-		Let us now re-state the variational problem \eqref{eq:poisson-weak} onto the reference domain $\Omega$. For this purpose, let $\Gamma_D$ and $\Gamma_N$ be the portions of the boundary $\Gamma = \partial \Omega$ on which we impose Dirichlet and Neumann boundary conditions, respectively. Moreover, we denote by $\mathbb{J}_{\bg{\Phi}}(\cdot; \bg{\mu}_g)$ the Jacobian of the parametrized map $\bg{\Phi}(\cdot; \bg{\mu}_g)$, with determinant $\lvert \mathbb{J}_{\bg{\Phi}}(\cdot; \bg{\mu}_g) \rvert$, and we set
-		\begin{equation*}
-			k(\bg{x}, \, \cdot; \, \bg{\mu}) = \wt{k}(\bg{\Phi}(\bg{x}; \, \bg{\mu}_g), \, \cdot; \, \bg{\mu}_{ph}) \, , \hspace*{0.2cm} s(\bg{x}; \, \bg{\mu}) = \wt{s}(\bg{\Phi}(\bg{x}; \, \bg{\mu}_g); \, \bg{\mu}_{ph}) \hspace*{0.2cm} \text{and} \hspace*{0.2cm} h(\bg{x}; \bg{\mu}) = \wt{h}(\bg{\Phi}(\bg{x}; \bg{\mu}_g); \, \bg{\mu}_{ph}) \, .
-		\end{equation*}
-		Letting \[ V = H^1_{\Gamma_D}(\Omega) \] and exploiting standard change of variables formulas, the variational formulation of the Poisson problem \eqref{eq:poisson-differential} over $\Omega$ reads: given $\bg{\mu} \in \mathcal{P}$, find $u(\bg{\mu}) \in V$ such that
+		Let us now re-state the variational problem \eqref{eq:poisson-weak} onto the reference domain $\Omega$. For this purpose, let $\Gamma_D$ and $\Gamma_N$ be the portions of the boundary $\Gamma = \partial \Omega$ on which we impose Dirichlet and Neumann boundary conditions, respectively. Moreover, we denote by $\mathbb{J}_{\bg{\Phi}}(\cdot; \bg{\mu}_g)$ the Jacobian of the parametrized map $\bg{\Phi}(\cdot; \bg{\mu}_g)$, with determinant $\lvert \mathbb{J}_{\bg{\Phi}}(\cdot; \bg{\mu}_g) \rvert$, and we set $k(\bg{x}, \, \cdot; \, \bg{\mu}) = \wt{k}(\bg{\Phi}(\bg{x}; \, \bg{\mu}_g), \, \cdot; \, \bg{\mu}_{ph})$, $s(\bg{x}; \, \bg{\mu}) = \wt{s}(\bg{\Phi}(\bg{x}; \, \bg{\mu}_g); \, \bg{\mu}_{ph})$ and $h(\bg{x}; \bg{\mu}) = \wt{h}(\bg{\Phi}(\bg{x}; \bg{\mu}_g); \, \bg{\mu}_{ph})$. Letting \[ V = H^1_{\Gamma_D}(\Omega) \] and exploiting standard change of variables formulas, the variational formulation of the Poisson problem \eqref{eq:poisson-differential} over $\Omega$ reads: given $\bg{\mu} \in \mathcal{P}$, find $u(\bg{\mu}) \in V$ such that
 		\begin{equation*}
 			\label{eq:poisson-weak-reference}
 			a(u(\bg{\mu}), \, v; \, \bg{\mu}) = f(v; \, \bg{\mu}) \hspace*{0.3cm} \forall v \in V \, ,
 		\end{equation*}
 		with
-		\begin{subequations}
+		\begin{equation*}
 			\label{eq:poisson-weak-forms-reference}
-			\begin{align}
-				\label{eq:poisson-weak-forms-reference-first}
+			\begin{aligned}
 				&
 				\begin{aligned}
 				a(w, \, v; \, \bg{\mu}) = & \int_{\Omega} k(w + l(\bg{\mu}); \, \bg{\mu}) ~ \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}_g) \nabla w \cdot \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}_g) \nabla v ~ \lvert \mathbb{J}_{\bg{\Phi}}(\bg{\mu}_g) \rvert \, d \Omega \\
 				& + \int_{\Omega} k(w + l(\bg{\mu}); \, \bg{\mu}) ~ \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}_g) \nabla l(\bg{\mu}) \cdot \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}_g) \nabla v ~ \lvert \mathbb{J}_{\bg{\Phi}}(\bg{\mu}_g) \rvert \, d \Omega \, ,
 				\end{aligned} \\
-				\label{eq:poisson-weak-forms-reference-second}
 				& f(v; \, \bg{\mu}) = \int_{\Omega} s(\bg{\mu}) ~ v ~ \lvert \mathbb{J}_{\bg{\Phi}}(\bg{\mu}_g) \rvert \, d \Omega \, ,  
-			\end{align}
-		\end{subequations}
+			\end{aligned}
+		\end{equation*}
 		for any $w$, $v \in V$ and $\bg{\mu} \in \mathcal{P}$. Note that, as done in \eqref{eq:poisson-weak-forms}, we resort to a lifting function $l(\bg{\mu}) \in H^1(\Omega)$ with $l(\bg{\mu}) \big\rvert_{\Gamma_D} = g(\bg{\mu})$, such that the weak solution to problem \eqref{eq:poisson-differential} re-stated over $\Omega$ is obtained as $u(\bg{\mu}) + l(\bg{\mu})$.
 		
 		%Let us also remark that, when on a parameter-independent configuration, one can avoid to distinguish between physical and geometrical parameters, since even the latter now affect the integrands in \eqref{eq:poisson-weak-forms-reference-first} and \eqref{eq:poisson-weak-forms-reference-second}, and not the domain of integration.
@@ -1090,17 +988,17 @@
 	\subsubsection{One-dimensional test case}
 	\label{section:One-dimensional test case}
 	
-		\begin{figure}[b!]
+		\begin{figure}[t!]
 			\center
-			\includegraphics[scale = 0.385, trim = {1cm 9cm 1cm 3.5cm}, clip]{poisson1d_3_error_vs_rank}
-			\includegraphics[scale = 0.385, trim = {1.5cm 9cm 1cm 3.5cm}, clip]{poisson1d_3_fe_vs_podnn}
+			\includegraphics[scale = 0.385, trim = {1cm 9.5cm 1cm 3.5cm}, clip]{poisson1d_3_error_vs_rank}
+			\includegraphics[scale = 0.385, trim = {1cm 9.5cm 1cm 3.5cm}, clip]{poisson1d_3_fe_vs_podnn_bis}
 			
-			\vspace*{-0.2cm}
+			%\vspace*{-0.2cm}
 			
 			\caption{Convergence analysis for the POD-G and POD-NN methods applied to problem \eqref{eq:poisson1d} (\emph{left}) and comparison between the FE and the POD-NN solutions for three parameter values (\emph{right}). These latter results have been obtained via a neural network with $H_1 = H_2 = 35$ units per hidden layer and employing $L = 10$ POD modes.}
 			\label{fig:poisson1d-fig2}
 		\end{figure}
-			
+				
 		Consider the following BVP for the one-dimensional Poisson equation, featuring an exponential nonlinearity (in the diffusion coefficient) and involving three parameters:
 		\begin{equation}
 			\label{eq:poisson1d}
@@ -1121,12 +1019,12 @@
 		
 		\begin{figure}[t!]
 			\center
-			\includegraphics[scale = 0.4, trim = {1cm 9cm 1.5cm 3.5cm}, clip]{poisson1d_3_nn_convergence}
+			\includegraphics[scale = 0.4, trim = {1cm 9.8cm 1.5cm 3.5cm}, clip]{poisson1d_3_nn_convergence}
 			
 			\caption{Error analysis for the POD-NN RB method applied to problem \eqref{eq:poisson1d} for several numbers of training samples. The solid sections represent the steps followed by the automatic routine desscribed in Section \ref{section:A non-intrusive RB method using neural networks}.}
 			\label{fig:poisson1d-fig3}
 		\end{figure}
-		
+				
 		
 	%
 	% Subsection 6.1.2 : Two-dimensional test case
@@ -1134,6 +1032,24 @@
 	
 	\subsubsection{Two-dimensional test case}
 	\label{section:Two-dimensional test case}
+		
+		\begin{figure}[b!]
+			\center
+			\begin{minipage}{0.4\textwidth}
+				\center
+				\includegraphics[scale = 0.65, trim = {0 0 0 0.5cm}, clip]{domain_stenosis} 
+			\end{minipage}
+			\begin{minipage}{0.4\textwidth}
+				\center
+				\vspace*{-0.2cm}
+				\includegraphics[scale = 0.65, trim = {0 0 0 0}, clip]{bc_square_poster}
+			\end{minipage}
+			
+			\vspace*{-0.3cm}
+			
+			\caption{The physical (\emph{left}) and reference (\emph{right}) domains for the Poisson problem \eqref{eq:poisson2d}.}
+			\label{fig:poisson2d-fig1}
+		\end{figure}
 		
 		Let $\bg{\mu} = [\mu_1, \, \mu_2, \, \mu_3] \in \mathcal{P} = [-0.5, \, 0.5] \times [-0.5, \, 0.5] \times [1, \, 5]$ and $\wt{\Omega}(\bg{\mu})$ be the stenosis geometry reported on the left in Fig. \ref{fig:poisson2d-fig1}, parametrized in the depths $\mu_1$ and $\mu_2$ of the bottom and top restrictions (or inflations), respectively, and the length $\mu_3$ of the vessel. The Poisson problem we deal with in this section reads:
 		\begin{equation}
@@ -1147,25 +1063,11 @@
 		This can be drawn from Fig. \ref{fig:poisson2d-fig2}, offering the finite element solution (\emph{top left}) to \eqref{eq:poisson2d} when $\bg{\mu} = (0.349, \, -0.413, \, 4.257)$, and the pointwise errors committed by either the projection onto $V_{\texttt{rb}}$ (\emph{top right}), or the POD-G method (\emph{bottom left}), or the POD-NN method (\emph{bottom right}). The computational mesh employed consists of $2792$ nodes, resulting in $N_h = 2632$ degrees of freedom (as many as the inner nodes) for the FE scheme. The reduced space $V_{\texttt{rb}}$ is generated by $L = 30$ basis functions, given by POD of $N = 100$ snapshots. Specifically, the results concerning the POD-NN method have been obtained by employing a neural network equipped with $H_1 = H_2 = 35$ neurons per hidden layer and trained with $N_{tr} = 200$ learning samples. In this way, the POD-NN procedure leads to an error field which shows similar patterns to those featured by the projection error field. This is not surprising, due to the way neural networks are trained within the POD-NN framework (see Section \ref{section:A non-intrusive RB method using neural networks}). 
 		
 		%\vspace*{-0.2cm}
-						
-		\begin{figure}[t!]
-			\center
-			\begin{minipage}{0.4\textwidth}
-				\center
-				\includegraphics[scale = 0.65, trim = {0 0 0 0.5cm}, clip]{domain_stenosis} 
-			\end{minipage}
-			\begin{minipage}{0.4\textwidth}
-				\center
-				\vspace*{-0.2cm}
-				\includegraphics[scale = 0.65, trim = {0 0 0 0}, clip]{bc_square_poster}
-			\end{minipage}
-			
-			\caption{The physical (\emph{left}) and reference (\emph{right}) domains for the Poisson problem \eqref{eq:poisson2d}.}
-			\label{fig:poisson2d-fig1}	
-		
+								
+		\begin{figure}[t!]		
 			\center
 			\subfloat{\includegraphics[scale = 0.275, trim = {1cm 3cm 4cm 2.5cm}, clip]{poisson2d_3_fe_solution}}
-			\subfloat{\includegraphics[scale = 0.275, trim = {1cm 3cm 4cm 2.5cm}, clip]{poisson2d_3_error_projection}} \\[-0.2cm]
+			\subfloat{\includegraphics[scale = 0.275, trim = {1cm 3cm 4cm 2.5cm}, clip]{poisson2d_3_error_projection}} \\[-0.7cm]
 			\subfloat{\includegraphics[scale = 0.275, trim = {1cm 3cm 4cm 2.5cm}, clip]{poisson2d_3_error_podg}}
 			\subfloat{\includegraphics[scale = 0.275, trim = {1cm 3cm 4cm 2.5cm}, clip]{poisson2d_3_error_podnn}}
 			
@@ -1186,33 +1088,35 @@
 			\label{fig:poisson2d-fig3}
 		\end{figure}
 		\fi
-		
-		%\vspace*{-0.2cm}
-		
-		A quantitative evidence of the efficacy of the RB approximations is given in the plot on the left in Fig. \ref{fig:poisson2d-fig3}, which reports a convergence analysis for both the POD-G and the POD-NN methods with respect to the number $L$ of retained modal basis functions. As usual, the error has to be intended as an average over a parameter data set $\Xi_{te}$, here consisting of $N_{te} = 50$ samples. However, the second plot of Fig. \ref{fig:poisson2d-fig3} reveals how the former scheme produces a response for any online query approximately $10^3$ times slowlier than the proposed POD-NN procedure does, preventing any computational gain with respect to the finite element scheme. %This assertion can also be extended to the memory demand. In fact, in addition to the assembly of the full-order residual vector $\mathbf{G}_h(\cdot;\bg{\mu}) \in \mathbb{R}^{N_h}$ and the associated Jacobian $\mathbb{J}_h(\cdot;\bg{\mu}) \in \mathbb{R}^{{N_h} \times {N_h}}$, the online phase of the POD-G RB method requires the storage of the POD basis $\mathbb{V} \in \mathbb{R}^{{N_h} \times L}$. Here, ${N_h} = 2632$ and $L = 30$, with the (sparse) Jacobian featuring $18388$ non-zero entries. Hence, recalling that a float occupies $4$ bytes in memory, the memory footprint approximately amounts to $400$ Kb. Instead, the POD-NN method requires only the underpinning neural network to tackle a query. Therefore, assuming $35$ computing units within both inner layers, we need a bit more than $9$ Kb of RAM, coincident with the space necessary to save the synaptical and bias weights characterizing the network.
-		
-		Let us further analyze the first plot of Fig. \ref{fig:poisson2d-fig3}. Within the POD-NN framework, when the proper orthogonal decomposition of a set of $N = 100$ snapshots is coupled with a three-layers perceptron with $35$ neurons per hidden layer, trained to approximate the map \eqref{eq:map-to-approximate} relying on $N_{tr} = 200$ learning patterns, for each $L \leq 30$ the relative error is smaller than the error committed by the POD-Galerkin procedure. Yet, halfing the number of learning patterns employed, the POD-NN error curve stops decreasing at $L = 20$, then incurring in a plateu. In this regard, Fig. \ref{fig:poisson2d-fig4} suggests that as the size of the available training set decreases, one should coherently reduce the amount of computing units to be embodied in the network, thus to limit the risk of overfitting. Particularly, when only $N_{tr} = 100$ training samples are used, the optimal network configuration comprises $20$ neurons per internal layer (\emph{left}). However, doubling the dimension of the training set, the same configuration does not allow to fully exploit the augmented amount of information. In that case, a network with, e.g., $35$ neurons per hidden layer is preferable (\emph{right}). 
-						
-		\begin{figure}[t]
+				
+		\begin{figure}[t!]
 			\center
-			\includegraphics[scale = 0.395, trim = {1.5cm 9.6cm 1.5cm 3.8cm}, clip]{poisson2d_3_error_vs_rank}
+			\includegraphics[scale = 0.395, trim = {1.5cm 9.6cm 1.5cm 3.8cm}, clip]{poisson2d_3_error_vs_rank_bis}
 			\hspace*{0.8cm}
 			\includegraphics[scale = 0.38, trim = {1.5cm 8.95cm 1.5cm 3.8cm}, clip]{poisson2d_3_time}
 			
-			\caption{Error analysis (\emph{left}) and online CPU time (\emph{right}) for the POD-G and the POD-NN methods applied to problem \eqref{eq:poisson2d}. $N_{te} = 50$ randomly picked parameter values are considered. The reduced basis have been generated via POD, relying on $N = 100$ snapshots. The second plot refers to RB models including $L = 30$ modal functions; within the POD-NN framework, a neural network emboding $35$ neurons per inner layer has been used.}
+			\vspace*{-0.1cm}
+			
+			\caption{Error analysis (\emph{left}) and online CPU time (\emph{right}) for the POD-G and the POD-NN methods applied to problem \eqref{eq:poisson2d}. The reduced basis have been generated via POD, relying on $N = 100$ snapshots. The second plot refers to RB models including $L = 30$ modal functions; within the POD-NN framework, an MLP emboding $35$ neurons per inner layer has been used.}
 			\label{fig:poisson2d-fig3}
 			
-			\vspace*{0.3cm}
+			\vspace*{0.2cm}
 			
 			\center
 			\includegraphics[scale = 0.38, trim = {1.5cm 9.6cm 1.5cm 3.8cm}, clip]{poisson2d_3_nn_convergence}
 			\hspace*{1cm}
 			\includegraphics[scale = 0.385, trim = {1.5cm 9.8cm 1.5cm 3.8cm}, clip]{poisson2d_3_nn_comparison}
+			
+			\vspace*{-0.1cm}
 						
 			\caption{Convergence analysis with respect to the number of hidden neurons (\emph{left}) and modal functions (\emph{right}) used within the POD-NN framework applied to problem \eqref{eq:poisson2d}. The results provided in the first plot have been obtained using $L = 30$ modes; the solid tracts refer to the steps performed by the automatic routine carried out to find an optimal network configuration.}
 			\label{fig:poisson2d-fig4}
 		\end{figure}	
 		
+		A quantitative evidence of the efficacy of the RB approximations is given in the plot on the left in Fig. \ref{fig:poisson2d-fig3}, which reports a convergence analysis for both the POD-G and the POD-NN methods with respect to the number $L$ of retained modal basis functions. As usual, the error has to be intended as an average over a parameter data set $\Xi_{te}$, here consisting of $N_{te} = 50$ samples. However, the second plot of Fig. \ref{fig:poisson2d-fig3} reveals how the former scheme produces a response for any online query approximately $10^3$ times slowlier than the proposed POD-NN procedure does, preventing any computational gain with respect to the finite element scheme. %This assertion can also be extended to the memory demand. In fact, in addition to the assembly of the full-order residual vector $\mathbf{G}_h(\cdot;\bg{\mu}) \in \mathbb{R}^{N_h}$ and the associated Jacobian $\mathbb{J}_h(\cdot;\bg{\mu}) \in \mathbb{R}^{{N_h} \times {N_h}}$, the online phase of the POD-G RB method requires the storage of the POD basis $\mathbb{V} \in \mathbb{R}^{{N_h} \times L}$. Here, ${N_h} = 2632$ and $L = 30$, with the (sparse) Jacobian featuring $18388$ non-zero entries. Hence, recalling that a float occupies $4$ bytes in memory, the memory footprint approximately amounts to $400$ Kb. Instead, the POD-NN method requires only the underpinning neural network to tackle a query. Therefore, assuming $35$ computing units within both inner layers, we need a bit more than $9$ Kb of RAM, coincident with the space necessary to save the synaptical and bias weights characterizing the network.
+		
+		Let us further analyze the first plot of Fig. \ref{fig:poisson2d-fig3}. Within the POD-NN framework, when the proper orthogonal decomposition of a set of $N = 100$ snapshots is coupled with a three-layers perceptron with $35$ neurons per hidden layer, trained to approximate the map \eqref{eq:map-to-approximate} relying on $N_{tr} = 200$ learning patterns, for each $L \leq 30$ the relative error is smaller than the error committed by the POD-Galerkin procedure. Yet, halfing the number of learning patterns employed, the POD-NN error curve stops decreasing at $L = 20$, then incurring in a plateu. In this regard, Fig. \ref{fig:poisson2d-fig4} suggests that as the size of the available training set decreases, one should coherently reduce the amount of computing units to be embodied in the network, thus to limit the risk of overfitting. Particularly, when only $N_{tr} = 100$ training samples are used, the optimal network configuration comprises $20$ neurons per internal layer (\emph{left}). However, doubling the dimension of the training set, the same configuration does not allow to fully exploit the augmented amount of information. In that case, a network with, e.g., $35$ neurons per hidden layer is preferable (\emph{right}). 
+								
 		The distinguishing and novel feature of the POD-NN method is represented by the employment of multi-layer perceptrons to recover the coefficients of the reduced model. To motivate this choice, let us pursue a more traditional approach in the interpolation step by resorting to cubic splines \cite{Deb78}. To this end, let $\Xi_{\delta} \subset \mathcal{P}$ be a tensor-product grid on the parameter domain, based on, e.g., Chebyshev nodes. %\footnote{For a given natural number $n$, the Chebyshev nodes in the interval $(a, \, b)$ are \[ x_k = \dfrac{1}{2}(a + b) + \dfrac{1}{2}(b - a) \, \cos \left( \dfrac{2k - 1}{2n} \pi \right) \hspace*{0.3cm} \text{for $k = 1, \, \ldots \, , n$} \, . \]}. 
 		In the offline phase, for each $\bg{\mu}_{\delta} \in \Xi_{\delta}$, we compute the truth solution $\mathbf{u}_h(\bg{\mu}_{\delta}) \in \mathbb{R}^{N_h}$ and we extract the expansion coefficients $\mathbb{V}^T \mathbf{u}_h(\bg{\mu}_{\delta}) \in \mathbb{R}^L$. At the online stage, given a new parameter value $\bg{\mu} \in \mathcal{P}$, the $i$-th expansion coefficient, $i = 1, \, \ldots \, , L$, is sought by cubic spline interpolation of the samples \[ \big\lbrace \big( \bg{\mu}_{\delta}, \, \big( \mathbb{V}^T \mathbf{u}_h(\bg{\mu}_{\delta}) \big)_i \big) \big\rbrace_{\bg{\mu}_{\delta} \in \Xi_{\delta}} \, . \] Hence, denoting by $\mathbf{u}_{\texttt{rb}}^{\texttt{CS}}(\bg{\mu}) \in \mathbb{R}^L$ the so-constructed approximation of $\mathbb{V}^T \mathbf{u}_h(\bg{\mu})$, the reduced-order approximation of $\mathbf{u}_h(\bg{\mu})$ is given by $\mathbf{u}_L^{\texttt{CS}}(\bg{\mu}) = \mathbb{V} \, \mathbf{u}_{\texttt{rb}}^{\texttt{CS}}(\bg{\mu})$. Similarly to the POD-G and the POD-NN method, the accuracy of the resulting POD-CS procedure can be assessed by evaluating and averaging the relative error $\varepsilon_{\texttt{PODCS}}^{}(L, \, \bg{\mu})$, defined as
 		\begin{equation*}
@@ -1225,9 +1129,11 @@
 		
 		\begin{figure}[t!]
 			\center
-			\includegraphics[scale = 0.39, trim = {1.5cm 9.34cm 1.5cm 3.8cm}, clip]{poisson2d_3_cs_error}
+			\includegraphics[scale = 0.38, trim = {1.5cm 9.34cm 1.5cm 3.8cm}, clip]{poisson2d_3_cs_error}
 			\hspace*{1cm}
-			\includegraphics[scale = 0.38, trim = {1.5cm 8.9cm 1.5cm 3.8cm}, clip]{poisson2d_3_cs_time}
+			\includegraphics[scale = 0.372, trim = {1.5cm 8.9cm 1.5cm 3.8cm}, clip]{poisson2d_3_cs_time}
+			
+			\vspace*{-0.2cm}
 			
 			\caption{Average relative errors (\emph{left}) and online run times (\emph{right}) on $\Xi_{te}$ for the POD-CS and the POD-NN methods applied to problem \eqref{eq:poisson2d}. For the latter, the results refer to an MLP equipped with $H_1 = H_2 = 35$ neurons per hidden layer.}
 			\label{fig:poisson2d-fig5}
@@ -1241,26 +1147,26 @@
 	\subsection{Steady uncompressible Navier-Stokes equations}
 	\label{section:Steady uncompressible Navier-Stokes equations}
 	
-		The system of the Navier-Stokes equations model the conservation of mass and momentum for an incompressible Newtonian viscous fluid confined in a region $\wt{\Omega}(\bg{\mu}_g) \subset \mathbb{R}^d$, $d = 2, \, 3$ \cite{Ran99}. Letting $\wt{\bg{v}} = \wt{\bg{v}}(\wt{\bg{x}}; \, \bg{\mu})$ and $\wt{p} = \wt{p}(\wt{\bg{x}}; \, \bg{\mu})$ be respectively the velocity and pressure of the fluid, the parametrized steady version of the Navier-Stokes equations considered in this work reads
+		The system of the Navier-Stokes equations model the conservation of mass and momentum for an incompressible Newtonian viscous fluid confined in a two- or three-dimensional region \cite{Ran99}. Letting $\bg{\mu} \equiv \bg{\mu}_g$ and $\wt{\bg{v}} = \wt{\bg{v}}(\wt{\bg{x}}; \, \bg{\mu})$ and $\wt{p} = \wt{p}(\wt{\bg{x}}; \, \bg{\mu})$ be respectively the velocity and pressure of the fluid, the parametrized steady version of the Navier-Stokes equations considered in this work reads
 		\begin{subequations}
 			\label{eq:ns-differential}
 			\begin{empheq}[left=\empheqlbrace]{align}
 				\label{eq:mass-conservation}
-				\wt{\nabla} \cdot \wt{\bg{v}}(\bg{\mu}) & = 0 & \hspace*{-2cm} \text{in $\wt{\Omega}(\bg{\mu}_g)$} \, , \\
+				\wt{\nabla} \cdot \wt{\bg{v}}(\bg{\mu}) & = 0 & \hspace*{-2cm} \text{in $\wt{\Omega}(\bg{\mu})$} \, , \\
 				\label{eq:momentum-conservation}
-				- \nu(\bg{\mu}) ~ \wt{\Delta} \wt{\bg{v}}(\bg{\mu}) + (\wt{\bg{v}}(\bg{\mu}) \cdot \wt{\nabla}) \wt{\bg{v}}(\bg{\mu}) + \dfrac{1}{\rho(\bg{\mu})} \wt{\nabla} \wt{p}(\bg{\mu}) & = \bg{0} & \hspace*{-2cm} \text{in $\wt{\Omega}(\bg{\mu}_g)$} \, , \\
-				\wt{\bg{v}}(\bg{\mu}) & = \wt{\bg{h}}(\bg{\mu}_{ph}) & \hspace*{-2cm} \text{on $\wt{\Gamma}_D(\bg{\mu}_g)$} \, , \\
-				\wt{p}(\bg{\mu}) \wt{\bg{n}} - \nu(\bg{\mu}) \wt{\nabla} \wt{\bg{v}}(\bg{\mu}) \cdot \wt{\bg{n}} & = \bg{0} & \hspace*{-2cm} \text{on $\wt{\Gamma}_N(\bg{\mu}_g)$} \, .
+				- \nu(\bg{\mu}) ~ \wt{\Delta} \wt{\bg{v}}(\bg{\mu}) + (\wt{\bg{v}}(\bg{\mu}) \cdot \wt{\nabla}) \wt{\bg{v}}(\bg{\mu}) + \dfrac{1}{\rho(\bg{\mu})} \wt{\nabla} \wt{p}(\bg{\mu}) & = \bg{0} & \hspace*{-2cm} \text{in $\wt{\Omega}(\bg{\mu})$} \, , \\
+				\wt{\bg{v}}(\bg{\mu}) & = \wt{\bg{h}} & \hspace*{-2cm} \text{on $\wt{\Gamma}_D(\bg{\mu})$} \, , \\
+				\wt{p}(\bg{\mu}) \wt{\bg{n}} - \nu(\bg{\mu}) \wt{\nabla} \wt{\bg{v}}(\bg{\mu}) \cdot \wt{\bg{n}} & = \bg{0} & \hspace*{-2cm} \text{on $\wt{\Gamma}_N(\bg{\mu})$} \, .
 			\end{empheq}
 		\end{subequations}
-		Here, $\wt{\bg{h}}(\bg{\mu}_{ph})$ denotes the velocity field prescribed on $\wt{\Gamma}_D(\bg{\mu}_g)$, whereas homogeneous Neumann conditions are applied on $\wt{\Gamma}_N(\bg{\mu}_g)$. Furthermore, $\rho(\bg{\mu})$ and $\nu(\bg{\mu})$ represent the uniform density and kinematic viscosity of the fluid, respectively. Note that, despite these quantities encode physical properties, we let them depend on the geometrical parameters as well. Indeed, fluid dynamics can be characterized (and controlled) by means of a wealth of dimensionless quantities, e.g., the Reynolds number, which combine physical properties of the fluid with geometrical features of the domain. Therefore, a numerical study of the sensitivity of the system \eqref{eq:ns-differential} with respect to $\bg{\mu}_g$ may be carried out by adapting either $\rho(\bg{\mu})$ or $\nu(\bg{\mu})$ as $\bg{\mu}_g$ varies, so to preserve a dimensionless quantity of interest; we refer the reader to Subsection \ref{section:The lid-driven cavity problem} for a practical example. 
+		Here, $\wt{\bg{h}}$ denotes the velocity field prescribed on $\wt{\Gamma}_D(\bg{\mu})$, whereas homogeneous Neumann conditions are applied on $\wt{\Gamma}_N(\bg{\mu})$. Furthermore, $\rho(\bg{\mu})$ and $\nu(\bg{\mu})$ represent the uniform density and kinematic viscosity of the fluid, respectively. Note that, despite these quantities encode physical properties, we let them depend on the geometrical parameters as well. Indeed, fluid dynamics can be characterized (and controlled) by means of a wealth of dimensionless quantities, e.g., the Reynold's number, which combine physical properties of the fluid with geometrical features of the domain. Therefore, a numerical study of the sensitivity of the system \eqref{eq:ns-differential} with respect to $\bg{\mu}$ may be carried out by adapting either $\rho(\bg{\mu})$ or $\nu(\bg{\mu})$ as $\bg{\mu}$ varies, so to preserve a dimensionless quantity of interest; we refer the reader to the following subsection for a practical example. 
 		%For our purpose, it is worth noticing that the nonlinearity of problem \eqref{eq:ns-differential} lies in the convective term
 		%\begin{equation*}
 		%	\big( \wt{\bg{v}}(\bg{\mu}) \cdot \wt{\nabla} \big) \wt{\bg{v}}(\bg{\mu}) \, ,
 		%\end{equation*}
 		%which gives rise to a \emph{quadratic} nonlinearity. %Conversely, the other terms appearing in the momentum equation \eqref{eq:momentum-conservation} and in Eq. \eqref{eq:mass-conservation}, which enforces mass conservation \cite{QMN15}, are linear in the solution $(\wt{\bg{v}}(\bg{\mu}), \, \wt{p}(\bg{\mu}))$.
 		
-		To write the differential system \eqref{eq:ns-differential} in weak form over a $\bg{\mu}_g$-independent configuration $\Omega$, let us introduce the velocity and pressure spaces \[ \wt{X}(\bg{\mu}_g) = \big[ H^1_{\wt{\Gamma}_D} \big( \wt{\Omega}(\bg{\mu}_g) \big) \big]^d ~~ \text{and} ~~ \wt{Q}(\bg{\mu}_g) = L^2 \big( \wt{\Omega}(\bg{\mu}_g) \big) \, , \] respectively, with \[ X = \big[ H^1_{\Gamma_D} \big( \Omega \big) \big]^d ~~ \text{and} ~~ Q = L^2 \big( \Omega \big) \] be their respective counterparts over $\Omega$. By multiplying \eqref{eq:ns-differential} for test functions $\big( \wt{\bg{\chi}}, \, \wt{\xi} \big) \in \wt{V}(\bg{\mu}_g) = \wt{X}(\bg{\mu}_g) \times \wt{Q}(\bg{\mu}_g)$, integrating by parts and then tracing everything back onto $\Omega$ by means of the parametrized map $\bg{\Phi}(\cdot; \, \bg{\mu}_g)$, we end up with the following parametrized weak variational problem: given $\bg{\mu} \in \mathcal{P}$, find $u(\bg{\mu}) = (\bg{v}(\bg{\mu}), \, p(\bg{\mu})) \in V = X \times Q$ so that
+		To write the differential system \eqref{eq:ns-differential} in weak form over a $\bg{\mu}$-independent configuration $\Omega$, let us introduce the velocity and pressure spaces \[ \wt{X}(\bg{\mu}) = \big[ H^1_{\wt{\Gamma}_D} \big( \wt{\Omega}(\bg{\mu}) \big) \big]^d ~~ \text{and} ~~ \wt{Q}(\bg{\mu}) = L^2 \big( \wt{\Omega}(\bg{\mu}) \big) \, , \] respectively, with \[ X = \big[ H^1_{\Gamma_D} \big( \Omega \big) \big]^d ~~ \text{and} ~~ Q = L^2 \big( \Omega \big) \] be their respective counterparts over $\Omega$. By multiplying \eqref{eq:ns-differential} for test functions $\big( \wt{\bg{\chi}}, \, \wt{\xi} \big) \in \wt{V}(\bg{\mu}) = \wt{X}(\bg{\mu}) \times \wt{Q}(\bg{\mu})$, integrating by parts and then tracing everything back onto $\Omega$ by means of the parametrized map $\bg{\Phi}(\cdot; \, \bg{\mu})$, we end up with the following parametrized weak variational problem: given $\bg{\mu} \in \mathcal{P}$, find $u(\bg{\mu}) = (\bg{v}(\bg{\mu}), \, p(\bg{\mu})) \in V = X \times Q$ so that
 		\begin{equation*}
 			\label{eq:ns-weak-reference}
 			\begin{aligned}
@@ -1272,12 +1178,12 @@
 		\begin{equation*}
 			\label{eq:ns-weak-forms}
 			\begin{aligned}
-				& c(\bg{\psi}, \, \bg{\chi}, \, \bg{\eta}; \, \bg{\mu}) = \int_{\Omega} \left( \bg{\psi} \cdot \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}_g) \nabla \right) \bg{\chi} \cdot \bg{\eta} ~ \lvert \mathbb{J}_{\bg{\Phi}}(\bg{\mu}_g) \rvert \, d \Omega \, , \qquad && d(\bg{\psi}, \, \bg{\chi}; \, \bg{\mu}) = c(\bg{l}(\bg{\mu}), \, \bg{\psi}, \, \bg{\chi}; \, \bg{\mu}) + c(\bg{\psi}, \, \bg{l}(\bg{\mu}), \, \bg{\chi}; \, \bg{\mu}) \, , \\[0.1cm]
-				& a(\bg{\psi}, \, \bg{\chi}; \, \bg{\mu}) = \nu(\bg{\mu}) \int_{\Omega} \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}_g) \nabla \bg{\psi} ~ : ~ \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}_g) \nabla \bg{\chi} ~ \lvert \mathbb{J}_{\bg{\Phi}}(\bg{\mu}_g) \rvert \, d \Omega \, , && f_1(\bg{\psi}; \, \bg{\mu}) = - a(\bg{l}(\bg{\mu}), \, \bg{\psi}; \, \bg{\mu}) - c(\bg{l}(\bg{\mu}), \, \bg{l}(\bg{\mu}), \, \bg{\psi}; \, \bg{\mu}) \, , \\[0.2cm]
-				& b(\bg{\psi}, \, \xi; \, \bg{\mu}) = - \dfrac{1}{\rho(\bg{\mu})} \int_{\Omega} \left( \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}_g) \nabla \cdot \bg{\psi} \right) ~ \xi ~ \lvert \mathbb{J}_{\bg{\Phi}}(\bg{\mu}_g) \rvert \, d \Omega \, , && f_2(\xi; \, \bg{\mu}) = - b(\bg{l}(\bg{\mu}), \, \xi; \, \bg{\mu}) \, ,
+				& c(\bg{\psi}, \, \bg{\chi}, \, \bg{\eta}; \, \bg{\mu}) = \int_{\Omega} \left( \bg{\psi} \cdot \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}) \nabla \right) \bg{\chi} \cdot \bg{\eta} ~ \lvert \mathbb{J}_{\bg{\Phi}}(\bg{\mu}) \rvert \, d \Omega \, , \qquad && d(\bg{\psi}, \, \bg{\chi}; \, \bg{\mu}) = c(\bg{l}(\bg{\mu}), \, \bg{\psi}, \, \bg{\chi}; \, \bg{\mu}) + c(\bg{\psi}, \, \bg{l}(\bg{\mu}), \, \bg{\chi}; \, \bg{\mu}) \, , \\[0.1cm]
+				& a(\bg{\psi}, \, \bg{\chi}; \, \bg{\mu}) = \nu(\bg{\mu}) \int_{\Omega} \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}) \nabla \bg{\psi} ~ : ~ \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}) \nabla \bg{\chi} ~ \lvert \mathbb{J}_{\bg{\Phi}}(\bg{\mu}) \rvert \, d \Omega \, , && f_1(\bg{\psi}; \, \bg{\mu}) = - a(\bg{l}(\bg{\mu}), \, \bg{\psi}; \, \bg{\mu}) - c(\bg{l}(\bg{\mu}), \, \bg{l}(\bg{\mu}), \, \bg{\psi}; \, \bg{\mu}) \, , \\[0.2cm]
+				& b(\bg{\psi}, \, \xi; \, \bg{\mu}) = - \dfrac{1}{\rho(\bg{\mu})} \int_{\Omega} \left( \mathbb{J}^{-T}_{\bg{\Phi}}(\bg{\mu}) \nabla \cdot \bg{\psi} \right) ~ \xi ~ \lvert \mathbb{J}_{\bg{\Phi}}(\bg{\mu}) \rvert \, d \Omega \, , && f_2(\xi; \, \bg{\mu}) = - b(\bg{l}(\bg{\mu}), \, \xi; \, \bg{\mu}) \, ,
 			\end{aligned}
 		\end{equation*}
-		for all $\bg{\psi}$, $\bg{\chi}$, $\bg{\eta} \in X$ and $\xi \in Q$. In the definitions of $d(\cdot, \, \cdot; \, \bg{\mu})$, $f_1(\cdot; \, \bg{\mu})$ and $f_2(\cdot; \, \bg{\mu})$, $\bg{l}(\bg{\mu}) \in \big[ H^1(\Omega) \big]^d$ denotes the lifting vector field, with $\bg{l}(\bg{\mu}) \big\rvert_{\Gamma_D} = \bg{h}(\bg{\mu})$, $\bg{h}(\bg{x}; \, \bg{\mu}) = \wt{\bg{h}}(\bg{\Phi}(\bg{x}; \, \bg{\mu}_g); \, \bg{\mu}_{ph})$ being the velocity field prescribed on $\Gamma_D$. Hence, the weak solution to \eqref{eq:ns-differential} defined over the fixed domain $\Omega$ is given by $\big( \bg{v}(\bg{\mu}) + \bg{l}(\bg{\mu}), p(\bg{\mu}) \big)$.
+		for all $\bg{\psi}$, $\bg{\chi}$, $\bg{\eta} \in X$ and $\xi \in Q$. In the definitions of $d(\cdot, \, \cdot; \, \bg{\mu})$, $f_1(\cdot; \, \bg{\mu})$ and $f_2(\cdot; \, \bg{\mu})$, $\bg{l}(\bg{\mu}) \in \big[ H^1(\Omega) \big]^d$ denotes the lifting vector field, with $\bg{l}(\bg{\mu}) \big\rvert_{\Gamma_D} = \bg{h}(\bg{\mu})$, $\bg{h}(\bg{x}; \, \bg{\mu}) = \wt{\bg{h}}(\bg{\Phi}(\bg{x}; \, \bg{\mu}))$ being the velocity field prescribed on $\Gamma_D$. Hence, the weak solution to \eqref{eq:ns-differential} defined over the fixed domain $\Omega$ is given by $\big( \bg{v}(\bg{\mu}) + \bg{l}(\bg{\mu}), p(\bg{\mu}) \big)$.
 	
 	
 	%
@@ -1287,7 +1193,7 @@
 	\subsubsection{The lid-driven cavity problem}
 	\label{section:The lid-driven cavity problem}
 		
-		In this section, we are concerned with the numerical simulation of a viscous flow within a parallelogram-shaped cavity, illustrated in Fig. \ref{fig:dc-domain} (\emph{left}). The geometry of the domain is affected by three parameters: $\mu_1 \in [1, \, 2]$ and $\mu_2 \in [1, \, 2]$ define the length of the horizontal and slanting (possibly vertical) edges, respectively, whereas $\mu_3 \in \big[ \nicefrac{\pi}{6}, \, \nicefrac{5 \pi}{6} \big]$ denotes the angle between the oblique sides and the positive $\wt{x}$-semiaxis. The Dirichlet boundary conditions enforced on the velocity field, graphically represented in Fig. \ref{fig:dc-domain} (\emph{center}), are such that the flow is driven by a unit horizontal velocity at the top boundary \cite{Per02}. For this reason, this benchmark is typically referred to as the \emph{lid-driven cavity} problem. In addition, to retain the uniqueness of the solution, we fix the pressure at the lower-left corner \cite{Dho14}. Therefore, to properly resolve the steep velocity gradient near the upper boundary and the pressure singularities at the top corners, the computational mesh $\Omega_h$ (Fig. \ref{fig:dc-mesh}, \emph{right}) is refined in the upper part of the domain. %, leading to ${N_h}_{\bg{v}} = 4868$ degrees of freedom for $\bg{v}$ and ${N_h}_p = 691$ nodal values for $p$. 
+		In this subsection, we are concerned with the numerical simulation of a viscous flow within a parallelogram-shaped cavity, illustrated in Fig. \ref{fig:dc-domain} (\emph{left}). The geometry of the domain is affected by three parameters: $\mu_1 \in [1, \, 2]$ and $\mu_2 \in [1, \, 2]$ define the length of the horizontal and slanting (possibly vertical) edges, respectively, whereas $\mu_3 \in \big[ \nicefrac{\pi}{6}, \, \nicefrac{5 \pi}{6} \big]$ denotes the angle between the oblique sides and the positive $\wt{x}$-semiaxis. The Dirichlet boundary conditions enforced on the velocity field, graphically represented in Fig. \ref{fig:dc-domain} (\emph{center}), are such that the flow is driven by a unit horizontal velocity at the top boundary \cite{Per02}. Hence, this benchmark is typically referred to as the \emph{lid-driven cavity} problem. In addition, we fix the pressure at the lower-left corner, in order to retain the uniqueness of the solution \cite{Dho14}. Therefore, the computational mesh $\Omega_h$ (Fig. \ref{fig:dc-domain}, \emph{right}) is refined in the upper part of the domain, so to properly resolve the steep velocity gradient near the upper boundary and the pressure singularities at the top corners. %, leading to ${N_h}_{\bg{v}} = 4868$ degrees of freedom for $\bg{v}$ and ${N_h}_p = 691$ nodal values for $p$. 
 		
 		For the Navier-Stokes equations, a suitable choice of the FE spaces is crucial to fulfill the well-known \emph{inf-sup} stability condition \cite{Ran99}. At this regard, a common and effective choice consists in using quadratic finite elements for the components of the velocity field and linear finite elements for the pressure, leading to the so-called $\mathbb{P}^2 - \mathbb{P}^1$ (or Taylor-Hood) FE discretization \cite{Per02}. Figure \ref{fig:dc-solutions-different-domains} shows the velocity streamlines (\emph{top}) and the pressure distribution (\emph{bottom}) obtained through the resulting FE method for, from the left to the right, $\bg{\mu} = \big( 1, \, \nicefrac{2}{\sqrt{3}}, \, \nicefrac{2 \pi}{3} \big)$, $\bg{\mu} = \big( 1, \, 1, \, \nicefrac{\pi}{2} \big)$ or $\bg{\mu} = \big( 1, \, \nicefrac{2}{\sqrt{3}}, \, \nicefrac{\pi}{6} \big)$. Observe how the moving lid induces a large velocity gradient close to the top boundary, while it only slightly affects the fluid in the lower part of the cavity. In turn, this gives rising to two vortices, whose extent highly depends on the shape of the domain, or, equivalently, $\bg{\mu}$. Conversely, the pressure field does not undergo remarkable alterations across the parameter space. For all the configurations, a low-pressure region takes place at the upper-left corner of the domain and in the center of the major vortex (although it may be not clearly visible). Instead, the upper-right corner represents a stagnation point for the $\wt{x}$-velocity, and so therein the pressure assumes larger values than in the rest of the cavity \cite{Dho14}.
 		
@@ -1303,10 +1209,11 @@
 			\end{minipage}
 			\begin{minipage}{0.32\textwidth}
 				\center
+				\vspace*{0.15cm}
 				\includegraphics[scale = 0.275, trim = {2cm 9cm 1.5cm 3.5cm}, clip]{dc_mesh}
 			\end{minipage}
 			
-			\caption{Computational domain (\emph{left}), enforced velocity at the boundaries (\emph{center}) and computational mesh $\Omega_h$ (\emph{right}) for the lid-driven cavity problem for the uncompressible Navier-Stokes equations.}
+			\caption{Computational domain $\wt{\Omega}(\bg{\mu})$ (\emph{left}), enforced velocity at the boundaries (\emph{center}) and computational mesh $\Omega_h$ (\emph{right}) for the lid-driven cavity problem for the uncompressible Navier-Stokes equations.}
 			\label{fig:dc-domain}
 			
 			\center 
@@ -1324,27 +1231,25 @@
 		All the results presented in Fig. \ref{fig:dc-solutions-different-domains} refer to a Reynold's number of $400$. The Reynold's number is an adimensional group, defined as the ratio between the inertia and the viscous (or friction) force. For the specific problem at hand, it reads:
 		\begin{equation*}
 			\vspace*{-0.1cm}
-			Re = \dfrac{\max \big\lbrace \mu_1, \, \mu_2 \big\rbrace}{\nu(\bg{\mu})} \, ,
+			Re = \dfrac{\max \big\lbrace \mu_1, \, \mu_2 \big\rbrace}{\nu(\bg{\mu})} \, .
 		\end{equation*}
-		with $\nu = \nu(\bg{\mu})$ being the dynamic viscosity of the fluid. In our analyses, $\nu(\bg{\mu})$ is adapted as the geometry varies so that the Reynold's number is either $200$ or $400$. %\vspace*{0.2cm} \footnote{We would like to point out that these values for the Reynold's number have been chosen sufficiently low, so that the flow can be reasonably treated as steady.}.
-																			
-		Regarding the reduced-order modeling of the parametrized problem of interest, we slightly distance ourselves from the general workflow depicted in Sections \ref{section:Projection-based reduced basis method} and \ref{section:A non-intrusive RB method using neural networks}. Indeed, for the Navier-Stokes equations is convenient to construct two separate reduced spaces \cite{Bal14, Chen17, QMN15}: $X_{\texttt{rb}}$, with dimension $L_{\bg{v}}$, for the velocity field and $Q_{\texttt{rb}}$, with dimension $L_p$, for the pressure distribution, respectively represented by the matrices 
+		In our analyses, $\nu(\bg{\mu})$ is adapted as the geometry varies so that the Reynold's number is either $200$ or $400$. \\[0.1cm] %\vspace*{0.2cm} \footnote{We would like to point out that these values for the Reynold's number have been chosen sufficiently low, so that the flow can be reasonably treated as steady.}.
+																							
+		Regarding the reduced-order modeling of the parametrized problem of interest, we slightly distance ourselves from the general workflow depicted in Sections \ref{section:Projection-based reduced basis method} and \ref{section:A non-intrusive RB method using neural networks}. Indeed, for the Navier-Stokes equations is convenient to construct two separate reduced spaces \cite{Bal14, Chen17, QMN15}: $X_{\texttt{rb}}$, of dimension $L_{\bg{v}}$, for the velocity field and $Q_{\texttt{rb}}$, of dimension $L_p$, for the pressure distribution, respectively represented by the matrices 
 		\begin{equation*}
-			\mathbb{V}_{\bg{v}} = \left[ \bg{\psi}_1^{\bg{v}} \, \big| \, \ldots \, \big| \, \bg{\psi}_{L_{\bg{v}}}^{\bg{v}} \right] \in \mathbb{R}^{{N_h}_{\bg{v}} \times L_{\bg{v}}} \hspace*{0.5cm} \text{and} \hspace*{0.5cm} \mathbb{V}_p = \left[ \bg{\psi}_1^p \, \big| \, \ldots \, \big| \, \bg{\psi}_{L_p}^p \right] \in \mathbb{R}^{{N_h}_p \times L_p} \, ,
+			\mathbb{V}_{\bg{v}} = \left[ \bg{\psi}_1^{\bg{v}} \, \big| \, \ldots \, \big| \, \bg{\psi}_{L_{\bg{v}}}^{\bg{v}} \right] \in \mathbb{R}^{N_h^{\bg{v}} \times L_{\bg{v}}} \hspace*{0.5cm} \text{and} \hspace*{0.5cm} \mathbb{V}_p = \left[ \bg{\psi}_1^p \, \big| \, \ldots \, \big| \, \bg{\psi}_{L_p}^p \right] \in \mathbb{R}^{N_h^p \times L_p} \, ,
 		\end{equation*} 
-		with ${N_h}_{\bg{v}}$ (respectively, ${N_h}_p$) the size of the FE velocity (resp., pressure) space. 
-		
-		Actually, although the underpinning finite element solver has been designed to fulfill the inf-sup condition, thus ensuring the stability of the scheme, when dealing with incompressible flows this property may not be automatically inherited by the POD-Galerkin reduced-order solver, which as a result may show severe instabilities \cite{Bur06}. Indeed, one has to carefully choose the reduced velocity space $X_{\texttt{rb}}$ so to meet an equivalent of the inf-sup condition at the reduced level. To this end, in our simulations we resort to a \emph{supremizer enrichment} of $X_{\texttt{rb}}$, as proposed in \cite{Bal14} (to which we refer the readers which are interested in the rational and details of this approach). At each pressure snapshot $\mathbf{p}_h \big( \bg{\mu}^{(n)} \big) \in \mathbb{R}^{{N_h}_p}$, $n = 1, \, \ldots \, , N$, we associate the \emph{supremizer solution} $\mathbf{s}_h \big( \bg{\mu}^{(n)} \big) \in \mathbb{R}^{{N_h}_{\bg{v}}}$, defined as the solution to a linear system of the form
+		with $N_h^{\bg{v}}$ (respectively, $N_h^p$) the dimension of the FE velocity (resp., pressure) space. Actually, although the underpinning finite element solver has been designed to fulfill the inf-sup condition, thus ensuring the stability of the scheme, when dealing with incompressible flows this property may not be automatically inherited by the POD-Galerkin reduced-order solver, which as a result may show severe instabilities \cite{Bur06}. Indeed, one has to carefully choose the reduced velocity space $X_{\texttt{rb}}$ so to meet an equivalent of the inf-sup condition at the reduced level. To this end, in our simulations we resort to a \emph{supremizer enrichment} of $X_{\texttt{rb}}$, as proposed in \cite{Bal14} (to which we refer the readers which are interested in the rational and details of this approach). At each pressure snapshot $\mathbf{p}_h \big( \bg{\mu}^{(n)} \big) \in \mathbb{R}^{N_h^p}$, $n = 1, \, \ldots \, , N$, we associate the \emph{supremizer solution} $\mathbf{s}_h \big( \bg{\mu}^{(n)} \big) \in \mathbb{R}^{N_h^{\bg{v}}}$, defined as the solution to a linear system of the form
 		\begin{equation*}
 			\mathbb{A} \, \mathbf{s}_h \big( \bg{\mu}^{(n)} \big) = \mathbb{B} \big( \bg{\mu}^{(n)} \big) \, \mathbf{p}_h \big( \bg{\mu}^{(n)} \big) \, ,
 		\end{equation*}
-		with $\mathbb{A} \in \mathbb{R}^{{N_h}_{\bg{v}} \times {N_h}_{\bg{v}}}$ and $\mathbb{B} \big( \bg{\mu}^{(n)} \big) \in \mathbb{R}^{{N_h}_{\bg{v}} \times {N_h}_p}$. Letting $\mathbb{V}_{\bg{s}} = \left[ \bg{\psi}_1^{\bg{s}} \, \big| \, \ldots \, \big| \, \bg{\psi}_{L_{\bg{s}}}^{\bg{s}} \right] \in \mathbb{R}^{{N_h}_{\bg{v}} \times L_{\bg{s}}}$ be the POD basis of rank $L_{\bg{s}}$ extracted from the ensemble of snapshots $\lbrace \mathbf{s} \big( \bg{\mu}^{(1)} \big) , \, \ldots \, , \mathbf{s} \big( \bg{\mu}^{(N)} \big) \rbrace$, the POD-G approximation of the velocity field is then sought in the form
+		with $\mathbb{A} \in \mathbb{R}^{N_h^{\bg{v}} \times N_h^{\bg{v}}}$ and $\mathbb{B} \big( \bg{\mu}^{(n)} \big) \in \mathbb{R}^{N_h^{\bg{v}} \times N_h^p}$. Letting \[ \mathbb{V}_{\bg{s}} = \left[ \bg{\psi}_1^{\bg{s}} \, \big| \, \ldots \, \big| \, \bg{\psi}_{L_{\bg{s}}}^{\bg{s}} \right] \in \mathbb{R}^{N_h^{\bg{v}} \times L_{\bg{s}}} \] be the POD basis of rank $L_{\bg{s}}$ extracted from the ensemble of snapshots $\big\lbrace \mathbf{s} \big( \bg{\mu}^{(1)} \big) , \, \ldots \, , \mathbf{s} \big( \bg{\mu}^{(N)} \big) \big\rbrace$, the POD-G approximation of the velocity field is then sought in the form
 		\begin{equation*}
 			\bar{\mathbf{v}}_L(\bg{\mu}) = \overline{\mathbb{V}}_{\bg{v}} \, \bar{\mathbf{v}}_{\texttt{rb}}(\bg{\mu}) = \sum_{i = 1}^{L_{\bg{v}}} v_{\texttt{rb}}^{(i)} \bg{\psi}_i^{\bg{v}} + \sum_{i = 1}^{L_{\bg{s}}} s_{\texttt{rb}}^{(i)} \bg{\psi}_i^{\bg{s}} \, ,
 		\end{equation*} 
 		where
 		\begin{equation*}
-			\overline{\mathbb{V}}_{\bg{v}} = \left[ \mathbb{V}_{\bg{v}} ~ \mathbb{V}_{\bg{s}} \right] \in \mathbb{R}^{{N_h}_{\bg{v}} \times (L_{\bg{v}} + L_{\bg{s}})} \hspace*{0.5cm} \text{and} \hspace*{0.5cm} \bar{\mathbf{v}}_{\texttt{rb}}(\bg{\mu}) =
+			\overline{\mathbb{V}}_{\bg{v}} = \left[ \mathbb{V}_{\bg{v}} ~ \mathbb{V}_{\bg{s}} \right] \in \mathbb{R}^{N_h^{\bg{v}} \times (L_{\bg{v}} + L_{\bg{s}})} \hspace*{0.5cm} \text{and} \hspace*{0.5cm} \bar{\mathbf{v}}_{\texttt{rb}}(\bg{\mu}) =
 			\begin{bmatrix}
 			\hspace*{-0.15cm}
 			\begin{array}{c}
@@ -1367,45 +1272,26 @@
 		\end{equation*}
 		At this regard, let us point out two important remarks.
 		\begin{enumerate}[label=(\roman*)]
-			\item The supremizer solutions are not involved (either directly or indirectly) in the POD-NN framework. Indeed, they ensure the overall stability of the POD-Galerkin procedure, but they do not power-up the accuracy of the method, and so they can be disregarded whenever stability is not an issue.
+			\item The supremizer solutions are not involved (either directly or indirectly) in the POD-NN framework. Indeed, they ensure the overall stability of the POD-G procedure, but they do not power-up the accuracy of the method, and so they can be disregarded whenever stability is not an issue.
 			\item The routine outlined in Section \ref{section:A non-intrusive RB method using neural networks}, aiming at finding an optimal network configuration, is applied \emph{separately} to the perceptrons designated to predict the velocity field and to the perceptrons required to approximate the pressure distribution. As a result, once the offline phase of the POD-NN method is completed, we may end up with two completely different networks, equipped with $H_1^{\bg{v}} = H_2^{\bg{v}}$ and $H_1^p = H_2^p$ computing units per hidden layer, respectively.  
 		\end{enumerate}
 		Figure \ref{fig:dc-error-vs-rank} reports the error committed by both RB procedures when approximating the velocity field (\emph{left}) and the pressure distribution (\emph{right}) by means of $L_{\bg{v}}$ velocity modes, $L_p$ pressure modes and, exclusively for the POD-Galerkin method, $L_{\bg{s}}$ supremizer modes, with $5 \leq L_{\bg{v}} = L_{\bg{s}} = L_p \leq 35$. The plots on the top refer to a Reynold's number of $200$, the ones on the bottom to a Reynold's number of $400$. Please note that for clarity of illustration, the symbols denoting the projection, POD-G and POD-NN errors have been decorated with a superscript (either $\bg{v}$ or $p$) recalling the state variable they refer to. 
-		
-		\iffalse
 		\begin{figure}[t!]
 			\center
-			\vspace*{-0.5cm}
-			\subfloat{\includegraphics[scale = 0.22, trim = {7.5cm 0 7.5cm 0.4cm}, clip]{dc_200_vel_basis_1}}
-			\subfloat{\includegraphics[scale = 0.22, trim = {7.5cm 0 7.5cm 0.4cm}, clip]{dc_200_vel_basis_2}}
-			\subfloat{\includegraphics[scale = 0.22, trim = {7.5cm 0 7.5cm 0.4cm}, clip]{dc_200_vel_basis_3}}
-			\subfloat{\includegraphics[scale = 0.22, trim = {7.5cm 0 7.5cm 0.4cm}, clip]{dc_200_vel_basis_4}} \\
-			\subfloat{\includegraphics[scale = 0.22, trim = {7.5cm 0 7.5cm 0.4cm}, clip]{dc_200_p_basis_1}}
-			\subfloat{\includegraphics[scale = 0.22, trim = {7.5cm 0 7.5cm 0.4cm}, clip]{dc_200_p_basis_2}}
-			\subfloat{\includegraphics[scale = 0.22, trim = {7.5cm 0 7.5cm 0.4cm}, clip]{dc_200_p_basis_3}}
-			\subfloat{\includegraphics[scale = 0.22, trim = {7.5cm 0 7.5cm 0.4cm}, clip]{dc_200_p_basis_4}}
-			
-			\caption{First four POD modes for the velocity (\emph{top}) and the pressure (\emph{bottom}) for the parametrized lid-driven cavity problem with $Re = 200$.}
-			\label{fig:dc-modal-functions}
-		\end{figure}
-		\fi
-		
-		\begin{figure}[t!]
-			\center
-			\includegraphics[scale = 0.4, trim = {2cm 9cm 1.5cm 3.5cm}, clip]{dc_200_vel_error_vs_rank}
+			\includegraphics[scale = 0.38, trim = {2cm 9cm 1.5cm 3.5cm}, clip]{dc_200_vel_error_vs_rank_ter}
 			\hspace*{1cm}
-			\includegraphics[scale = 0.4, trim = {2cm 9cm 1.5cm 3.5cm}, clip]{dc_200_p_error_vs_rank} \\
-			\includegraphics[scale = 0.4, trim = {2cm 9cm 1.5cm 3.5cm}, clip]{dc_400_vel_error_vs_rank}
+			\includegraphics[scale = 0.38, trim = {2cm 9cm 1.5cm 3.5cm}, clip]{dc_200_p_error_vs_rank_ter} \\
+			\includegraphics[scale = 0.38, trim = {2cm 9cm 1.5cm 3.5cm}, clip]{dc_400_vel_error_vs_rank_ter}
 			\hspace*{1cm}
-			\includegraphics[scale = 0.4, trim = {2cm 9cm 1.5cm 3.5cm}, clip]{dc_400_p_error_vs_rank}
+			\includegraphics[scale = 0.38, trim = {2cm 9cm 1.5cm 3.5cm}, clip]{dc_400_p_error_vs_rank_ter}
 			
 			\caption{Velocity (\emph{left}) and pressure (\emph{right}) error analysis for the POD-G and POD-NN methods applied to the lid-driven cavity problem with $Re = 200$ (\emph{top}) and $Re = 400$ (\emph{bottom}).}
 			\label{fig:dc-error-vs-rank}
 		\end{figure}
-									
-		While the error yielded on the velocity field shows an almost perfect exponential decay with the number of POD modes included in the RB model, the POD-G method faces difficulties in providing a correct recovery of the pressure, already for $Re = 200$. Indeed, the corresponding error curve may not be monotone, and generally lays at least one order of magnitude above the projection error. On the contrary, the POD-NN method attains a satisfactory predictive accuracy. Particularly, the advantages of resorting to a neural network-based nonlinear regression coupled with a POD procedure are evident when the approximation is built upon a few basis functions, say $L_p < 20$. However, even for $L_p = 35$ (i.e., the dimension of the largest basis tested in our experiments), the POD-NN error is smaller than the POD-G one. Moreover, the proposed routine recommends to use fewer neurons to predict the POD coefficients for the pressure than for the velocity, thus resulting in a lighter perceptron. 
+		While the error yielded on the velocity field shows an almost perfect exponential decay with the number of POD modes included in the RB model, the POD-G method faces difficulties in providing a correct recovery of the pressure, already for $Re = 200$. Indeed, the corresponding error curve may not be monotone, and generally lays at least one order of magnitude above the projection error. Conversely, the POD-NN method attains a satisfactory predictive accuracy. Particularly, the advantages of resorting to a neural network-based nonlinear regression coupled with POD are evident when the approximation is built upon a few basis functions, say $L_p < 20$. %However, even for $L_p = 35$ (i.e., the dimension of the largest basis tested in our experiments), the POD-NN error is close to the POD-G one.
+		Moreover, the proposed routine recommends to use fewer neurons to predict the POD coefficients for the pressure than for the velocity, thus resulting in a lighter perceptron. 
 		
-		This is confirmed also by Fig. \ref{fig:dc-nn-convergence}, which provides a sensitivity analysis of the predictive accuracy featured by the POD-NN method with respect the amount of neurons and training samples used. Observe that for the pressure (\emph{right}), employing more than $30$ neurons within each hidden layer is counter-productive, both for $Re = 200$ (\emph{top}) and $Re = 400$ (\emph{bottom}). This assertion agrees with the peculiar role played by the pressure in the parametrized lid-driven cavity problem, with similar patterns featured across the entire parameter domain. 
+		This is confirmed also by Fig. \ref{fig:dc-nn-convergence}, which provides a sensitivity analysis of the predictive accuracy featured by the POD-NN method with respect to the amount of neurons and training samples used. Observe that for the pressure (\emph{right}), employing more than $30$ neurons within each hidden layer is counter-productive, both for $Re = 200$ (\emph{top}) and $Re = 400$ (\emph{bottom}). This assertion agrees with the peculiar role played by the pressure in the parametrized lid-driven cavity problem, with similar patterns featured across the entire parameter domain. \\
 		
 		On the contrary, we have seen that the velocity field presents more complex dynamics, highly varying with the domain configuration. As a result, an optimal approximation of the velocity is obtained for the maximum values of $H_i^{\bg{v}}$, $i = 1, \, 2$, and $N_{tr}$ tested, that is, $H_1^{\bg{v}} = H_2^{\bg{v}} = 35$ and $N_{tr} = 300$ for $Re = 200$, $H_1^{\bg{v}} = H_2^{\bg{v}} = 40$ and $N_{tr} = 300$ for $Re = 400$. Moreover, we may not be able to exactly attain the same precision enabled by the standard POD-Galerkin procedure, although the results are quite similar. However, this (slight) loss of accuracy is offset by a (great) reduction in the online run time: the POD-NN method takes around $2/100$ of seconds per query, against the average $40$ seconds required by the POD-G method; see Fig. \ref{fig:dc-time}. As for the test cases for the Poisson problem, this comes at the cost of a longer offline phase. In fact, the research and training of sufficiently accurate perceptrons lasted about $4.5$ hours here.
 										
@@ -1424,7 +1310,7 @@
 			\label{fig:dc-nn-convergence}
 		\end{figure}
 		
-		\begin{figure}[H]
+		\begin{figure}[t!]
 			\center
 			\includegraphics[scale = 0.37, trim = {1cm 9cm 1.5cm 3.5cm}, clip]{dc_200_time}
 			\hspace*{0.6cm}
@@ -1458,7 +1344,7 @@
 		
 		Another numerical evidence of the predictive accuracy of the proposed POD-NN RB method is provided in Fig. \ref{fig:dc-x-velocity}, showing the contour plots for the $\wt{x}$-velocity computed through the FE (\emph{top row}) and the POD-NN (\emph{bottom row}) scheme. Three different configurations, corresponding to as many input vectors, are considered; the Reynold's number is fixed to $400$. We can appreciate the good agreement between the solutions given by the full-order and the reduced-order methods. 
 														
-		Lastly, Fig. \ref{fig:dc-streamlines} compares the streamlines obtained through the direct method (\emph{top}) and the proposed reduced basis approach (\emph{bottom}) over the three configurations previously considered. Streamlines provide an interesting test bed, as minor variations in velocity contours may lead to substantial differences in the streamlines \cite{Chen17}. However, we observe a good agreement between the two methods. In particular, in the second example, the POD-NN method is still able to detect the two micro recirculation zones at the lower corners of the domain. Whereas, the method partially fails in properly describing the velocity field at the bottom-left corner in the first configuration and at the bottom-right corner in the last configuration. However, these are dead zones, so we can safely disregard these little imprecisions.
+		Lastly, Fig. \ref{fig:dc-streamlines} compares the streamlines obtained through the direct method (\emph{top}) and the proposed reduced basis approach (\emph{bottom}) over the three configurations previously considered. Streamlines provide an interesting test bed, as minor variations in velocity contours may lead to substantial differences in the streamlines \cite{Chen17}. Nevertheless, we observe a good agreement between the two methods. In particular, in the second example, the POD-NN method is still able to detect the two micro recirculation zones at the lower corners of the domain. Whereas, the method partially fails in properly describing the velocity field at the bottom-left corner in the first configuration and at the bottom-right corner in the last configuration. However, these are dead zones, and one can safely disregard these little imprecisions.
 				
 		\begin{figure}[t]
 			\center
@@ -1493,7 +1379,7 @@
 		
 		The POD-NN method has been successfully tested on the nonlinear Poisson equation in one and two spatial dimensions, and on two-dimensional cavity viscous flows, modeled through the steady uncompressible Navier-Stokes equations. In particular, the proposed RB strategy enabled the same predictive accuracy provided by the POD-Galerkin method while reducing by two or even three order of magnitudes the CPU time required to process an online query. %Generally, the optimal network configuration yielded by the developed automatic routine comprised around $35$ neurons per hidden layer and required from $200$ to $300$ training patterns not to incur in overfitting.
 		
-		All the test cases considered in our numerical studies involved three parameters, affecting either physical or geometrical factors of the differential problem. The extension of the POD-NN method to time-dependent problems depending on many parameters is left as future work. In this respect, the secret hope behind a neural network-based interpolation is that the number of training samples, thus snapshots, required to achieve a given level of accuracy properly scales with the dimension of the parameter space. In fact, as observed in Subsection \ref{section:Two-dimensional Poisson equation}, this represents the major weak point of traditional interpolation techniques.
+		All the test cases considered in our numerical studies involved three parameters, affecting either physical or geometrical factors of the differential problem. The extension of the POD-NN method to time-dependent problems depending on many parameters is left as future work. In this respect, the secret hope behind a neural network-based interpolation is that the number of training samples, thus snapshots, required to achieve a given level of accuracy properly scales with the dimension of the parameter space. In fact, as observed in Subsection \ref{section:Two-dimensional test case}, this represents the major weak point of traditional interpolation techniques.
 		
 		Lastly, let us point out that although in this work we used POD to recover a reduced space, this choice is not binding, and a greedy approach may also be pursued. 
 		
@@ -1505,9 +1391,7 @@
 	%
 	% Bibliography
 	%
-	
-	\clearpage
-	
+		
 	\section*{References}
 		
 	\begin{thebibliography}{50}
@@ -1695,8 +1579,8 @@
 		\bibitem{Vol08}
 		Volkwein, S. (2008). \emph{Model reduction using proper orthogonal decomposition}. Lecture notes, Department of Mathematics, University of Konstanz.
 		
-		\bibitem{WH60}
-		Widrow, B., Hoff, M. E. (1960). \emph{Adaptive switching circuits}. Proceedings WESCON, 96-104.
+		%\bibitem{WH60}
+		%Widrow, B., Hoff, M. E. (1960). \emph{Adaptive switching circuits}. Proceedings WESCON, 96-104.
 		
 	\end{thebibliography}
 	
