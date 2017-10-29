@@ -17,7 +17,7 @@
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
 \emailauthor{jan.hesthaven@epfl.ch}{J.~S.~Hesthaven}
-\emailauthor{stefano.ubbiali@epfl.ch}{S.~Ubbiali}
+\emailauthor{subbiali@phys.ethz.ch}{S.~Ubbiali}
 \citation{Eft08,HSR16,JIR14}
 \citation{Bro93}
 \citation{Ben04}
@@ -34,6 +34,8 @@
 \citation{HSR16}
 \citation{Bal14}
 \providecommand\tcolorbox@label[2]{}
+\Newlabel{epfl}{a}
+\Newlabel{polimi}{b}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}}
 \newlabel{section:Introduction}{{1}{1}{Introduction}{section.1}{}}
 \citation{Buf12}
@@ -58,32 +60,23 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Discrete full-order model}{3}{subsection.2.2}}
 \newlabel{section:Discrete full-order model}{{2.2}{3}{Discrete full-order model}{subsection.2.2}{}}
 \newlabel{eq:galerkin}{{2.4}{3}{Discrete full-order model}{equation.2.4}{}}
-\citation{HSR16,QMN15}
+\newlabel{eq:galerkin-algebraic}{{2.5}{3}{Discrete full-order model}{equation.2.5}{}}
 \citation{HSR16}
 \citation{Chen17}
 \citation{Lia02,Vol08}
-\newlabel{eq:newton-linearized-problem}{{2.2}{4}{Discrete full-order model}{equation.2.4}{}}
-\newlabel{eq:galerkin-solution}{{2.2}{4}{Discrete full-order model}{equation.2.4}{}}
-\newlabel{eq:galerkin-nonlinear-system}{{2.5}{4}{Discrete full-order model}{equation.2.5}{}}
-\newlabel{eq:galerkin-nonlinear-system-equation}{{2.6}{4}{Discrete full-order model}{equation.2.6}{}}
-\newlabel{eq:galerkin-linear-system}{{2.7}{4}{Discrete full-order model}{equation.2.7}{}}
+\newlabel{eq:galerkin-algebraic-component}{{2.6}{4}{Discrete full-order model}{equation.2.6}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Projection-based reduced basis method}{4}{section.3}}
 \newlabel{section:Projection-based reduced basis method}{{3}{4}{Projection-based reduced basis method}{section.3}{}}
-\newlabel{eq:rb-solution}{{3}{5}{Projection-based reduced basis method}{section.3}{}}
-\newlabel{eq:pde-rb}{{3.1}{5}{Projection-based reduced basis method}{equation.3.1}{}}
-\newlabel{eq:pde-rb-newton}{{3}{5}{Projection-based reduced basis method}{equation.3.1}{}}
-\newlabel{eq:rb-fe-coefficients}{{3.2}{5}{Projection-based reduced basis method}{equation.3.2}{}}
-\newlabel{eq:rb-nonlinear-system}{{3.3}{5}{Projection-based reduced basis method}{equation.3.3}{}}
-\newlabel{eq:rb-nonlinear-system-jacobian}{{3.4}{5}{Projection-based reduced basis method}{equation.3.4}{}}
-\newlabel{eq:rb-nonlinear-system-newton}{{3.5}{5}{Projection-based reduced basis method}{equation.3.5}{}}
+\newlabel{eq:rb-solution}{{3}{4}{Projection-based reduced basis method}{section.3}{}}
+\newlabel{eq:pde-rb}{{3.1}{4}{Projection-based reduced basis method}{equation.3.1}{}}
+\newlabel{eq:change-of-variables}{{3.2}{4}{Projection-based reduced basis method}{equation.3.2}{}}
+\newlabel{eq:pde-rb-algebraic}{{3.3}{4}{Projection-based reduced basis method}{equation.3.3}{}}
+\citation{EY36,Sch07}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Proper orthogonal decomposition}{5}{subsection.3.1}}
 \newlabel{section:Proper Orthogonal Decomposition}{{3.1}{5}{Proper orthogonal decomposition}{subsection.3.1}{}}
-\citation{EY36,Sch07}
-\newlabel{eq:svd}{{3.6}{6}{Proper orthogonal decomposition}{equation.3.6}{}}
-\newlabel{eq:svd-relationships}{{3.7}{6}{Proper orthogonal decomposition}{equation.3.7}{}}
-\newlabel{eq:svd-compact}{{3.1}{6}{Proper orthogonal decomposition}{equation.3.7}{}}
-\newlabel{eq:svd-compact-matrices}{{3.1}{6}{Proper orthogonal decomposition}{equation.3.7}{}}
-\newlabel{eq:basis-error}{{3.8}{6}{Proper orthogonal decomposition}{equation.3.8}{}}
+\newlabel{eq:svd}{{3.1}{5}{Proper orthogonal decomposition}{subsection.3.1}{}}
+\newlabel{eq:svd-relationships}{{3.4}{5}{Proper orthogonal decomposition}{equation.3.4}{}}
+\newlabel{eq:basis-error}{{3.5}{5}{Proper orthogonal decomposition}{equation.3.5}{}}
 \citation{Pru02}
 \citation{QMN15}
 \citation{Bar04}
@@ -94,146 +87,139 @@
 \citation{Hay05,Kri07}
 \citation{Nie15}
 \citation{SD13}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Implementation: details and issues}{7}{subsection.3.2}}
-\newlabel{section:Implementation: details and issues}{{3.2}{7}{Implementation: details and issues}{subsection.3.2}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Artifical neural networks}{7}{section.4}}
-\newlabel{section:Artificial neural networks}{{4}{7}{Artifical neural networks}{section.4}{}}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {3.1}{\ignorespaces The offline and online stages for the POD-Galerkin (POD-G) RB method.\relax }}{7}{algorithm.3.1}}
-\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{alg:pod-galerkin}{{3.1}{7}{The offline and online stages for the POD-Galerkin (POD-G) RB method.\relax }{algorithm.3.1}{}}
 \citation{Kri07}
 \citation{Kri07}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Implementation: details and issues}{6}{subsection.3.2}}
+\newlabel{section:Implementation: details and issues}{{3.2}{6}{Implementation: details and issues}{subsection.3.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Artifical neural networks}{6}{section.4}}
+\newlabel{section:Artificial neural networks}{{4}{6}{Artifical neural networks}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Neuronal model}{6}{subsection.4.1}}
+\newlabel{section:Neuronal model}{{4.1}{6}{Neuronal model}{subsection.4.1}{}}
+\newlabel{eq:propagation-function}{{4.1}{6}{Neuronal model}{subsection.4.1}{}}
+\newlabel{eq:weighted-sum}{{4.1}{6}{Neuronal model}{subsection.4.1}{}}
 \citation{Hay05}
 \citation{Hay05}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Neuronal model}{8}{subsection.4.1}}
-\newlabel{section:Neuronal model}{{4.1}{8}{Neuronal model}{subsection.4.1}{}}
-\newlabel{eq:propagation-function}{{4.1}{8}{Neuronal model}{subsection.4.1}{}}
-\newlabel{eq:weighted-sum}{{4.1}{8}{Neuronal model}{subsection.4.1}{}}
-\newlabel{eq:activation-function}{{4.1}{8}{Neuronal model}{subsection.4.1}{}}
-\newlabel{eq:hyperbolic-tangent}{{4.1}{8}{Neuronal model}{subsection.4.1}{}}
-\newlabel{eq:output-function}{{4.1}{8}{Neuronal model}{subsection.4.1}{}}
 \citation{Ros58}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Visualization of the generic $j$-th neuron of an artificial neural network, including (right) or not (left) a bias neuron. On the left, the neuron accumulates the weighted inputs ${\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "42663A9 \vcenter to\@ne \big@size {}\right .$}\box \z@ }w_{s_1,j} \nobreakspace  {} y_{s_1}, \tmspace  +\thinmuskip {.1667em} \ldots  \tmspace  +\thinmuskip {.1667em} , w_{s_m,j} \nobreakspace  {} y_{s_m} {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "52673AA \vcenter to\@ne \big@size {}\right .$}\box \z@ }$ respectively coming from the sending neurons ${\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "42663A9 \vcenter to\@ne \big@size {}\right .$}\box \z@ }s_1, \tmspace  +\thinmuskip {.1667em} \ldots  \tmspace  +\thinmuskip {.1667em} , s_m {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "52673AA \vcenter to\@ne \big@size {}\right .$}\box \z@ }$; on the right, the neuron accumulates the weighted inputs ${\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "42663A9 \vcenter to\@ne \big@size {}\right .$}\box \z@ }w_{s_1,j} \nobreakspace  {} y_{s_1}, \tmspace  +\thinmuskip {.1667em} \ldots  \tmspace  +\thinmuskip {.1667em} , w_{s_m,j} \nobreakspace  {} y_{s_m}, \tmspace  +\thinmuskip {.1667em} -\theta _j {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "52673AA \vcenter to\@ne \big@size {}\right .$}\box \z@ }$ respectively coming from the sending neurons ${\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "42663A9 \vcenter to\@ne \big@size {}\right .$}\box \z@ }s_1, \tmspace  +\thinmuskip {.1667em} \ldots  \tmspace  +\thinmuskip {.1667em} , s_m, \tmspace  +\thinmuskip {.1667em} b {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "52673AA \vcenter to\@ne \big@size {}\right .$}\box \z@ }$, with $b$ the bias neuron. In both situations, the neuron then fires $y_j$, sent to the target neurons ${\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "42663A9 \vcenter to\@ne \big@size {}\right .$}\box \z@ }r_1, \tmspace  +\thinmuskip {.1667em} \ldots  \tmspace  +\thinmuskip {.1667em} , r_n {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "52673AA \vcenter to\@ne \big@size {}\right .$}\box \z@ }$ through the synapsis ${\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "42663A9 \vcenter to\@ne \big@size {}\right .$}\box \z@ }w_{j,r_1}, \tmspace  +\thinmuskip {.1667em} \ldots  \tmspace  +\thinmuskip {.1667em} , w_{j,r_n} {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "52673AA \vcenter to\@ne \big@size {}\right .$}\box \z@ }$. The neuron threshold is reported in brackets within its body.\relax }}{7}{figure.caption.1}}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:neural-model}{{4.1}{7}{Visualization of the generic $j$-th neuron of an artificial neural network, including (right) or not (left) a bias neuron. On the left, the neuron accumulates the weighted inputs $\big \lbrace w_{s_1,j} ~ y_{s_1}, \, \ldots \, , w_{s_m,j} ~ y_{s_m} \big \rbrace $ respectively coming from the sending neurons $\big \lbrace s_1, \, \ldots \, , s_m \big \rbrace $; on the right, the neuron accumulates the weighted inputs $\big \lbrace w_{s_1,j} ~ y_{s_1}, \, \ldots \, , w_{s_m,j} ~ y_{s_m}, \, -\theta _j \big \rbrace $ respectively coming from the sending neurons $\big \lbrace s_1, \, \ldots \, , s_m, \, b \big \rbrace $, with $b$ the bias neuron. In both situations, the neuron then fires $y_j$, sent to the target neurons $\big \lbrace r_1, \, \ldots \, , r_n \big \rbrace $ through the synapsis $\big \lbrace w_{j,r_1}, \, \ldots \, , w_{j,r_n} \big \rbrace $. The neuron threshold is reported in brackets within its body.\relax }{figure.caption.1}{}}
+\newlabel{eq:activation-function}{{4.1}{7}{Neuronal model}{subsection.4.1}{}}
+\newlabel{eq:hyperbolic-tangent}{{4.1}{7}{Neuronal model}{subsection.4.1}{}}
+\newlabel{eq:output-function}{{4.1}{7}{Neuronal model}{subsection.4.1}{}}
 \citation{Kri07}
 \citation{Cyb88,Cyb89}
 \citation{Hag14}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Visualization of the generic $j$-th neuron of an artificial neural network, including (right) or not (left) a bias neuron. On the left, the neuron accumulates the weighted inputs ${\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "42663A9 \vcenter to\@ne \big@size {}\right .$}\box \z@ }w_{s_1,j} \nobreakspace  {} y_{s_1}, \tmspace  +\thinmuskip {.1667em} \ldots  \tmspace  +\thinmuskip {.1667em} , w_{s_m,j} \nobreakspace  {} y_{s_m} {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "52673AA \vcenter to\@ne \big@size {}\right .$}\box \z@ }$ respectively coming from the sending neurons $s_1, \tmspace  +\thinmuskip {.1667em} \ldots  \tmspace  +\thinmuskip {.1667em} , s_m$; on the right, the neuron accumulates the weighted inputs ${\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "42663A9 \vcenter to\@ne \big@size {}\right .$}\box \z@ }w_{s_1,j} \nobreakspace  {} y_{s_1}, \tmspace  +\thinmuskip {.1667em} \ldots  \tmspace  +\thinmuskip {.1667em} , w_{s_m,j} \nobreakspace  {} y_{s_m}, \tmspace  +\thinmuskip {.1667em} -\theta _j {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "52673AA \vcenter to\@ne \big@size {}\right .$}\box \z@ }$ respectively coming from the sending neurons $s_1, \tmspace  +\thinmuskip {.1667em} \ldots  \tmspace  +\thinmuskip {.1667em} , s_m, \tmspace  +\thinmuskip {.1667em} b$, with $b$ the bias neuron. In both situations, the neuron then fires $y_j$, sent to the target neurons ${\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "42663A9 \vcenter to\@ne \big@size {}\right .$}\box \z@ }r_1, \tmspace  +\thinmuskip {.1667em} \ldots  \tmspace  +\thinmuskip {.1667em} , r_n {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "52673AA \vcenter to\@ne \big@size {}\right .$}\box \z@ }$ through the synapsis ${\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "42663A9 \vcenter to\@ne \big@size {}\right .$}\box \z@ }w_{j,r_1}, \tmspace  +\thinmuskip {.1667em} \ldots  \tmspace  +\thinmuskip {.1667em} , w_{j,r_n} {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left \delimiter "52673AA \vcenter to\@ne \big@size {}\right .$}\box \z@ }$. The neuron threshold is reported in brackets within its body.\relax }}{9}{figure.caption.1}}
-\newlabel{fig:neural-model}{{4.1}{9}{Visualization of the generic $j$-th neuron of an artificial neural network, including (right) or not (left) a bias neuron. On the left, the neuron accumulates the weighted inputs $\big \lbrace w_{s_1,j} ~ y_{s_1}, \, \ldots \, , w_{s_m,j} ~ y_{s_m} \big \rbrace $ respectively coming from the sending neurons $s_1, \, \ldots \, , s_m$; on the right, the neuron accumulates the weighted inputs $\big \lbrace w_{s_1,j} ~ y_{s_1}, \, \ldots \, , w_{s_m,j} ~ y_{s_m}, \, -\theta _j \big \rbrace $ respectively coming from the sending neurons $s_1, \, \ldots \, , s_m, \, b$, with $b$ the bias neuron. In both situations, the neuron then fires $y_j$, sent to the target neurons $\big \lbrace r_1, \, \ldots \, , r_n \big \rbrace $ through the synapsis $\big \lbrace w_{j,r_1}, \, \ldots \, , w_{j,r_n} \big \rbrace $. The neuron threshold is reported in brackets within its body.\relax }{figure.caption.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Network topology: the feedforward neural network}{9}{subsection.4.2}}
-\newlabel{section:Network topology}{{4.2}{9}{Network topology: the feedforward neural network}{subsection.4.2}{}}
-\newlabel{cybenko-first-rule}{{{{(i)}}}{9}{Network topology: the feedforward neural network}{Item.3}{}}
-\newlabel{cybenko-second-rule}{{{{(ii)}}}{9}{Network topology: the feedforward neural network}{Item.4}{}}
 \citation{Kri07}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces A three-layer feedforward neural network, with three input neurons, two hidden layers each one consisting of six neurons, and four output neurons. Within each connection, information flows from left to right.\relax }}{8}{figure.caption.2}}
+\newlabel{fig:neural-network}{{4.2}{8}{A three-layer feedforward neural network, with three input neurons, two hidden layers each one consisting of six neurons, and four output neurons. Within each connection, information flows from left to right.\relax }{figure.caption.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Network topology: the feedforward neural network}{8}{subsection.4.2}}
+\newlabel{section:Network topology}{{4.2}{8}{Network topology: the feedforward neural network}{subsection.4.2}{}}
+\newlabel{cybenko-first-rule}{{{{(i)}}}{8}{Network topology: the feedforward neural network}{Item.3}{}}
+\newlabel{cybenko-second-rule}{{{{(ii)}}}{8}{Network topology: the feedforward neural network}{Item.4}{}}
 \citation{Hag14}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces A three-layer feedforward neural network, with three input neurons, two hidden layers each one consisting of six neurons, and four output neurons. Within each connection, information flows from left to right.\relax }}{10}{figure.caption.2}}
-\newlabel{fig:neural-network}{{4.2}{10}{A three-layer feedforward neural network, with three input neurons, two hidden layers each one consisting of six neurons, and four output neurons. Within each connection, information flows from left to right.\relax }{figure.caption.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Training a multi-layer feedforward neural network}{10}{subsection.4.3}}
-\newlabel{section:Training a multi-layer feedforward neural network}{{4.3}{10}{Training a multi-layer feedforward neural network}{subsection.4.3}{}}
-\newlabel{eq:weight-update}{{4.3}{10}{Training a multi-layer feedforward neural network}{subsection.4.3}{}}
-\newlabel{eq:performance-function}{{4.3}{10}{Training a multi-layer feedforward neural network}{subsection.4.3}{}}
 \citation{Hag94,Mar63}
-\citation{Hag94}
-\citation{Mar63}
-\citation{Mar63}
-\citation{Hag94}
-\newlabel{eq:accumulated-mse}{{4.1}{11}{Training a multi-layer feedforward neural network}{equation.4.1}{}}
-\newlabel{eq:levenberg-marquardt}{{4.2}{11}{Training a multi-layer feedforward neural network}{equation.4.2}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}A non-intrusive reduced basis method using artificial neural networks}{11}{section.5}}
-\newlabel{section:A non-intrusive RB method using neural networks}{{5}{11}{A non-intrusive reduced basis method using artificial neural networks}{section.5}{}}
-\newlabel{eq:discrete-scalar-product}{{5.1}{11}{A non-intrusive reduced basis method using artificial neural networks}{equation.5.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Training a multi-layer feedforward neural network}{9}{subsection.4.3}}
+\newlabel{section:Training a multi-layer feedforward neural network}{{4.3}{9}{Training a multi-layer feedforward neural network}{subsection.4.3}{}}
+\newlabel{eq:weight-update}{{4.3}{9}{Training a multi-layer feedforward neural network}{subsection.4.3}{}}
+\newlabel{eq:performance-function}{{4.3}{9}{Training a multi-layer feedforward neural network}{subsection.4.3}{}}
+\newlabel{eq:accumulated-mse}{{4.1}{9}{Training a multi-layer feedforward neural network}{equation.4.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}A non-intrusive reduced basis method using artificial neural networks}{9}{section.5}}
+\newlabel{section:A non-intrusive RB method using neural networks}{{5}{9}{A non-intrusive reduced basis method using artificial neural networks}{section.5}{}}
 \citation{Ams10}
 \citation{Chen17}
-\newlabel{eq:high-fidelity-projected}{{5}{12}{A non-intrusive reduced basis method using artificial neural networks}{equation.5.1}{}}
-\newlabel{eq:map-to-approximate}{{5.2}{12}{A non-intrusive reduced basis method using artificial neural networks}{equation.5.2}{}}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {5.1}{\ignorespaces The offline and online stages for the POD-NN RB method.\relax }}{12}{algorithm.5.1}}
-\newlabel{alg:pod-nn}{{5.1}{12}{The offline and online stages for the POD-NN RB method.\relax }{algorithm.5.1}{}}
+\newlabel{eq:discrete-scalar-product}{{5.1}{10}{A non-intrusive reduced basis method using artificial neural networks}{equation.5.1}{}}
+\newlabel{eq:high-fidelity-projected}{{5}{10}{A non-intrusive reduced basis method using artificial neural networks}{equation.5.1}{}}
+\newlabel{eq:map-to-approximate}{{5.2}{10}{A non-intrusive reduced basis method using artificial neural networks}{equation.5.2}{}}
 \citation{Imam08}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {5.1}{\ignorespaces The offline and online stages for the POD-NN RB method.\relax }}{11}{algorithm.5.1}}
+\newlabel{alg:pod-nn}{{5.1}{11}{The offline and online stages for the POD-NN RB method.\relax }{algorithm.5.1}{}}
 \citation{Mat16}
 \citation{Koh95}
-\newlabel{eq:pod-nn-mse}{{5}{13}{A non-intrusive reduced basis method using artificial neural networks}{Item.6}{}}
-\newlabel{eq:pod-nn-solution}{{5}{13}{A non-intrusive reduced basis method using artificial neural networks}{Item.6}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Numerical results}{13}{section.6}}
-\newlabel{section:Numerical results}{{6}{13}{Numerical results}{section.6}{}}
 \citation{Koh95}
 \citation{Kri07,Mat16}
+\newlabel{eq:pod-nn-mse}{{5}{12}{A non-intrusive reduced basis method using artificial neural networks}{Item.6}{}}
+\newlabel{eq:pod-nn-solution}{{5}{12}{A non-intrusive reduced basis method using artificial neural networks}{Item.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Numerical results}{12}{section.6}}
+\newlabel{section:Numerical results}{{6}{12}{Numerical results}{section.6}{}}
+\newlabel{eq:podg-error}{{6.1}{12}{Numerical results}{equation.6.1}{}}
+\newlabel{eq:podnn-error}{{6.2}{12}{Numerical results}{equation.6.2}{}}
+\newlabel{eq:projection-error}{{6.3}{12}{Numerical results}{equation.6.3}{}}
 \citation{MM10}
-\newlabel{eq:podg-error}{{6.1}{14}{Numerical results}{equation.6.1}{}}
-\newlabel{eq:podnn-error}{{6.2}{14}{Numerical results}{equation.6.2}{}}
-\newlabel{eq:projection-error}{{6.3}{14}{Numerical results}{equation.6.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Nonlinear Poisson equation}{14}{subsection.6.1}}
-\newlabel{section:Nonlinear Poisson equation}{{6.1}{14}{Nonlinear Poisson equation}{subsection.6.1}{}}
-\newlabel{eq:poisson-differential}{{6.4}{14}{Nonlinear Poisson equation}{equation.6.4}{}}
-\newlabel{eq:poisson-differential-first-equation}{{6.4a}{14}{Nonlinear Poisson equation}{equation.6.4alph1}{}}
-\newlabel{eq:poisson-weak-derivation}{{6.5}{15}{Nonlinear Poisson equation}{equation.6.5}{}}
-\newlabel{eq:poisson-weak-forms}{{6.6}{15}{Nonlinear Poisson equation}{equation.6.6}{}}
-\newlabel{eq:poisson-weak}{{6.7}{15}{Nonlinear Poisson equation}{equation.6.7}{}}
-\newlabel{eq:poisson-weak-reference}{{6.1}{15}{Nonlinear Poisson equation}{equation.6.7}{}}
-\newlabel{eq:poisson-weak-forms-reference}{{6.1}{15}{Nonlinear Poisson equation}{equation.6.7}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces Convergence analysis for the POD-G and POD-NN methods applied to problem \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {eq:poisson1d}\unskip \@@italiccorr )}} (\emph  {left}) and comparison between the FE and the POD-NN solutions for three parameter values (\emph  {right}). These latter results have been obtained via a neural network with $H_1 = H_2 = 35$ units per hidden layer and employing $L = 10$ POD modes.\relax }}{16}{figure.caption.4}}
-\newlabel{fig:poisson1d-fig2}{{6.1}{16}{Convergence analysis for the POD-G and POD-NN methods applied to problem \eqref {eq:poisson1d} (\emph {left}) and comparison between the FE and the POD-NN solutions for three parameter values (\emph {right}). These latter results have been obtained via a neural network with $H_1 = H_2 = 35$ units per hidden layer and employing $L = 10$ POD modes.\relax }{figure.caption.4}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.1.1}One-dimensional test case}{16}{subsubsection.6.1.1}}
-\newlabel{section:One-dimensional test case}{{6.1.1}{16}{One-dimensional test case}{subsubsection.6.1.1}{}}
-\newlabel{eq:poisson1d}{{6.8}{16}{One-dimensional test case}{equation.6.8}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces Error analysis for the POD-NN RB method applied to problem \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {eq:poisson1d}\unskip \@@italiccorr )}} for several numbers of training samples. The solid sections represent the steps followed by the automatic routine desscribed in Section \ref  {section:A non-intrusive RB method using neural networks}.\relax }}{17}{figure.caption.5}}
-\newlabel{fig:poisson1d-fig3}{{6.2}{17}{Error analysis for the POD-NN RB method applied to problem \eqref {eq:poisson1d} for several numbers of training samples. The solid sections represent the steps followed by the automatic routine desscribed in Section \ref {section:A non-intrusive RB method using neural networks}.\relax }{figure.caption.5}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.1.2}Two-dimensional test case}{17}{subsubsection.6.1.2}}
-\newlabel{section:Two-dimensional test case}{{6.1.2}{17}{Two-dimensional test case}{subsubsection.6.1.2}{}}
-\newlabel{eq:poisson2d}{{6.9}{17}{Two-dimensional test case}{equation.6.9}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces The physical (\emph  {left}) and reference (\emph  {right}) domains for the Poisson problem \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {eq:poisson2d}\unskip \@@italiccorr )}}.\relax }}{17}{figure.caption.6}}
-\newlabel{fig:poisson2d-fig1}{{6.3}{17}{The physical (\emph {left}) and reference (\emph {right}) domains for the Poisson problem \eqref {eq:poisson2d}.\relax }{figure.caption.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Nonlinear Poisson equation}{13}{subsection.6.1}}
+\newlabel{section:Nonlinear Poisson equation}{{6.1}{13}{Nonlinear Poisson equation}{subsection.6.1}{}}
+\newlabel{eq:poisson-differential}{{6.4}{13}{Nonlinear Poisson equation}{equation.6.4}{}}
+\newlabel{eq:poisson-differential-first-equation}{{6.4a}{13}{Nonlinear Poisson equation}{equation.6.4alph1}{}}
+\newlabel{eq:poisson-weak-derivation}{{6.5}{13}{Nonlinear Poisson equation}{equation.6.5}{}}
+\newlabel{eq:poisson-weak-forms}{{6.6}{13}{Nonlinear Poisson equation}{equation.6.6}{}}
+\newlabel{eq:poisson-weak}{{6.7}{13}{Nonlinear Poisson equation}{equation.6.7}{}}
+\newlabel{eq:poisson-weak-reference}{{6.1}{14}{Nonlinear Poisson equation}{equation.6.7}{}}
+\newlabel{eq:poisson-weak-forms-reference}{{6.1}{14}{Nonlinear Poisson equation}{equation.6.7}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.1.1}One-dimensional test case}{14}{subsubsection.6.1.1}}
+\newlabel{section:One-dimensional test case}{{6.1.1}{14}{One-dimensional test case}{subsubsection.6.1.1}{}}
+\newlabel{eq:poisson1d}{{6.8}{14}{One-dimensional test case}{equation.6.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces Convergence analysis for the POD-G and POD-NN methods applied to problem \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {eq:poisson1d}\unskip \@@italiccorr )}} (\emph  {left}) and comparison between the FE and the POD-NN solutions for three parameter values (\emph  {right}). These latter results have been obtained via a neural network with $H_1 = H_2 = 35$ units per hidden layer and employing $L = 10$ POD modes.\relax }}{14}{figure.caption.4}}
+\newlabel{fig:poisson1d-fig2}{{6.1}{14}{Convergence analysis for the POD-G and POD-NN methods applied to problem \eqref {eq:poisson1d} (\emph {left}) and comparison between the FE and the POD-NN solutions for three parameter values (\emph {right}). These latter results have been obtained via a neural network with $H_1 = H_2 = 35$ units per hidden layer and employing $L = 10$ POD modes.\relax }{figure.caption.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces Error analysis for the POD-NN RB method applied to problem \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {eq:poisson1d}\unskip \@@italiccorr )}} for several numbers of training samples. The solid sections represent the steps followed by the automatic routine described in Section \ref  {section:A non-intrusive RB method using neural networks}.\relax }}{15}{figure.caption.5}}
+\newlabel{fig:poisson1d-fig3}{{6.2}{15}{Error analysis for the POD-NN RB method applied to problem \eqref {eq:poisson1d} for several numbers of training samples. The solid sections represent the steps followed by the automatic routine described in Section \ref {section:A non-intrusive RB method using neural networks}.\relax }{figure.caption.5}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.1.2}Two-dimensional test case}{15}{subsubsection.6.1.2}}
+\newlabel{section:Two-dimensional test case}{{6.1.2}{15}{Two-dimensional test case}{subsubsection.6.1.2}{}}
+\newlabel{eq:poisson2d}{{6.9}{15}{Two-dimensional test case}{equation.6.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces The physical (\emph  {left}) and reference (\emph  {right}) domains for the Poisson problem \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {eq:poisson2d}\unskip \@@italiccorr )}}.\relax }}{16}{figure.caption.6}}
+\newlabel{fig:poisson2d-fig1}{{6.3}{16}{The physical (\emph {left}) and reference (\emph {right}) domains for the Poisson problem \eqref {eq:poisson2d}.\relax }{figure.caption.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.4}{\ignorespaces FE solution (\emph  {top left}) to the Poisson problem \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {eq:poisson2d}\unskip \@@italiccorr )}} with $\bm  {\mu } = (0.349, \tmspace  +\thinmuskip {.1667em} -0.413, \tmspace  +\thinmuskip {.1667em} 4.257)$, and pointwise errors yielded by either its projection onto $V_{\texttt  {rb}}$ (\emph  {top right}), or the POD-G method (\emph  {bottom left}), or the POD-NN method (\emph  {bottom right}). The results have been obtained by employing $L = 30$ POD modes.\relax }}{16}{figure.caption.6}}
+\newlabel{fig:poisson2d-fig2}{{6.4}{16}{FE solution (\emph {top left}) to the Poisson problem \eqref {eq:poisson2d} with $\bg {\mu } = (0.349, \, -0.413, \, 4.257)$, and pointwise errors yielded by either its projection onto $V_{\texttt {rb}}$ (\emph {top right}), or the POD-G method (\emph {bottom left}), or the POD-NN method (\emph {bottom right}). The results have been obtained by employing $L = 30$ POD modes.\relax }{figure.caption.6}{}}
 \citation{Deb78}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.4}{\ignorespaces FE solution (\emph  {top left}) to the Poisson problem \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {eq:poisson2d}\unskip \@@italiccorr )}} with $\bm  {\mu } = (0.349, \tmspace  +\thinmuskip {.1667em} -0.413, \tmspace  +\thinmuskip {.1667em} 4.257)$, and pointwise errors yielded by either its projection onto $V_{\texttt  {rb}}$ (\emph  {top right}), or the POD-G method (\emph  {bottom left}), or the POD-NN method (\emph  {bottom right}). The results have been obtained by employing $L = 30$ POD modes.\relax }}{18}{figure.caption.7}}
-\newlabel{fig:poisson2d-fig2}{{6.4}{18}{FE solution (\emph {top left}) to the Poisson problem \eqref {eq:poisson2d} with $\bg {\mu } = (0.349, \, -0.413, \, 4.257)$, and pointwise errors yielded by either its projection onto $V_{\texttt {rb}}$ (\emph {top right}), or the POD-G method (\emph {bottom left}), or the POD-NN method (\emph {bottom right}). The results have been obtained by employing $L = 30$ POD modes.\relax }{figure.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.5}{\ignorespaces Error analysis (\emph  {left}) and online CPU time (\emph  {right}) for the POD-G and the POD-NN methods applied to problem \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {eq:poisson2d}\unskip \@@italiccorr )}}. The reduced basis have been generated via POD, relying on $N = 100$ snapshots. The second plot refers to RB models including $L = 30$ modal functions; within the POD-NN framework, an MLP emboding $35$ neurons per inner layer has been used.\relax }}{17}{figure.caption.7}}
+\newlabel{fig:poisson2d-fig3}{{6.5}{17}{Error analysis (\emph {left}) and online CPU time (\emph {right}) for the POD-G and the POD-NN methods applied to problem \eqref {eq:poisson2d}. The reduced basis have been generated via POD, relying on $N = 100$ snapshots. The second plot refers to RB models including $L = 30$ modal functions; within the POD-NN framework, an MLP emboding $35$ neurons per inner layer has been used.\relax }{figure.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.6}{\ignorespaces Convergence analysis with respect to the number of hidden neurons (\emph  {left}) and modal functions (\emph  {right}) used within the POD-NN framework applied to problem \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {eq:poisson2d}\unskip \@@italiccorr )}}. The results provided in the first plot have been obtained using $L = 30$ modes; the solid tracts refer to the steps performed by the automatic routine carried out to find an optimal network configuration.\relax }}{17}{figure.caption.7}}
+\newlabel{fig:poisson2d-fig4}{{6.6}{17}{Convergence analysis with respect to the number of hidden neurons (\emph {left}) and modal functions (\emph {right}) used within the POD-NN framework applied to problem \eqref {eq:poisson2d}. The results provided in the first plot have been obtained using $L = 30$ modes; the solid tracts refer to the steps performed by the automatic routine carried out to find an optimal network configuration.\relax }{figure.caption.7}{}}
 \citation{Ams10}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.5}{\ignorespaces Error analysis (\emph  {left}) and online CPU time (\emph  {right}) for the POD-G and the POD-NN methods applied to problem \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {eq:poisson2d}\unskip \@@italiccorr )}}. The reduced basis have been generated via POD, relying on $N = 100$ snapshots. The second plot refers to RB models including $L = 30$ modal functions; within the POD-NN framework, an MLP emboding $35$ neurons per inner layer has been used.\relax }}{19}{figure.caption.8}}
-\newlabel{fig:poisson2d-fig3}{{6.5}{19}{Error analysis (\emph {left}) and online CPU time (\emph {right}) for the POD-G and the POD-NN methods applied to problem \eqref {eq:poisson2d}. The reduced basis have been generated via POD, relying on $N = 100$ snapshots. The second plot refers to RB models including $L = 30$ modal functions; within the POD-NN framework, an MLP emboding $35$ neurons per inner layer has been used.\relax }{figure.caption.8}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.6}{\ignorespaces Convergence analysis with respect to the number of hidden neurons (\emph  {left}) and modal functions (\emph  {right}) used within the POD-NN framework applied to problem \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {eq:poisson2d}\unskip \@@italiccorr )}}. The results provided in the first plot have been obtained using $L = 30$ modes; the solid tracts refer to the steps performed by the automatic routine carried out to find an optimal network configuration.\relax }}{19}{figure.caption.8}}
-\newlabel{fig:poisson2d-fig4}{{6.6}{19}{Convergence analysis with respect to the number of hidden neurons (\emph {left}) and modal functions (\emph {right}) used within the POD-NN framework applied to problem \eqref {eq:poisson2d}. The results provided in the first plot have been obtained using $L = 30$ modes; the solid tracts refer to the steps performed by the automatic routine carried out to find an optimal network configuration.\relax }{figure.caption.8}{}}
-\newlabel{eq:podcs-error}{{6.1.2}{19}{Two-dimensional test case}{figure.caption.8}{}}
 \citation{Ran99}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.7}{\ignorespaces Average relative errors (\emph  {left}) and online run times (\emph  {right}) on $\Xi _{te}$ for the POD-CS and the POD-NN methods applied to problem \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {eq:poisson2d}\unskip \@@italiccorr )}}. For the latter, the results refer to an MLP equipped with $H_1 = H_2 = 35$ neurons per hidden layer.\relax }}{20}{figure.caption.9}}
-\newlabel{fig:poisson2d-fig5}{{6.7}{20}{Average relative errors (\emph {left}) and online run times (\emph {right}) on $\Xi _{te}$ for the POD-CS and the POD-NN methods applied to problem \eqref {eq:poisson2d}. For the latter, the results refer to an MLP equipped with $H_1 = H_2 = 35$ neurons per hidden layer.\relax }{figure.caption.9}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Steady uncompressible Navier-Stokes equations}{20}{subsection.6.2}}
-\newlabel{section:Steady uncompressible Navier-Stokes equations}{{6.2}{20}{Steady uncompressible Navier-Stokes equations}{subsection.6.2}{}}
-\newlabel{eq:ns-differential}{{6.10}{20}{Steady uncompressible Navier-Stokes equations}{equation.6.10}{}}
-\newlabel{eq:mass-conservation}{{6.10a}{20}{Steady uncompressible Navier-Stokes equations}{equation.6.10alph1}{}}
-\newlabel{eq:momentum-conservation}{{6.10b}{20}{Steady uncompressible Navier-Stokes equations}{equation.6.10alph2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.7}{\ignorespaces Average relative errors (\emph  {left}) and online run times (\emph  {right}) on $\Xi _{te}$ for the POD-CS and the POD-NN methods applied to problem \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {eq:poisson2d}\unskip \@@italiccorr )}}. For the latter, the results refer to an MLP equipped with $H_1 = H_2 = 35$ neurons per hidden layer.\relax }}{18}{figure.caption.8}}
+\newlabel{fig:poisson2d-fig5}{{6.7}{18}{Average relative errors (\emph {left}) and online run times (\emph {right}) on $\Xi _{te}$ for the POD-CS and the POD-NN methods applied to problem \eqref {eq:poisson2d}. For the latter, the results refer to an MLP equipped with $H_1 = H_2 = 35$ neurons per hidden layer.\relax }{figure.caption.8}{}}
+\newlabel{eq:podcs-error}{{6.1.2}{18}{Two-dimensional test case}{figure.caption.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Steady incompressible Navier-Stokes equations}{18}{subsection.6.2}}
+\newlabel{section:Steady incompressible Navier-Stokes equations}{{6.2}{18}{Steady incompressible Navier-Stokes equations}{subsection.6.2}{}}
 \citation{Per02}
 \citation{Dho14}
 \citation{Ran99}
 \citation{Per02}
 \citation{Dho14}
+\newlabel{eq:ns-differential}{{6.10}{19}{Steady incompressible Navier-Stokes equations}{equation.6.10}{}}
+\newlabel{eq:mass-conservation}{{6.10a}{19}{Steady incompressible Navier-Stokes equations}{equation.6.10alph1}{}}
+\newlabel{eq:momentum-conservation}{{6.10b}{19}{Steady incompressible Navier-Stokes equations}{equation.6.10alph2}{}}
+\newlabel{eq:ns-weak-reference}{{6.2}{19}{Steady incompressible Navier-Stokes equations}{AMS.9}{}}
+\newlabel{eq:ns-weak-forms}{{6.2}{19}{Steady incompressible Navier-Stokes equations}{AMS.9}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.1}The lid-driven cavity problem}{19}{subsubsection.6.2.1}}
+\newlabel{section:The lid-driven cavity problem}{{6.2.1}{19}{The lid-driven cavity problem}{subsubsection.6.2.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.8}{\ignorespaces Computational domain $\mathaccentV {widetilde}365{\Omega }(\bm  {\mu })$ (\emph  {left}), enforced velocity at the boundaries (\emph  {center}) and computational mesh $\Omega _h$ (\emph  {right}) for the lid-driven cavity problem for the incompressible Navier-Stokes equations.\relax }}{20}{figure.caption.10}}
+\newlabel{fig:dc-domain}{{6.8}{20}{Computational domain $\wt {\Omega }(\bg {\mu })$ (\emph {left}), enforced velocity at the boundaries (\emph {center}) and computational mesh $\Omega _h$ (\emph {right}) for the lid-driven cavity problem for the incompressible Navier-Stokes equations.\relax }{figure.caption.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.9}{\ignorespaces Velocity streamlines (\emph  {top}) and pressure distribution (\emph  {bottom}) for the lid-driven cavity problem, computed through the FE method. Three different parameter values are considered; for all configurations, the Reynold's number is $400$.\relax }}{20}{figure.caption.10}}
+\newlabel{fig:dc-solutions-different-domains}{{6.9}{20}{Velocity streamlines (\emph {top}) and pressure distribution (\emph {bottom}) for the lid-driven cavity problem, computed through the FE method. Three different parameter values are considered; for all configurations, the Reynold's number is $400$.\relax }{figure.caption.10}{}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {$\bm {\mu } = {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left (\vcenter to\@ne \big@size {}\right .$}\box \z@ } 1, \tmspace +\thinmuskip {.1667em} \nicefrac {2}{\sqrt {3}}, \tmspace +\thinmuskip {.1667em} \nicefrac {2 \pi }{3} {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left )\vcenter to\@ne \big@size {}\right .$}\box \z@ }$}}}{20}{subfigure.9.1}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {$\bm {\mu } = {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left (\vcenter to\@ne \big@size {}\right .$}\box \z@ } 1, \tmspace +\thinmuskip {.1667em} 1, \tmspace +\thinmuskip {.1667em} \nicefrac {\pi }{2} {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left )\vcenter to\@ne \big@size {}\right .$}\box \z@ }$}}}{20}{subfigure.9.2}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {$\bm {\mu } = {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left (\vcenter to\@ne \big@size {}\right .$}\box \z@ } 1, \tmspace +\thinmuskip {.1667em} \nicefrac {2}{\sqrt {3}}, \tmspace +\thinmuskip {.1667em} \nicefrac {\pi }{3} {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left )\vcenter to\@ne \big@size {}\right .$}\box \z@ }$}}}{20}{subfigure.9.3}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(d)}{\ignorespaces {$\bm {\mu } = {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left (\vcenter to\@ne \big@size {}\right .$}\box \z@ } 1, \tmspace +\thinmuskip {.1667em} \nicefrac {2}{\sqrt {3}}, \tmspace +\thinmuskip {.1667em} \nicefrac {2 \pi }{3} {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left )\vcenter to\@ne \big@size {}\right .$}\box \z@ }$}}}{20}{subfigure.9.4}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(e)}{\ignorespaces {$\bm {\mu } = {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left (\vcenter to\@ne \big@size {}\right .$}\box \z@ } 1, \tmspace +\thinmuskip {.1667em} 1, \tmspace +\thinmuskip {.1667em} \nicefrac {\pi }{2} {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left )\vcenter to\@ne \big@size {}\right .$}\box \z@ }$}}}{20}{subfigure.9.5}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(f)}{\ignorespaces {$\bm {\mu } = {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left (\vcenter to\@ne \big@size {}\right .$}\box \z@ } 1, \tmspace +\thinmuskip {.1667em} \nicefrac {2}{\sqrt {3}}, \tmspace +\thinmuskip {.1667em} \nicefrac {\pi }{3} {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left )\vcenter to\@ne \big@size {}\right .$}\box \z@ }$}}}{20}{subfigure.9.6}}
 \citation{Bal14,Chen17,QMN15}
-\newlabel{eq:ns-weak-reference}{{6.2}{21}{Steady uncompressible Navier-Stokes equations}{AMS.10}{}}
-\newlabel{eq:ns-weak-forms}{{6.2}{21}{Steady uncompressible Navier-Stokes equations}{AMS.10}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.1}The lid-driven cavity problem}{21}{subsubsection.6.2.1}}
-\newlabel{section:The lid-driven cavity problem}{{6.2.1}{21}{The lid-driven cavity problem}{subsubsection.6.2.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.8}{\ignorespaces Computational domain $\mathaccentV {widetilde}365{\Omega }(\bm  {\mu })$ (\emph  {left}), enforced velocity at the boundaries (\emph  {center}) and computational mesh $\Omega _h$ (\emph  {right}) for the lid-driven cavity problem for the uncompressible Navier-Stokes equations.\relax }}{22}{figure.caption.11}}
-\newlabel{fig:dc-domain}{{6.8}{22}{Computational domain $\wt {\Omega }(\bg {\mu })$ (\emph {left}), enforced velocity at the boundaries (\emph {center}) and computational mesh $\Omega _h$ (\emph {right}) for the lid-driven cavity problem for the uncompressible Navier-Stokes equations.\relax }{figure.caption.11}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.9}{\ignorespaces Velocity streamlines (\emph  {top}) and pressure distribution (\emph  {bottom}) for the lid-driven cavity problem, computed through the FE method. Three different parameter values are considered; for all configurations, the Reynold's number is $400$.\relax }}{22}{figure.caption.11}}
-\newlabel{fig:dc-solutions-different-domains}{{6.9}{22}{Velocity streamlines (\emph {top}) and pressure distribution (\emph {bottom}) for the lid-driven cavity problem, computed through the FE method. Three different parameter values are considered; for all configurations, the Reynold's number is $400$.\relax }{figure.caption.11}{}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {$\bm {\mu } = {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left (\vcenter to\@ne \big@size {}\right .$}\box \z@ } 1, \tmspace +\thinmuskip {.1667em} \nicefrac {2}{\sqrt {3}}, \tmspace +\thinmuskip {.1667em} \nicefrac {2 \pi }{3} {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left )\vcenter to\@ne \big@size {}\right .$}\box \z@ }$}}}{22}{subfigure.9.1}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {$\bm {\mu } = {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left (\vcenter to\@ne \big@size {}\right .$}\box \z@ } 1, \tmspace +\thinmuskip {.1667em} 1, \tmspace +\thinmuskip {.1667em} \nicefrac {\pi }{2} {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left )\vcenter to\@ne \big@size {}\right .$}\box \z@ }$}}}{22}{subfigure.9.2}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {$\bm {\mu } = {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left (\vcenter to\@ne \big@size {}\right .$}\box \z@ } 1, \tmspace +\thinmuskip {.1667em} \nicefrac {2}{\sqrt {3}}, \tmspace +\thinmuskip {.1667em} \nicefrac {\pi }{3} {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left )\vcenter to\@ne \big@size {}\right .$}\box \z@ }$}}}{22}{subfigure.9.3}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(d)}{\ignorespaces {$\bm {\mu } = {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left (\vcenter to\@ne \big@size {}\right .$}\box \z@ } 1, \tmspace +\thinmuskip {.1667em} \nicefrac {2}{\sqrt {3}}, \tmspace +\thinmuskip {.1667em} \nicefrac {2 \pi }{3} {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left )\vcenter to\@ne \big@size {}\right .$}\box \z@ }$}}}{22}{subfigure.9.4}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(e)}{\ignorespaces {$\bm {\mu } = {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left (\vcenter to\@ne \big@size {}\right .$}\box \z@ } 1, \tmspace +\thinmuskip {.1667em} 1, \tmspace +\thinmuskip {.1667em} \nicefrac {\pi }{2} {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left )\vcenter to\@ne \big@size {}\right .$}\box \z@ }$}}}{22}{subfigure.9.5}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(f)}{\ignorespaces {$\bm {\mu } = {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left (\vcenter to\@ne \big@size {}\right .$}\box \z@ } 1, \tmspace +\thinmuskip {.1667em} \nicefrac {2}{\sqrt {3}}, \tmspace +\thinmuskip {.1667em} \nicefrac {\pi }{3} {\setbox \z@ \hbox {\frozen@everymath \@emptytoks \mathsurround \z@ $\nulldelimiterspace \z@ \left )\vcenter to\@ne \big@size {}\right .$}\box \z@ }$}}}{22}{subfigure.9.6}}
 \citation{Bur06}
 \citation{Bal14}
 \citation{Bal14}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.10}{\ignorespaces Velocity (\emph  {left}) and pressure (\emph  {right}) error analysis for the POD-G and POD-NN methods applied to the lid-driven cavity problem with $Re = 200$ (\emph  {top}) and $Re = 400$ (\emph  {bottom}).\relax }}{24}{figure.caption.12}}
-\newlabel{fig:dc-error-vs-rank}{{6.10}{24}{Velocity (\emph {left}) and pressure (\emph {right}) error analysis for the POD-G and POD-NN methods applied to the lid-driven cavity problem with $Re = 200$ (\emph {top}) and $Re = 400$ (\emph {bottom}).\relax }{figure.caption.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.10}{\ignorespaces Velocity (\emph  {left}) and pressure (\emph  {right}) error analysis for the POD-G and POD-NN methods applied to the lid-driven cavity problem with $Re = 200$ (\emph  {top}) and $Re = 400$ (\emph  {bottom}).\relax }}{22}{figure.caption.11}}
+\newlabel{fig:dc-error-vs-rank}{{6.10}{22}{Velocity (\emph {left}) and pressure (\emph {right}) error analysis for the POD-G and POD-NN methods applied to the lid-driven cavity problem with $Re = 200$ (\emph {top}) and $Re = 400$ (\emph {bottom}).\relax }{figure.caption.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.11}{\ignorespaces Convergence analysis with respect to the number of hidden neurons and training samples used within the POD-NN procedure to approximate the velocity field (\emph  {left}) and the pressure distribution (\emph  {right}) by means of $35$ modal functions. The Reynold's number is either $200$ (\emph  {top}) or $400$ (\emph  {bottom}).\relax }}{23}{figure.caption.12}}
+\newlabel{fig:dc-nn-convergence}{{6.11}{23}{Convergence analysis with respect to the number of hidden neurons and training samples used within the POD-NN procedure to approximate the velocity field (\emph {left}) and the pressure distribution (\emph {right}) by means of $35$ modal functions. The Reynold's number is either $200$ (\emph {top}) or $400$ (\emph {bottom}).\relax }{figure.caption.12}{}}
 \citation{Chen17}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.11}{\ignorespaces Convergence analysis with respect to the number of hidden neurons and training samples used within the POD-NN procedure to approximate the velocity field (\emph  {left}) and the pressure distribution (\emph  {right}) by means of $35$ modal functions. The Reynold's number is either $200$ (\emph  {top}) or $400$ (\emph  {bottom}).\relax }}{25}{figure.caption.13}}
-\newlabel{fig:dc-nn-convergence}{{6.11}{25}{Convergence analysis with respect to the number of hidden neurons and training samples used within the POD-NN procedure to approximate the velocity field (\emph {left}) and the pressure distribution (\emph {right}) by means of $35$ modal functions. The Reynold's number is either $200$ (\emph {top}) or $400$ (\emph {bottom}).\relax }{figure.caption.13}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.12}{\ignorespaces Online run times for the POD-G and the POD-NN method applied to the lid-driven cavity problem with $Re = 200$ (\emph  {left}) and $Re = 400$ (\emph  {right}). $N_{te} = 75$ test configurations are considered. For the POD-NN method, the reported times include the (sequential) evaluation of both neural networks for the velocity and pressure field.\relax }}{26}{figure.caption.14}}
-\newlabel{fig:dc-time}{{6.12}{26}{Online run times for the POD-G and the POD-NN method applied to the lid-driven cavity problem with $Re = 200$ (\emph {left}) and $Re = 400$ (\emph {right}). $N_{te} = 75$ test configurations are considered. For the POD-NN method, the reported times include the (sequential) evaluation of both neural networks for the velocity and pressure field.\relax }{figure.caption.14}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.13}{\ignorespaces $\mathaccentV {widetilde}365{x}$-velocity contour at three parameter values, as computed through the FE (\emph  {top row}) and POD-NN (\emph  {bottom row}) method. For each configuration, the Reynold's number is $400$.\relax }}{26}{figure.caption.14}}
-\newlabel{fig:dc-x-velocity}{{6.13}{26}{$\wt {x}$-velocity contour at three parameter values, as computed through the FE (\emph {top row}) and POD-NN (\emph {bottom row}) method. For each configuration, the Reynold's number is $400$.\relax }{figure.caption.14}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.12}{\ignorespaces Online run times for the POD-G and the POD-NN method applied to the lid-driven cavity problem with $Re = 200$ (\emph  {left}) and $Re = 400$ (\emph  {right}). $N_{te} = 75$ test configurations are considered. For the POD-NN method, the reported times include the (sequential) evaluation of both neural networks for the velocity and pressure field.\relax }}{24}{figure.caption.13}}
+\newlabel{fig:dc-time}{{6.12}{24}{Online run times for the POD-G and the POD-NN method applied to the lid-driven cavity problem with $Re = 200$ (\emph {left}) and $Re = 400$ (\emph {right}). $N_{te} = 75$ test configurations are considered. For the POD-NN method, the reported times include the (sequential) evaluation of both neural networks for the velocity and pressure field.\relax }{figure.caption.13}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.13}{\ignorespaces $\mathaccentV {widetilde}365{x}$-velocity contour at three parameter values, as computed through the FE (\emph  {top row}) and POD-NN (\emph  {bottom row}) method. For each configuration, the Reynold's number is $400$.\relax }}{24}{figure.caption.13}}
+\newlabel{fig:dc-x-velocity}{{6.13}{24}{$\wt {x}$-velocity contour at three parameter values, as computed through the FE (\emph {top row}) and POD-NN (\emph {bottom row}) method. For each configuration, the Reynold's number is $400$.\relax }{figure.caption.13}{}}
 \bibcite{Ams10}{{1}{}{{}}{{}}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.14}{\ignorespaces Streamlines at three parameter values, as computed through the FE (\emph  {top row}) and POD-NN (\emph  {bottom row}) method. For each configuration, the Reynold's number is $400$.\relax }}{27}{figure.caption.15}}
-\newlabel{fig:dc-streamlines}{{6.14}{27}{Streamlines at three parameter values, as computed through the FE (\emph {top row}) and POD-NN (\emph {bottom row}) method. For each configuration, the Reynold's number is $400$.\relax }{figure.caption.15}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{27}{section.7}}
-\newlabel{section:Conclusion}{{7}{27}{Conclusion}{section.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.14}{\ignorespaces Streamlines at three parameter values, as computed through the FE (\emph  {top row}) and POD-NN (\emph  {bottom row}) method. For each configuration, the Reynold's number is $400$.\relax }}{25}{figure.caption.14}}
+\newlabel{fig:dc-streamlines}{{6.14}{25}{Streamlines at three parameter values, as computed through the FE (\emph {top row}) and POD-NN (\emph {bottom row}) method. For each configuration, the Reynold's number is $400$.\relax }{figure.caption.14}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{25}{section.7}}
+\newlabel{section:Conclusion}{{7}{25}{Conclusion}{section.7}{}}
 \bibcite{Bal14}{{2}{}{{}}{{}}}
 \bibcite{Bar04}{{3}{}{{}}{{}}}
 \bibcite{BNR00}{{4}{}{{}}{{}}}
