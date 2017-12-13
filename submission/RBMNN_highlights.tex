@@ -1,0 +1,188 @@
+\documentclass[11pt]{article}
+
+%
+% Packages
+%
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{listings}
+\usepackage{amsmath}
+\allowdisplaybreaks
+\usepackage{amsfonts}
+\usepackage{amstext}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{empheq}
+\usepackage{cases}
+\usepackage{anyfontsize}
+\usepackage{enumitem}
+\usepackage{pdfpages}
+\usepackage{fourier}	% Style
+\usepackage{bm}
+\usepackage{epstopdf}
+\usepackage{lipsum}
+\usepackage[top=3cm, bottom=3cm, left=1.5cm, right=1.75cm, scale=0.75]{geometry}	% Set the margins
+\usepackage{fancyhdr}
+\usepackage[letterspace=150]{microtype}
+\usepackage{textcomp}
+\usepackage{gensymb}
+\usepackage{booktabs}
+\usepackage{amsmath,etoolbox}
+\usepackage{mathtools}
+\usepackage{anyfontsize}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{float}
+\usepackage{subfig}
+\usepackage[labelfont=bf,labelsep=period,font=small]{caption}
+\usepackage{newunicodechar}
+\usepackage{nicefrac}	% For diagonal fractions
+\usepackage{bbm}
+\usepackage{csvsimple}
+
+% Set header and footer
+\usepackage{fancyhdr}
+
+% Packages needed for tables
+\usepackage{longtable}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{array}
+
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+\usepackage{breakurl}
+\usepackage{url}
+
+% To put footnotes at the bottom of the page
+\usepackage[bottom]{footmisc}
+
+\usepackage{empheq}
+
+\usepackage{tikz}
+
+% Default fixed font does not support bold face
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{10.25} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{10.25}  % for normal
+
+% Custom colors
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+% To insert code snippets
+\usepackage{listings}
+
+% For argmin
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% To insert verbatim within a command
+\usepackage{fancyvrb}
+
+% For pseudocode
+\usepackage[section]{algorithm}
+\usepackage{algpseudocode}
+
+\usepackage[many]{tcolorbox}
+
+\usepackage{stackengine}
+
+% Equations enumeration options
+\numberwithin{equation}{section}
+
+% Set interline
+\usepackage{setspace}
+
+% Path to images
+\graphicspath{{./img/}}
+
+
+%
+% Definitions
+%
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\makeatletter
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+
+% Theorem and definition environment
+\theoremstyle{theorem}
+\newtheorem{theorem}{Theorem}[section]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+\theoremstyle{proposition}
+\newtheorem{proposition}{Proposition}[section]
+
+% To enumerate the equations and the figures according to the section they are in
+%\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+% To modify the space between figure and caption
+%\setlength{\abovecaptionskip}{-4pt}
+%\setlength{\belowcaptionskip}{3pt}
+
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\topfraction}{0.9}
+
+\makeatletter
+	\renewcommand*\l@figure{\@dottedtocline{1}{1em}{3.2em}}
+\makeatother
+
+% Define norm symbol
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% Define mod symbol
+\newcommand{\Mod}[1]{\ (\mathrm{mod}\ #1)}
+
+% Aliases for \boldsymbol and \widetilde
+\newcommand{\wt}[1]{\widetilde{#1}}
+\newcommand{\bg}[1]{\boldsymbol{#1}}
+
+% Redefine \Require and \Ensure for algorithm environment
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+% Make \big| adapt to the context
+\makeatletter
+\let\amstexbig\big
+\def\newbig#1{%
+  \ifx#1|%
+    \expandafter\@firstoftwo
+  \else
+    \expandafter\@secondoftwo
+  \fi
+  {\big@bar}%
+  {\amstexbig{#1}}%
+}
+\AtBeginDocument{\let\big\newbig}
+\def\big@bar{\bBigg@{1.1}|}
+\makeatother
+
+% Define the do-while loop
+\algdef{SE}[DOWHILE]{DoWhile}{EndDoWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1}
+
+
+%
+% Document
+%
+
+\begin{document}
+
+	\textbf{Research highlights} \\
+
+	\begin{itemize}
+		\item A novel non-intrusive RB method coupling proper orthogonal decomposition with multi-layer perceptrons. 
+		\item Numerical studies for the nonlinear Poisson equation and the incompressible steady Navier-Stokes equations.
+		\item Physical and geometrical parametrizations considered.
+		\item Good agreement with the finite element method.
+		\item Substantial speed-up enabled at the online stage as compared to a traditional RB strategy. 
+		\item Sensitivity analysis on the number of training samples and neurons.
+		\item Comparison between MLP-based regression and cubic spline interpolation within the RB framework. 
+	\end{itemize}	
+
+\end{document}
