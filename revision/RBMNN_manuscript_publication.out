@@ -1,0 +1,19 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Parametrized partial differential equations}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{From physical to reference domain}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Discrete full-order model}{section.2}% 4
+\BOOKMARK [1][-]{section.3}{Projection-based reduced basis method}{}% 5
+\BOOKMARK [2][-]{subsection.3.1}{Proper orthogonal decomposition}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.2}{Implementation: details and issues}{section.3}% 7
+\BOOKMARK [1][-]{section.4}{Artifical neural networks}{}% 8
+\BOOKMARK [2][-]{subsection.4.1}{Neuronal model}{section.4}% 9
+\BOOKMARK [2][-]{subsection.4.2}{Network topology: the feedforward neural network}{section.4}% 10
+\BOOKMARK [2][-]{subsection.4.3}{Training a multi-layer feedforward neural network}{section.4}% 11
+\BOOKMARK [1][-]{section.5}{A non-intrusive reduced basis method using artificial neural networks}{}% 12
+\BOOKMARK [1][-]{section.6}{Numerical results}{}% 13
+\BOOKMARK [2][-]{subsection.6.1}{Nonlinear Poisson equation}{section.6}% 14
+\BOOKMARK [3][-]{subsubsection.6.1.1}{One-dimensional test case}{subsection.6.1}% 15
+\BOOKMARK [3][-]{subsubsection.6.1.2}{Two-dimensional test case}{subsection.6.1}% 16
+\BOOKMARK [2][-]{subsection.6.2}{Steady incompressible Navier-Stokes equations}{section.6}% 17
+\BOOKMARK [3][-]{subsubsection.6.2.1}{The lid-driven cavity problem}{subsection.6.2}% 18
+\BOOKMARK [1][-]{section.7}{Conclusion}{}% 19

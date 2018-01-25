@@ -1,0 +1,460 @@
+\RequirePackage[hyphens]{url}
+
+\documentclass[longtitle]{elsarticle}
+
+
+%
+% Packages
+%
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{listings}
+\usepackage{amsmath}
+\allowdisplaybreaks
+\usepackage{amsfonts}
+\usepackage{amstext}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{empheq}
+\usepackage{cases}
+\usepackage{anyfontsize}
+\usepackage{enumitem}
+\usepackage{pdfpages}
+\usepackage{fourier}	% Style
+\usepackage{bm}
+\usepackage{epstopdf}
+\usepackage{lipsum}
+\usepackage[top=3cm, bottom=3cm, left=2cm, right=2cm, scale=0.75]{geometry}	% Set the margins
+\usepackage{fancyhdr}
+\usepackage[letterspace=150]{microtype}
+\usepackage{textcomp}
+\usepackage{gensymb}
+\usepackage{booktabs}
+\usepackage{amsmath,etoolbox}
+\usepackage{mathtools}
+\usepackage{anyfontsize}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{float}
+\usepackage{subfig}
+\usepackage[labelfont=bf,labelsep=period,font=small]{caption}
+\usepackage{newunicodechar}
+\usepackage{nicefrac}	% For diagonal fractions
+\usepackage{bbm}
+\usepackage{csvsimple}
+
+% Set header and footer
+\usepackage{fancyhdr}
+
+% Packages needed for tables
+\usepackage{longtable}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{array}
+
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+\usepackage{breakurl}
+\usepackage{url}
+
+% To put footnotes at the bottom of the page
+\usepackage[bottom]{footmisc}
+
+\usepackage{empheq}
+
+\usepackage{tikz}
+
+% Default fixed font does not support bold face
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{10.25} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{10.25}  % for normal
+
+% Custom colors
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+% To insert code snippets
+\usepackage{listings}
+
+% For argmin
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% To insert verbatim within a command
+\usepackage{fancyvrb}
+
+% For pseudocode
+\usepackage[section]{algorithm}
+\usepackage{algpseudocode}
+
+\usepackage[many]{tcolorbox}
+
+\usepackage{stackengine}
+
+% Equations enumeration options
+%\numberwithin{equation}{section}
+
+% Set interline
+\usepackage{setspace}
+
+% Path to images
+\graphicspath{{./img/}}
+
+
+%
+% Definitions
+%
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\makeatletter
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+
+% Theorem and definition environment
+\theoremstyle{theorem}
+\newtheorem{theorem}{Theorem}[section]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+\theoremstyle{proposition}
+\newtheorem{proposition}{Proposition}[section]
+
+% To enumerate the equations and the figures according to the section they are in
+%\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+% To modify the space between figure and caption
+%\setlength{\abovecaptionskip}{-4pt}
+%\setlength{\belowcaptionskip}{3pt}
+
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\topfraction}{0.9}
+
+\makeatletter
+	\renewcommand*\l@figure{\@dottedtocline{1}{1em}{3.2em}}
+\makeatother
+
+% Define norm symbol
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% Define mod symbol
+\newcommand{\Mod}[1]{\ (\mathrm{mod}\ #1)}
+
+% Aliases for \boldsymbol and \widetilde
+\newcommand{\wt}[1]{\widetilde{#1}}
+\newcommand{\bg}[1]{\boldsymbol{#1}}
+
+% Redefine \Require and \Ensure for algorithm environment
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+% Make \big| adapt to the context
+\makeatletter
+\let\amstexbig\big
+\def\newbig#1{%
+  \ifx#1|%
+    \expandafter\@firstoftwo
+  \else
+    \expandafter\@secondoftwo
+  \fi
+  {\big@bar}%
+  {\amstexbig{#1}}%
+}
+\AtBeginDocument{\let\big\newbig}
+\def\big@bar{\bBigg@{1.1}|}
+\makeatother
+
+% Define the do-while loop
+\algdef{SE}[DOWHILE]{DoWhile}{EndDoWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1}
+
+
+%
+% Document
+%
+
+\begin{document}
+	\Large{\textbf{List of modifications}} \\
+	\normalsize
+
+	In this document, the authors list the modifications applied to the revised version of the manuscript \emph{Non-intrusive reduced-order modeling of nonlinear problems using neural networks}. Modifications are ordered based on their location in the text. For each modification, we specify the page, paragraph and line(s) at which it occurs; its content; its source (either anonymous or not); and the colour used to highlight it in the text. 
+
+	\setlength\extrarowheight{5pt}
+		
+	\begin{longtable}{c|c|c|c}
+		\cline{1-4}
+		\multicolumn{1}{|c|}{\textbf{Location}} & 
+		\multicolumn{1}{c|}{\textbf{Content}} &
+		\multicolumn{1}{c|}{\textbf{Source}} &
+		\multicolumn{1}{c|}{\textbf{Colour}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $1$, Abstract, line $12$} & 
+		\multicolumn{1}{c|}{Refer to the Levenberg-Marquardt algorithm as LM} &
+		\multicolumn{1}{c|}{The authors} &
+		\multicolumn{1}{c|}{\textcolor{deepgreen}{Green}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $7$, Section $4.1$, line $266$} & 
+		\multicolumn{1}{c|}{Replace "activation pattern" with "input vector"} &
+		\multicolumn{1}{c|}{Reviewer \#2} &
+		\multicolumn{1}{c|}{\textcolor{red}{Red}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $8$, Section $4.2$, line $275$} & 
+		\multicolumn{1}{c|}{Replace "activation pattern" with "input vector"} &
+		\multicolumn{1}{c|}{Reviewer \#2} &
+		\multicolumn{1}{c|}{\textcolor{red}{Red}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{\multirow{4}{*}{Page $8$, Section $4.2$, line $276$}} & 
+		\multicolumn{1}{c|}{Rephrase the sentence "For each hidden layer} &
+		\multicolumn{1}{c|}{\multirow{4}{*}{Reviewer \#2}} &
+		\multicolumn{1}{c|}{\multirow{4}{*}{\textcolor{red}{Red}}} \\[-0.1cm]
+		\multicolumn{1}{|c|}{} &
+		\multicolumn{1}{c|}{its output signals give the input pattern for the} &
+		\multicolumn{1}{c|}{} &
+		\multicolumn{1}{c|}{} \\[-0.1cm]
+		\multicolumn{1}{|c|}{} &
+		\multicolumn{1}{c|}{following layer" as "In turn, the outputs of each} &
+		\multicolumn{1}{c|}{} &
+		\multicolumn{1}{c|}{} \\[-0.1cm]
+		\multicolumn{1}{|c|}{} &
+		\multicolumn{1}{c|}{hidden layer feed the neurons in the following layer"} &
+		\multicolumn{1}{c|}{} &
+		\multicolumn{1}{c|}{} \\[0.1cm]
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $9$, Section $4.3$, line $298$} & 
+		\multicolumn{1}{c|}{Replace "training patterns" with "training data"} &
+		\multicolumn{1}{c|}{Reviewer \#2} &
+		\multicolumn{1}{c|}{\textcolor{red}{Red}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $9$, Section $4.3$, line $302$} & 
+		\multicolumn{1}{c|}{Replace "training patterns" with "training data"} &
+		\multicolumn{1}{c|}{Reviewer \#2} &
+		\multicolumn{1}{c|}{\textcolor{red}{Red}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $9$, Section $4.3$, line $307$} & 
+		\multicolumn{1}{c|}{Replace "input pattern" with "training input"} &
+		\multicolumn{1}{c|}{Reviewer \#2} &
+		\multicolumn{1}{c|}{\textcolor{red}{Red}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $9$, Section $4.3$, line $307$} & 
+		\multicolumn{1}{c|}{Replace "teaching input" with "desired output"} &
+		\multicolumn{1}{c|}{Reviewer \#2} &
+		\multicolumn{1}{c|}{\textcolor{red}{Red}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $9$, Section $4.3$, line $325$} & 
+		\multicolumn{1}{c|}{Replace "input pattern" with "input vector"} &
+		\multicolumn{1}{c|}{Reviewer \#2} &
+		\multicolumn{1}{c|}{\textcolor{red}{Red}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $9$, Section $4.3$, line $325$} & 
+		\multicolumn{1}{c|}{Replace "teaching input" with "desired output"} &
+		\multicolumn{1}{c|}{Reviewer \#2} &
+		\multicolumn{1}{c|}{\textcolor{red}{Red}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $9$, Section $4.3$, line $326$} & 
+		\multicolumn{1}{c|}{Replace "input pattern" with "input vector"} &
+		\multicolumn{1}{c|}{Reviewer \#2} &
+		\multicolumn{1}{c|}{\textcolor{red}{Red}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $9$, Section $4.3$, line $328$} & 
+		\multicolumn{1}{c|}{Refer to the Levenberg-Marquardt algorithm as LM} &
+		\multicolumn{1}{c|}{The authors} &
+		\multicolumn{1}{c|}{\textcolor{deepgreen}{Green}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{\multirow{2}{*}{Page $9$, Section $4.3$, lines $328-330$}} & 
+		\multicolumn{1}{c|}{Add practical details regarding the implementation} &
+		\multicolumn{1}{c|}{\multirow{2}{*}{Reviewer \#2}} &
+		\multicolumn{1}{c|}{\multirow{2}{*}{\textcolor{red}{Red}}} \\[-0.1cm]
+		\multicolumn{1}{|c|}{} &
+		\multicolumn{1}{c|}{of the LM algorithm} &
+		\multicolumn{1}{c|}{} &
+		\multicolumn{1}{c|}{} \\[0.1cm]
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $9$, Section $4.3$, line $330$} & 
+		\multicolumn{1}{c|}{Refer to the Levenberg-Marquardt algorithm as LM} &
+		\multicolumn{1}{c|}{The authors} &
+		\multicolumn{1}{c|}{\textcolor{deepgreen}{Green}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $10$, Section $5$, line $368$} & 
+		\multicolumn{1}{c|}{Replace "input pattern" with "training input"} &
+		\multicolumn{1}{c|}{Reviewer \#2} &
+		\multicolumn{1}{c|}{\textcolor{red}{Red}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $10$, Section $5$, line $368$} & 
+		\multicolumn{1}{c|}{Replace "teaching input" with "desired output"} &
+		\multicolumn{1}{c|}{Reviewer \#2} &
+		\multicolumn{1}{c|}{\textcolor{red}{Red}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $10$, Section $5$, line $368$} & 
+		\multicolumn{1}{c|}{Replace "teaching input" with "output vector"} &
+		\multicolumn{1}{c|}{Reviewer \#2} &
+		\multicolumn{1}{c|}{\textcolor{red}{Red}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $10$, Section $5$, line $369$} & 
+		\multicolumn{1}{c|}{Replace "teaching inputs" with "teaching data"} &
+		\multicolumn{1}{c|}{Reviewer \#2} &
+		\multicolumn{1}{c|}{\textcolor{red}{Red}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $11$, Section $5$, line $387$} & 
+		\multicolumn{1}{c|}{Replace "training patterns" with "training data"} &
+		\multicolumn{1}{c|}{Reviewer \#2} &
+		\multicolumn{1}{c|}{\textcolor{red}{Red}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{\multirow{2}{*}{Page $13$, Section $6$, lines $436-440$}} & 
+		\multicolumn{1}{c|}{Add details on how neural networks are trained} &
+		\multicolumn{1}{c|}{\multirow{2}{*}{Reviewer \#2}} &
+		\multicolumn{1}{c|}{\multirow{2}{*}{\textcolor{red}{Red}}} \\[-0.1cm]
+		\multicolumn{1}{|c|}{} &
+		\multicolumn{1}{c|}{in the practice} &
+		\multicolumn{1}{c|}{} &
+		\multicolumn{1}{c|}{} \\[0.1cm]
+		\cline{1-4}
+		\multicolumn{1}{|c|}{\multirow{3}{*}{Page $14$, Section $6.1.1$, lines $481$}} & 
+		\multicolumn{1}{c|}{Modify the boundary conditions for the Poisson} &
+		\multicolumn{1}{c|}{\multirow{3}{*}{N. L. Mundis}} &
+		\multicolumn{1}{c|}{\multirow{3}{*}{\textcolor{blue}{Blue}}} \\[-0.1cm]
+		\multicolumn{1}{|c|}{} &
+		\multicolumn{1}{c|}{problem $(6.8)$, so that the exact solution reads} &
+		\multicolumn{1}{c|}{} &
+		\multicolumn{1}{c|}{} \\[-0.1cm]
+		\multicolumn{1}{|c|}{} &
+		\multicolumn{1}{c|}{$u_{ex}(x; \, \bg{\mu}) = \mu_2 \sin \big(2 + \mu_1 \, x \big) \, \exp \big( \mu_3 \, x \big)$} &
+		\multicolumn{1}{c|}{} &
+		\multicolumn{1}{c|}{} \\[0.1cm]
+		\cline{1-4}
+		\multicolumn{1}{|c|}{\multirow{4}{*}{Page $14$, Section $6.1.1$, lines $483$}} & 
+		\multicolumn{1}{c|}{Correct the form of the exact solution for the} &
+		\multicolumn{1}{c|}{\multirow{4}{*}{N. L. Mundis}} &
+		\multicolumn{1}{c|}{\multirow{4}{*}{\textcolor{blue}{Blue}}} \\[-0.1cm]
+		\multicolumn{1}{|c|}{} &
+		\multicolumn{1}{c|}{Poisson problem $(6.8)$: from} &
+		\multicolumn{1}{c|}{} &
+		\multicolumn{1}{c|}{} \\[-0.1cm]
+		\multicolumn{1}{|c|}{} &
+		\multicolumn{1}{c|}{$u_{ex}(x; \, \bg{\mu}) = \mu_2 \, \big( 2 + \sin \big( \mu_1 \, x \big) \big) \, \exp \big( \mu_3 \, x \big)$} &
+		\multicolumn{1}{c|}{} &
+		\multicolumn{1}{c|}{} \\[-0.1cm]
+		\multicolumn{1}{|c|}{} &
+		\multicolumn{1}{c|}{to $u_{ex}(x; \, \bg{\mu}) = \mu_2 \sin \big(2 + \mu_1 \, x \big) \, \exp \big( \mu_3 \, x \big)$} &
+		\multicolumn{1}{c|}{} &
+		\multicolumn{1}{c|}{} \\[0.1cm]
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $15$, Section $6.1.1$, line $487$} & 
+		\multicolumn{1}{c|}{Replace "training patterns" with "training data"} &
+		\multicolumn{1}{c|}{Reviewer \#2} &
+		\multicolumn{1}{c|}{\textcolor{red}{Red}} \\
+		\cline{1-4} 
+		\multicolumn{1}{|c|}{\multirow{2}{*}{Page $15$, Section $6.1.1$, Figure $6.2$}} & 
+		\multicolumn{1}{c|}{Add the two rightmost plots and update the} &
+		\multicolumn{1}{c|}{\multirow{2}{*}{Reviewer \#2}} &
+		\multicolumn{1}{c|}{\multirow{2}{*}{\textcolor{red}{Red}}} \\[-0.1cm]
+		\multicolumn{1}{|c|}{} &
+		\multicolumn{1}{c|}{caption accordingly} &
+		\multicolumn{1}{c|}{} &
+		\multicolumn{1}{c|}{} \\[0.1cm]
+		\cline{1-4}
+		\multicolumn{1}{|c|}{\multirow{2}{*}{Page $15$, Section $6.1.1$, lines $502-512$}} & 
+		\multicolumn{1}{c|}{Add comments about the two plots which have} &
+		\multicolumn{1}{c|}{\multirow{2}{*}{Reviewer \#2}} &
+		\multicolumn{1}{c|}{\multirow{2}{*}{\textcolor{red}{Red}}} \\[-0.1cm]
+		\multicolumn{1}{|c|}{} &
+		\multicolumn{1}{c|}{been added to Fig. $6.2$} &
+		\multicolumn{1}{c|}{} &
+		\multicolumn{1}{c|}{} \\[0.1cm]
+		\cline{1-4}
+		\multicolumn{1}{|c|}{\multirow{2}{*}{Page $17$, Section $6.1.2$, lines $535-537$}} & 
+		\multicolumn{1}{c|}{Add comments about the offline run time for both} &
+		\multicolumn{1}{c|}{\multirow{2}{*}{Reviewer \#2}} &
+		\multicolumn{1}{c|}{\multirow{2}{*}{\textcolor{red}{Red}}} \\[-0.1cm]
+		\multicolumn{1}{|c|}{} &
+		\multicolumn{1}{c|}{the POD-G and the POD-NN methods} &
+		\multicolumn{1}{c|}{} &
+		\multicolumn{1}{c|}{} \\[0.1cm]
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $17$, Section $6.1.2$, line $540$} & 
+		\multicolumn{1}{c|}{Replace "learning patterns" with "learning data"} &
+		\multicolumn{1}{c|}{Reviewer \#2} &
+		\multicolumn{1}{c|}{\textcolor{red}{Red}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $17$, Section $6.1.2$, line $541$} & 
+		\multicolumn{1}{c|}{Replace "learning patterns" with "learning data"} &
+		\multicolumn{1}{c|}{Reviewer \#2} &
+		\multicolumn{1}{c|}{\textcolor{red}{Red}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $18$, Section $6.1.2$, line $561$} & 
+		\multicolumn{1}{c|}{Replace "training patterns" with "training data"} &
+		\multicolumn{1}{c|}{Reviewer \#2} &
+		\multicolumn{1}{c|}{\textcolor{red}{Red}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{\multirow{2}{*}{Page $22$, Section $6.2.1$, Figure $6.10$}} & 
+		\multicolumn{1}{c|}{Swap the top-left panel with the bottom-left one} &
+		\multicolumn{1}{c|}{\multirow{2}{*}{The authors}} &
+		\multicolumn{1}{c|}{\multirow{2}{*}{\textcolor{deepgreen}{Green}}} \\[-0.1cm]
+		\multicolumn{1}{|c|}{} &
+		\multicolumn{1}{c|}{and modify the caption accordingly} &
+		\multicolumn{1}{c|}{} &
+		\multicolumn{1}{c|}{} \\[0.1cm]
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $22$, Section $6.2.1$, line $653$} & 
+		\multicolumn{1}{c|}{Replace \emph{left} with \emph{top}} &
+		\multicolumn{1}{c|}{The authors} &
+		\multicolumn{1}{c|}{\textcolor{deepgreen}{Green}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $22$, Section $6.2.1$, line $654$} & 
+		\multicolumn{1}{c|}{Replace \emph{right} with \emph{bottom}} &
+		\multicolumn{1}{c|}{The authors} &
+		\multicolumn{1}{c|}{\textcolor{deepgreen}{Green}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $22$, Section $6.2.1$, line $655$} & 
+		\multicolumn{1}{c|}{Replace "on the top" with "on the left"} &
+		\multicolumn{1}{c|}{The authors} &
+		\multicolumn{1}{c|}{\textcolor{deepgreen}{Green}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $23$, Section $6.2.1$, line $656$} & 
+		\multicolumn{1}{c|}{Replace "on the bottom" with "on the right"} &
+		\multicolumn{1}{c|}{The authors} &
+		\multicolumn{1}{c|}{\textcolor{deepgreen}{Green}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{\multirow{2}{*}{Page $23$, Section $6.2.1$, Figure $6.11$}} & 
+		\multicolumn{1}{c|}{Swap the top-left panel with the bottom-left one} &
+		\multicolumn{1}{c|}{\multirow{2}{*}{The authors}} &
+		\multicolumn{1}{c|}{\multirow{2}{*}{\textcolor{deepgreen}{Green}}} \\[-0.1cm]
+		\multicolumn{1}{|c|}{} &
+		\multicolumn{1}{c|}{and modify the caption accordingly} &
+		\multicolumn{1}{c|}{} &
+		\multicolumn{1}{c|}{} \\[0.1cm]
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $23$, Section $6.2.1$, line $666$} & 
+		\multicolumn{1}{c|}{Replace \emph{right} with \emph{bottom}} &
+		\multicolumn{1}{c|}{The authors} &
+		\multicolumn{1}{c|}{\textcolor{deepgreen}{Green}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $23$, Section $6.2.1$, line $667$} & 
+		\multicolumn{1}{c|}{Replace \emph{top} with \emph{left}} &
+		\multicolumn{1}{c|}{The authors} &
+		\multicolumn{1}{c|}{\textcolor{deepgreen}{Green}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $23$, Section $6.2.1$, line $668$} & 
+		\multicolumn{1}{c|}{Replace \emph{bottom} with \emph{right}} &
+		\multicolumn{1}{c|}{The authors} &
+		\multicolumn{1}{c|}{\textcolor{deepgreen}{Green}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $27$, References, line $744$} & 
+		\multicolumn{1}{c|}{Add reference [$19$]} &
+		\multicolumn{1}{c|}{The authors} &
+		\multicolumn{1}{c|}{\textcolor{deepgreen}{Green}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $27$, References, lines $763-764$} & 
+		\multicolumn{1}{c|}{Add reference [$30$]} &
+		\multicolumn{1}{c|}{The authors} &
+		\multicolumn{1}{c|}{\textcolor{deepgreen}{Green}} \\
+		\cline{1-4}
+		\multicolumn{1}{|c|}{Page $27$, References, line $778$} & 
+		\multicolumn{1}{c|}{Add reference [$38$]} &
+		\multicolumn{1}{c|}{The authors} &
+		\multicolumn{1}{c|}{\textcolor{deepgreen}{Green}} \\
+		\cline{1-4}
+
+		%\multicolumn{1}{c|}{$\left( 1 + (\varepsilon r)^2 \right)^{\nu}$} & \multicolumn{1}{c|}{$\lceil \nu \rceil$} & \multicolumn{1}{c|}{\multirow{2}{*}{Polyharmonic splines}} & \multicolumn{1}{c|}{$r^{2k - d}$ \hspace{0.85cm} if $d$ odd} & \multicolumn{1}{c|}{\multirow{2}{*}{$k$}} \\
+	\end{longtable}
+\end{document}
